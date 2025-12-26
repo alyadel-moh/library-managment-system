@@ -1,26 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";      
-
-export interface Publisher{
-    publisherId : number;
-    publisherName : string;
-    address : string;
-    Phone : string;
+interface Top10sellingbooksResponse {
+  isbn: string,
+        category: string,
+        title: string,
+        total_sold: number
 }
-const useGetPublishers = () =>{
-  return useQuery<Publisher[]>({
-    queryKey: ['Publishers'],
+const useGettop10sellingbooks = () =>{
+  return useQuery<Top10sellingbooksResponse[]>({
+    queryKey: ['top10sellingbooks'],
     queryFn: () => {
       const token = localStorage.getItem('accessToken');
       return axios.get(
-        "http://localhost:8080/api/admin/publisher",
+        "http://localhost:8080/api/admin/reports/top-books",
         {
           headers: {
             'Authorization': `Bearer ${token}`
           }
         }
       ).then((response) => {
-        console.log('Publishers fetched successfully:', response.data);
+        console.log('Top10sellingbooksts fetched successfully:', response.data);
         return response.data;
       });
     },
@@ -28,5 +27,4 @@ const useGetPublishers = () =>{
     retry: false // do not retry on failure
   });
 }
-export default useGetPublishers;
-
+export default useGettop10sellingbooks;

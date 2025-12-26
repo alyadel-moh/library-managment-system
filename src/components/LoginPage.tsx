@@ -34,13 +34,14 @@ const Form = () => {
   useEffect(() => {
     if (isSuccess && data?.token) {
       // Refetch user data after login to get role
-      refetch().then((result) => {
+      refetch().then(async (result) => {
         if (result.data?.role) {
+          await new Promise((resolve) => setTimeout(resolve, 1000));
           console.log("Navigating for role:", result.data.role);
           if (result.data.role === "ROLE_ADMIN") {
-            navigate("/admin/dashboard");
+            navigate("/admin/dashboard", { replace: true });
           } else if (result.data.role === "ROLE_CUSTOMER") {
-            navigate("/customer/dashboard");
+            navigate("/customer/dashboard", { replace: true });
           }
         }
       });

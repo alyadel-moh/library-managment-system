@@ -2,7 +2,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
 import { useForm } from "react-hook-form";
 import { useModifyBook } from "../hooks/useModifyBook";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import useGetAuthors from "../hooks/useGetauthors";
 import type { CSSProperties } from "react";
 import useGetPublishers from "../hooks/useGetpublishers";
@@ -29,7 +29,6 @@ const ModifyBookForm = ({
   fieldType,
 }: ModifyBookFormProps) => {
   const location = useLocation();
-  const navigate = useNavigate();
   const bookData = location.state?.bookData;
   const { data: authors } = useGetAuthors();
   const { data: publishers } = useGetPublishers();
@@ -37,12 +36,16 @@ const ModifyBookForm = ({
   // Calculate marginLeft based on specific fieldLabel values
   const getMarginLeft = (label: string = "") => {
     switch (label) {
+      case "Publisher ID":
+        return "-30px";
+      case "Selling Price":
+        return "-30px";
       case "Publication Year":
         return "-50px";
-      case "Selling Price":
-        return "-35px";
+      case "Category ID":
+        return "-25px";
       default:
-        return "-13px";
+        return "-7px";
     }
   };
   const headingStyle: CSSProperties = {
@@ -70,7 +73,9 @@ const ModifyBookForm = ({
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const { mutate, isPending, isSuccess, isError, error } = useModifyBook();
+  const { mutate, isPending, isSuccess, isError, error } = useModifyBook(
+    bookData?.isbn
+  );
   const onSubmit = (formData: FormData) => {
     if (!bookData) return;
 
@@ -78,9 +83,12 @@ const ModifyBookForm = ({
       isbn: bookData.isbn,
       title: bookData.title,
       publicationYear: bookData.publicationYear,
-      categoryId: bookData.categoryId,
-      publisherId: bookData.publisherId,
-      authorIds: bookData.authorIds || [],
+      categoryId: bookData.category?.id || bookData.categoryId,
+      publisherId: bookData.publisher?.publisherId || bookData.publisherId,
+      authorIds:
+        bookData.authors?.map((a: any) => a.authorId) ||
+        bookData.authorIds ||
+        [],
       sellingPrice: bookData.sellingPrice,
       stockQuantity: bookData.stockQuantity,
       threshold: bookData.threshold,
@@ -134,7 +142,6 @@ const ModifyBookForm = ({
             {...register("categoryId", { valueAsNumber: true })}
             className="form-select"
             id="categoryId"
-            defaultValue={bookData?.categoryId}
             style={{ fontSize: "1.1rem", padding: "12px" }}
           >
             <option value="">Select a category</option>
@@ -150,7 +157,6 @@ const ModifyBookForm = ({
             {...register("publisherId", { valueAsNumber: true })}
             className="form-select"
             id="publisherId"
-            defaultValue={bookData?.publisherId}
             style={{ fontSize: "1.1rem", padding: "12px" }}
           >
             <option value="">Select a publisher</option>
@@ -209,20 +215,9 @@ const ModifyBookForm = ({
           />
         )}
       </div>
-      <div style={{ display: "flex", gap: "10px" }}>
-        <button
-          className="btn btn-secondary"
-          type="button"
-          onClick={() =>
-            navigate("/modifybook", { state: { isbn: bookData?.isbn } })
-          }
-        >
-          Back
-        </button>
-        <button className="btn btn-primary" type="submit" disabled={isPending}>
-          {isPending ? "Updating..." : "Update"}
-        </button>
-      </div>
+      <button className="btn btn-primary" type="submit" disabled={isPending}>
+        {isPending ? "Updating..." : "Update"}
+      </button>
     </form>
   );
 };

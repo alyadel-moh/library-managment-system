@@ -9,8 +9,12 @@ import Bookpage from "../components/Bookpage.tsx";
 import Adminpage from "../components/Adminpage.tsx";
 import ModifyBook from "../components/modifyBook.tsx";
 import ModifyBookForm from "../components/modifyBookForm.tsx";
-// import ViewBooks from "../components/viewBooks.tsx";
-
+import ViewBooks from "../components/viewbooks.tsx";
+import Reports from "../components/reports.tsx";
+import Publisherorders from "../components/Publisherorders.tsx";
+import ViewCart from "../components/viewCart.tsx";
+import Checkoutform from "../components/Checkoutform.tsx";
+import ViewOrderhistory from "../components/vieworderhistory.tsx";
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
   { path: "/signup", element: <SignupPage /> },
@@ -116,6 +120,40 @@ const router = createBrowserRouter([
   {
     path: "/modify/book/isbn",
     element: <ModifyBookForm fieldName="isbn" fieldLabel="ISBN" />,
+  },
+  {
+    path: "/modify/book/stockQuantity",
+    element: (
+      <ModifyBookForm
+        fieldName="stockQuantity"
+        fieldLabel="Stock Quantity"
+        fieldType="number"
+      />
+    ),
+  },
+  {
+    path: "/viewbooks",
+    element: <ViewBooks />,
+  },
+  {
+    path: "/reports",
+    element: <Reports />,
+  },
+  {
+    path: "/viewcart",
+    element: <ViewCart />,
+  },
+  {
+    path: "/pendingorders",
+    element: <Publisherorders />,
+  },
+  {
+    path: "/checkout",
+    element: <Checkoutform />,
+  },
+  {
+    path: "/orderhistory",
+    element: <ViewOrderhistory />,
   },
 ]);
 

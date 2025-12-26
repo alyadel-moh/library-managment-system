@@ -237,7 +237,7 @@ const Form = () => {
         />
       </div>
       <button className="btn btn-primary" type="submit" disabled={isPending}>
-        Submit
+        Sign Up
       </button>
     </form>
   );

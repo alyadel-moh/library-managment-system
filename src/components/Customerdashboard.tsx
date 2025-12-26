@@ -1,9 +1,14 @@
 import React, { type CSSProperties } from "react";
 import { useNavigate } from "react-router-dom";
-
+import useLogout from "../hooks/UseLogout";
 const Homepage = () => {
   const navigate = useNavigate();
-
+  const logoutQuery = useLogout();
+  const {
+    data: Logoutdata,
+    isError: logoutError,
+    error: logoutErrorMsg,
+  } = logoutQuery;
   const customButtonStyle: CSSProperties = {
     padding: "20px 100px",
     fontSize: "18px",
@@ -46,7 +51,7 @@ const Homepage = () => {
             type="button"
             onClick={() => navigate("/profile")}
           >
-            view Profile
+            View Profile
           </button>
           <button
             className="btn btn-primary"
@@ -60,10 +65,72 @@ const Homepage = () => {
             className="btn btn-primary"
             style={customButtonStyle}
             type="button"
-            onClick={() => navigate("/books")}
+            onClick={() => navigate("/viewbooks")}
           >
-            view Books
+            View Books
           </button>
+          <button
+            className="btn btn-primary"
+            style={customButtonStyle}
+            type="button"
+            onClick={() => navigate("/viewcart")}
+          >
+            View Shopping Cart
+          </button>
+          <button
+            className="btn btn-primary"
+            style={customButtonStyle}
+            type="button"
+            onClick={() => navigate("/orderhistory")}
+          >
+            View Order History
+          </button>
+          <button
+            className="btn btn-primary"
+            style={customButtonStyle}
+            type="button"
+            onClick={async () => {
+              try {
+                await logoutQuery.mutateAsync();
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+                navigate("/", { replace: true });
+              } catch (error) {
+                console.error("Logout error", error);
+              }
+            }}
+          >
+            Logout
+          </button>
+          {Logoutdata && (
+            <div
+              style={{
+                marginTop: "20px",
+                padding: "15px 20px",
+                backgroundColor: "#d4edda",
+                color: "#155724",
+                border: "1px solid #c3e6cb",
+                borderRadius: "5px",
+                fontSize: "1.1rem",
+              }}
+            >
+              {Logoutdata.message}
+            </div>
+          )}
+          {logoutError && (
+            <div
+              style={{
+                marginTop: "20px",
+                padding: "15px 20px",
+                backgroundColor: "#f8d7da",
+                color: "#721c24",
+                border: "1px solid #f5c6cb",
+                borderRadius: "5px",
+                fontSize: "1.1rem",
+              }}
+            >
+              {logoutErrorMsg?.message || "Error logging out"}
+            </div>
+          )}
         </div>
       </div>
     </>

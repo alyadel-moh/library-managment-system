@@ -1,29 +1,19 @@
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-interface Book {
-    isbn : string;
-    title : string;
-    publicationYear : number;
-    publisherId : number;
-    authorIds : Array<number>;
-    categoryId : number;
-    sellingPrice : number;
-    stockQuantity    : number;
-    threshold : number;
-}
 
 interface ModifyResponse {
   message: string;
 }
 
-export const useModifyBook = (isbn: string) => {
-  return useMutation<ModifyResponse, AxiosError<{ message: string }>, Book>({
-    mutationFn: (updatedBook: Book) => {
+
+const useConfirmOrder = () => {
+  return useMutation<ModifyResponse, AxiosError<{ message: string }>, number>({
+    mutationFn: (orderid: number) => {
       const token = localStorage.getItem("accessToken");
       return axios
         .put<ModifyResponse>(
-          `http://localhost:8080/api/admin/book/${isbn}`,
-          updatedBook,
+          `http://localhost:8080/api/admin/order/confirm/${orderid}`,
+          {},
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -33,15 +23,15 @@ export const useModifyBook = (isbn: string) => {
         .then((response) => response.data);
     },
     onSuccess: (data: ModifyResponse) => {
-      console.log("Book modified successfully:", data);
+      console.log("Order confirmed successfully:", data);
     },
     onError: (error: AxiosError<{ message: string }>) => {
       console.log(
-        "Error modifying book:",
+        "Error confirming order:",
         error.response?.data?.message || error.message
       );
     },
   });
 };
 
-export default useModifyBook;
+export default useConfirmOrder;

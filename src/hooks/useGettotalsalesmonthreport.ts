@@ -1,26 +1,24 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";      
-
-export interface Publisher{
-    publisherId : number;
-    publisherName : string;
-    address : string;
-    Phone : string;
+interface TotalsalesbymonthreportResponse { 
+  from_date: string,
+        to_date: string,
+        total_revenue: number
 }
-const useGetPublishers = () =>{
-  return useQuery<Publisher[]>({
-    queryKey: ['Publishers'],
+const useGettotalsalesbymonthreport = () =>{
+  return useQuery<TotalsalesbymonthreportResponse []>({
+    queryKey: ['totalsalesbymonthreport'],
     queryFn: () => {
       const token = localStorage.getItem('accessToken');
       return axios.get(
-        "http://localhost:8080/api/admin/publisher",
+        "http://localhost:8080/api/admin/reports/sales/prev-month",
         {
           headers: {
             'Authorization': `Bearer ${token}`
           }
         }
       ).then((response) => {
-        console.log('Publishers fetched successfully:', response.data);
+        console.log('Totalsalesbymonthreport fetched successfully:', response.data);
         return response.data;
       });
     },
@@ -28,5 +26,5 @@ const useGetPublishers = () =>{
     retry: false // do not retry on failure
   });
 }
-export default useGetPublishers;
+export default useGettotalsalesbymonthreport;
 

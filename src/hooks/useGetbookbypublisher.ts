@@ -11,16 +11,16 @@ interface Book {
     authors : Array<Author>;
     category : Category;
     sellingPrice : number;
-    stockQuantity    : number;
+    stockQuantity   : number;
     threshold : number;
 }
-const useGetBooksbyisbn = ({isbn} : {isbn: string}) =>{
-  return useQuery<Book []>({
-    queryKey: ['books', isbn],
+const useGetBooksbypublisher = ({publisher} : {publisher: string}) =>{
+  return useQuery<Book[]>({
+    queryKey: ['books', publisher],
     queryFn: () => {
       const token = localStorage.getItem('accessToken');
       return axios.get(
-        `http://localhost:8080/api/user/book/isbn/${isbn}`,
+        `http://localhost:8080/api/user/book/publisher/${encodeURIComponent(publisher)}`,
         {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -31,8 +31,8 @@ const useGetBooksbyisbn = ({isbn} : {isbn: string}) =>{
         return response.data;
       });
     },
-    enabled: !!localStorage.getItem('accessToken') && !!isbn,  // only run if token exists AND isbn is provided
+    enabled: !!localStorage.getItem('accessToken') && !!publisher,  // only run if token exists AND publisher is provided
     retry: false // do not retry on failure
   });
 }
-export default useGetBooksbyisbn;
+export default useGetBooksbypublisher;
