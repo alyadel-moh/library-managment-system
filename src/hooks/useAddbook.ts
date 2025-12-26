@@ -18,7 +18,7 @@ interface LoginResponse {
 }
 const useAddBook = () =>{
   return useMutation<LoginResponse, AxiosError<{message : string}>, Book>({
-    mutationFn: (newBook: Book) => {
+    mutationFn: async (newBook: Book) => {
       const token = localStorage.getItem('accessToken');
       return axios.post<LoginResponse>(
         "http://localhost:8080/api/admin/book",

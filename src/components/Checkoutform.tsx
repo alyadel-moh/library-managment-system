@@ -2,7 +2,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
 import { useForm } from "react-hook-form";
 import useCardcheckout from "../hooks/useCardcheckout";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 const schema = z.object({
   cardNumber: z.string().min(1, { message: "Card number is required" }),
   expiryDate: z.string().min(1, { message: "Expiry date is required" }),
@@ -10,6 +10,7 @@ const schema = z.object({
 });
 type formdata = z.infer<typeof schema>;
 const Form = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const expectedTotal = location.state?.expectedTotal || 0;
   const {
@@ -21,8 +22,10 @@ const Form = () => {
   const { isPending, isSuccess, isError, error, data } = cardcheckout;
   return (
     <form
-      onSubmit={handleSubmit((data) => {
-        cardcheckout.mutate({ ...data, expectedTotal });
+      onSubmit={handleSubmit(async (data) => {
+        await cardcheckout.mutateAsync({ ...data, expectedTotal });
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        navigate("/customer/dashboard", { replace: true });
       })}
       className="centered-form2"
     >

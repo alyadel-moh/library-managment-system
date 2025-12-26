@@ -18,7 +18,7 @@ interface ModifyResponse {
 
 export const useModifyBook = (isbn: string) => {
   return useMutation<ModifyResponse, AxiosError<{ message: string }>, Book>({
-    mutationFn: (updatedBook: Book) => {
+    mutationFn:async (updatedBook: Book) => {
       const token = localStorage.getItem("accessToken");
       return axios
         .put<ModifyResponse>(

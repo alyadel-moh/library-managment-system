@@ -16,7 +16,7 @@ interface LoginResponse {
 }
 const useAddUser = () =>{
   return useMutation<LoginResponse, AxiosError<{message : string}>, User>({
-    mutationFn: (newUser: User) => 
+    mutationFn: async (newUser: User) => 
       axios.post<LoginResponse>(
         "http://localhost:8080/api/auth/signup",
         newUser

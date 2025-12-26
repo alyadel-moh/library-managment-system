@@ -5,6 +5,7 @@ import useAddbook from "../hooks/useAddbook";
 import useGetAuthors from "../hooks/useGetauthors";
 import useGetCategories from "../hooks/useGetcategory";
 import useGetPublishers from "../hooks/useGetpublishers";
+import { useNavigate } from "react-router-dom";
 const schema = z.object({
   isbn: z.string().min(1, { message: "ISBN is required" }),
   title: z.string().min(1, { message: "Title is required" }),
@@ -20,6 +21,7 @@ const schema = z.object({
 });
 type formdata = z.infer<typeof schema>;
 const Bookpage = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -30,7 +32,7 @@ const Bookpage = () => {
       authorIds: [],
     },
   });
-  const { mutate, isSuccess, isError, error, data } = useAddbook();
+  const { mutateAsync, isSuccess, isError, error, data } = useAddbook();
   const { data: authors } = useGetAuthors();
   const { data: categories } = useGetCategories();
   const { data: publishers } = useGetPublishers();
@@ -39,9 +41,10 @@ const Bookpage = () => {
     <form
       className="addbook-form"
       onSubmit={handleSubmit(
-        (data) => {
-          console.log("Form submitted with data:", data);
-          mutate(data);
+        async (data) => {
+          await mutateAsync(data);
+          await new Promise((resolve) => setTimeout(resolve, 5000));
+          navigate("/admin/dashboard", { replace: true });
         },
         (errors) => {
           console.log("Form validation errors:", errors);

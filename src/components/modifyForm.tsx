@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import useModifyUser from "../hooks/useModifyuser";
 import useGetUser from "../hooks/useGetusers";
 import type { CSSProperties } from "react";
-
+import { useNavigate } from "react-router-dom";
 interface ModifyFormProps {
   fieldName:
     | "username"
@@ -23,6 +23,7 @@ const ModifyForm = ({
   fieldLabel,
   fieldType = "text",
 }: ModifyFormProps) => {
+  const navigate = useNavigate();
   const { data: userData } = useGetUser();
 
   // Calculate marginLeft based on specific fieldLabel values
@@ -61,9 +62,9 @@ const ModifyForm = ({
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const { mutate, isPending, isSuccess, isError, error } = useModifyUser();
+  const { mutateAsync, isPending, isSuccess, isError, error } = useModifyUser();
 
-  const onSubmit = (formData: FormData) => {
+  const onSubmit = async (formData: FormData) => {
     if (!userData) return;
     // Merge the single field update with existing user data
     const updatedUser = {
@@ -77,7 +78,9 @@ const ModifyForm = ({
       ...formData, // Override with the new field value
     };
 
-    mutate(updatedUser);
+    await mutateAsync(updatedUser);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    navigate("/profile", { replace: true });
   };
 
   return (

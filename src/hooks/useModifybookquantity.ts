@@ -6,7 +6,7 @@ interface ModifyResponse {
 
 const useModifyquantity = (quantity: number, isbn: string) => {
   return useMutation<ModifyResponse, AxiosError<{ message: string }>>({
-    mutationFn: () => {
+    mutationFn:async () => {
       const token = localStorage.getItem('accessToken');
       return axios
         .put<ModifyResponse>(

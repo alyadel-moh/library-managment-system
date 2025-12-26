@@ -7,7 +7,7 @@ import useGetAuthors from "../hooks/useGetauthors";
 import type { CSSProperties } from "react";
 import useGetPublishers from "../hooks/useGetpublishers";
 import useGetCategories from "../hooks/useGetcategory";
-
+import { useNavigate } from "react-router-dom";
 interface ModifyBookFormProps {
   fieldName:
     | "isbn"
@@ -28,6 +28,7 @@ const ModifyBookForm = ({
   fieldLabel,
   fieldType,
 }: ModifyBookFormProps) => {
+  const navigate = useNavigate();
   const location = useLocation();
   const bookData = location.state?.bookData;
   const { data: authors } = useGetAuthors();
@@ -73,10 +74,10 @@ const ModifyBookForm = ({
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const { mutate, isPending, isSuccess, isError, error } = useModifyBook(
+  const { mutateAsync, isPending, isSuccess, isError, error } = useModifyBook(
     bookData?.isbn
   );
-  const onSubmit = (formData: FormData) => {
+  const onSubmit = async (formData: FormData) => {
     if (!bookData) return;
 
     const updatedBook = {
@@ -95,7 +96,9 @@ const ModifyBookForm = ({
       ...formData,
     };
 
-    mutate(updatedBook);
+    await mutateAsync(updatedBook);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    navigate("/modifybook", { replace: true });
   };
 
   if (!bookData) {

@@ -1,9 +1,11 @@
-import useConfirmOrder from "../hooks/useconfirmOrder";
+import { useNavigate } from "react-router-dom";
+import useConfirmOrder from "../hooks/useConfirmOrder";
 import useGetpendingOrders from "../hooks/useGetpendingOrders";
 
 const Publisherorders = () => {
+  const navigate = useNavigate();
   const pendingOrders = useGetpendingOrders();
-  const { mutate, data, error } = useConfirmOrder();
+  const { mutateAsync, data, error } = useConfirmOrder();
   return (
     <>
       {pendingOrders.data && (
@@ -66,39 +68,33 @@ const Publisherorders = () => {
               </thead>
               <tbody>
                 {pendingOrders.data?.map((item) => (
-                  <tr key={item.order_id}>
+                  <tr key={item.orderId}>
+                    <td style={{ backgroundColor: "beige" }}>{item.orderId}</td>
                     <td style={{ backgroundColor: "beige" }}>
-                      {item.order_id}
+                      {item.orderDate}
+                    </td>
+                    <td style={{ backgroundColor: "beige" }}>{item.isbn}</td>
+                    <td style={{ backgroundColor: "beige" }}>{item.title}</td>
+                    <td style={{ backgroundColor: "beige" }}>
+                      {item.sellingPrice}
                     </td>
                     <td style={{ backgroundColor: "beige" }}>
-                      {item.order_quantity}
+                      {item.stockQuantity}
                     </td>
                     <td style={{ backgroundColor: "beige" }}>
-                      {item.book_isbn}
+                      {item.threshold}
                     </td>
                     <td style={{ backgroundColor: "beige" }}>
-                      {item.book_title}
+                      {item.totalOrderPrice}
                     </td>
                     <td style={{ backgroundColor: "beige" }}>
-                      {item.book_price}
+                      {item.publisherName}
                     </td>
                     <td style={{ backgroundColor: "beige" }}>
-                      {item.book_current_stock}
+                      {item.publisherAddress}
                     </td>
                     <td style={{ backgroundColor: "beige" }}>
-                      {item.book_stock_threshold}
-                    </td>
-                    <td style={{ backgroundColor: "beige" }}>
-                      {item.total_order_price}
-                    </td>
-                    <td style={{ backgroundColor: "beige" }}>
-                      {item.publisher_name}
-                    </td>
-                    <td style={{ backgroundColor: "beige" }}>
-                      {item.publisher_address}
-                    </td>
-                    <td style={{ backgroundColor: "beige" }}>
-                      {item.order_date}
+                      {item.orderDate}
                     </td>
                     <td style={{ backgroundColor: "beige" }}>
                       <button
@@ -108,7 +104,17 @@ const Publisherorders = () => {
                           padding: "12px 30px",
                           marginRight: "10px",
                         }}
-                        onClick={() => mutate(item.order_id)}
+                        onClick={async () => {
+                          try {
+                            await mutateAsync(item.orderId);
+                            await new Promise((resolve) =>
+                              setTimeout(resolve, 1500)
+                            );
+                            navigate("/admin/dashboard", { replace: true });
+                          } catch (error) {
+                            console.error("Confirm order error", error);
+                          }
+                        }}
                       >
                         Confirm Order
                       </button>
@@ -146,7 +152,7 @@ const Publisherorders = () => {
               >
                 {error?.response?.data?.message ||
                   error?.message ||
-                  "Error modifying quantity"}
+                  "Error confirming order"}
               </div>
             )}
           </div>

@@ -634,7 +634,7 @@ const ViewBooks = () => {
                     onClick={() => addBooktocart.mutate()}
                     disabled={addBooktocart.isPending}
                   >
-                    {addBooktocart.isPending ? "Adding..." : "Add to Cart"}
+                    Add to Cart
                   </button>
                   {addBooktocartData && (
                     <div

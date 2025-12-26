@@ -14,7 +14,7 @@ import Reports from "../components/reports.tsx";
 import Publisherorders from "../components/Publisherorders.tsx";
 import ViewCart from "../components/viewCart.tsx";
 import Checkoutform from "../components/Checkoutform.tsx";
-import ViewOrderhistory from "../components/vieworderhistory.tsx";
+import ViewOrderhistory from "../components/viewOrderhistory.tsx";
 const router = createBrowserRouter([
   { path: "/", element: <App /> },
   { path: "/signup", element: <SignupPage /> },

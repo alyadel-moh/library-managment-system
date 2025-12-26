@@ -8,7 +8,7 @@ interface ModifyResponse {
 
 const useConfirmOrder = () => {
   return useMutation<ModifyResponse, AxiosError<{ message: string }>, number>({
-    mutationFn: (orderid: number) => {
+    mutationFn: async (orderid: number) => {
       const token = localStorage.getItem("accessToken");
       return axios
         .put<ModifyResponse>(

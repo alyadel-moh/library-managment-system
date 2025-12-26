@@ -12,7 +12,7 @@ interface ModifyResponse {
 
 const useCardcheckout = () => {
   return useMutation<ModifyResponse, AxiosError<{ message: string }>,checkout>({
-    mutationFn: (checkoutData) => {
+    mutationFn: async (checkoutData) => {
       const token = localStorage.getItem('accessToken');
       return axios
         .post<ModifyResponse>("https://localhost:8443/api/user/cart/checkout", checkoutData, {

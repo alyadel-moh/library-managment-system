@@ -15,7 +15,7 @@ interface ModifyResponse {
 
 const useModifyUser = () => {
   return useMutation<ModifyResponse, AxiosError<{ message: string }>, User>({
-    mutationFn: (newUser: User) => {
+    mutationFn:async (newUser: User) => {
       const token = localStorage.getItem('accessToken');
       return axios
         .put<ModifyResponse>("http://localhost:8080/api/user/profile", newUser, {

@@ -2,18 +2,18 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 interface order {
-    order_id: number,
-        order_date:  string,
-        order_status: string,
-        order_quantity: number,
-        book_price: number,
-        total_order_price: number,
-        publisher_name: string,
-        publisher_address: string,
-        book_isbn: string,
-        book_title: string,
-        book_current_stock: number,
-        book_stock_threshold: number
+    orderId: number,
+         publisherAddress: string,
+        threshold: number,
+        sellingPrice:number ,
+        stockQuantity: number,
+        title: number,
+        status: string,
+        orderDate:string,
+        quantity: number,
+        publisherName: string,
+        isbn: string,
+        totalOrderPrice: number
 }
 const useGetpendingOrders = () =>{
   return useQuery<order[]>({

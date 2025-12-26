@@ -2,8 +2,9 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
 import { useForm } from "react-hook-form";
 import useModifypassword from "../hooks/useModifypassword";
-
+import { useNavigate } from "react-router-dom";
 const ChangePassword = () => {
+  const navigate = useNavigate();
   const schema = z.object({
     oldPassword: z.string().min(1, { message: "Old password is required" }),
     newPassword: z.string().min(1, { message: "New password is required" }),
@@ -16,14 +17,17 @@ const ChangePassword = () => {
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const { mutate, isPending, isSuccess, isError, error } = useModifypassword();
+  const { mutateAsync, isPending, isSuccess, isError, error } =
+    useModifypassword();
 
-  const onSubmit = (formData: FormData) => {
+  const onSubmit = async (formData: FormData) => {
     const updatedUser = {
       oldPassword: formData.oldPassword,
       newPassword: formData.newPassword,
     };
-    mutate(updatedUser);
+    await mutateAsync(updatedUser);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    navigate("/customer/dashboard", { replace: true });
   };
 
   return (
@@ -103,7 +107,7 @@ const ChangePassword = () => {
         />
       </div>
       <button className="btn btn-primary" type="submit" disabled={isPending}>
-        {isPending ? "Updating..." : "Update"}
+        Update Password
       </button>
     </form>
   );
