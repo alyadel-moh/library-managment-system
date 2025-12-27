@@ -2,6 +2,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
 import { useForm } from "react-hook-form";
 import UseAdduser from "../hooks/UseAdduser";
+import { useNavigate } from "react-router-dom";
 const schema = z.object({
   username: z.string().min(1, { message: "UserName is required" }),
   password: z.string().min(1, { message: "Password is required" }),
@@ -24,11 +25,14 @@ const Form = () => {
     formState: { errors }, // is valid for disabelling submit buttton and formsate used for displaying error messages
   } = useForm<formdata>({ resolver: zodResolver(schema) }); // manage form state errors validations submissionhandling i mean it builds and validate form
   const addUser = UseAdduser();
-  const { isPending, isSuccess, isError, error, data } = addUser;
+  const navigate = useNavigate();
+  const { isPending, isSuccess, isError, error, data, mutateAsync } = addUser;
   return (
     <form
-      onSubmit={handleSubmit((data) => {
-        addUser.mutate(data);
+      onSubmit={handleSubmit(async (data) => {
+        await mutateAsync(data);
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        navigate("/customer/dashboard", { replace: true });
       })}
       className="signup-form"
     >
