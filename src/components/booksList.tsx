@@ -13,11 +13,11 @@ interface viewdetails {
 }
 const BooksList = ({ onViewDetails, search, category }: viewdetails) => {
   const { data, error, isLoading } =
-    category === "All Categories"
-      ? useGetbooks()
-      : search
+    category === "All Categories" && search
+      ? useGetbook(search || "")
+      : category && category !== "All Categories"
         ? useGetBooksbycategory(category || "")
-        : useGetbook(search || "");
+        : useGetbooks();
 
   const skeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   if (error) return <Text>Error loading books.</Text>;

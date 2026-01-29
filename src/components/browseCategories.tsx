@@ -64,6 +64,7 @@ const BrowseCategories = ({ onViewChange }: categoryProps) => {
       minW="200px" // Optionally reduce min width
       marginTop="25px"
       height="55px"
+      padding="25px"
     >
       {options.map((item) => {
         const radio = getRadioProps({ value: item.value });

@@ -29,7 +29,7 @@ const Adminpage = () => {
         <GridItem
           area="aside"
           padding="5px"
-          position="sticky"
+          position="fixed"
           top="100px"
           height="calc(100vh - 100px)"
         >
