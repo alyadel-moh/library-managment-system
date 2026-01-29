@@ -1,26 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-
-interface Book {
-    isbn : string;
-    title : string;
-    publicationYear : number;
-    publisherId : number;
-    authorIds : Array<string>;
-    categoryId : number;
-    sellingPrice : number;
-    stockQuantity : number;
-    threshold : number;
-}
-interface LoginResponse {
-  status: string;
-  message: string;
-}
+import type { Book2 } from "../entities/Book";
+import type BackendResponse from "../entities/Response"; 
 const useAddBook = () =>{
-  return useMutation<LoginResponse, AxiosError<{message : string}>, Book>({
-    mutationFn: async (newBook: Book) => {
+  return useMutation<BackendResponse, AxiosError<{message : string}>, Book2>({
+    mutationFn: async (newBook: Book2) => {
       const token = localStorage.getItem('accessToken');
-      return axios.post<LoginResponse>(
+      return axios.post<BackendResponse>(
         "http://localhost:8080/api/admin/book",
         newBook,
         {
@@ -30,10 +16,10 @@ const useAddBook = () =>{
         }
       ).then((response) => response.data);
     },
-      onMutate :(newBook: Book) => {
+      onMutate :(newBook: Book2) => {
         console.log("Adding book:", newBook);
       },
-      onSuccess : (data: LoginResponse) => {
+      onSuccess : (data: BackendResponse) => {
         console.log("Book added successfully:", data);
       },
       onError :(error: AxiosError<{message : string}>) => {

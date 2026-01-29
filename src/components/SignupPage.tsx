@@ -3,6 +3,34 @@ import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
 import { useForm } from "react-hook-form";
 import UseAdduser from "../hooks/UseAdduser";
 import { useNavigate } from "react-router-dom";
+import {
+  Avatar,
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  IconButton,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
+  useToast,
+  VStack,
+  Text,
+} from "@chakra-ui/react";
+import {
+  FiUser,
+  FiPhone,
+  FiMail,
+  FiMapPin,
+  FiLogIn,
+  FiType,
+  FiKey,
+  FiEye,
+  FiEyeOff,
+  FiImage,
+} from "react-icons/fi";
+import { useEffect, useRef, useState } from "react";
 const schema = z.object({
   username: z.string().min(1, { message: "UserName is required" }),
   password: z.string().min(1, { message: "Password is required" }),
@@ -18,7 +46,33 @@ const schema = z.object({
     .email({ message: "Invalid Email address" }),
 });
 type formdata = z.infer<typeof schema>;
-const Form = () => {
+const SignupPage = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const previewUrl = URL.createObjectURL(file);
+    setSelectedImage(previewUrl);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "cloud_img_name");
+    const response = await fetch(
+      "https://api.cloudinary.com/v1_1/desvfcke6/image/upload",
+      {
+        method: "POST",
+        body: formData,
+      },
+    );
+    const cloudinaryData = await response.json();
+    return cloudinaryData;
+  };
+  const toast = useToast({
+    position: "bottom-right",
+    duration: 4000,
+    isClosable: true,
+  });
   const {
     register,
     handleSubmit,
@@ -26,224 +80,263 @@ const Form = () => {
   } = useForm<formdata>({ resolver: zodResolver(schema) }); // manage form state errors validations submissionhandling i mean it builds and validate form
   const addUser = UseAdduser();
   const navigate = useNavigate();
-  const { isPending, isSuccess, isError, error, data, mutateAsync } = addUser;
+  const { isSuccess, isError, error, data, mutateAsync, isPending } = addUser;
+  useEffect(() => {
+    if (isSuccess && data) {
+      toast({
+        title: data.status,
+        status: "success",
+      });
+    }
+  }, [isSuccess, data]);
+
+  // Show error toast
+  useEffect(() => {
+    if (isError && error) {
+      toast({
+        title: error?.response?.data?.message || "Signup Failed",
+        status: "error",
+      });
+    }
+  }, [isError, error]);
+  const onInvalid = () => {
+    const fieldError = errors["emailAddress"];
+    if (fieldError) {
+      toast({
+        description: fieldError.message,
+        status: "error",
+      });
+    }
+  };
   return (
     <form
       onSubmit={handleSubmit(async (data) => {
-        await mutateAsync(data);
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        navigate("/customer/dashboard", { replace: true });
-      })}
-      className="signup-form"
+        const cloudinaryData = await handleImageChange({
+          target: { files: fileInputRef.current?.files || null },
+        } as React.ChangeEvent<HTMLInputElement>);
+        await mutateAsync({
+          ...data,
+          photoUrl: cloudinaryData.secure_url || "",
+        });
+        navigate("/", { replace: true });
+      }, onInvalid)}
+      style={{
+        width: "100%",
+        maxWidth: "400px",
+        display: "flex",
+        flexDirection: "column",
+        gap: "15px",
+        marginTop: "10px", // reduced top margin
+      }}
     >
-      {isSuccess && data && (
-        <div className="alert alert-success">
-          <p>
-            <strong>
-              {data.status}
-              <br />
-              {data.message}
-            </strong>
-          </p>
-        </div>
-      )}
-      {isError && (
-        <div className="alert alert-danger">
-          Failed to create user:{" "}
-          {error?.response?.data?.message ||
-            error?.message ||
-            "An unknown error occurred."}
-        </div>
-      )}
-      <div className="mb-3">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
+      <VStack spacing={3} mt={-5}>
+        <VStack spacing={1}>
+          <Box position="relative" marginTop="15px">
+            {/* The Visual "Icon" or Avatar */}
+            <Avatar
+              size="xl"
+              src={selectedImage || ""}
+              name="User Photo"
+              border="2px solid"
+              borderColor="blue.500"
+            />
+            {/* The Upload Button overlay */}
+            <IconButton
+              aria-label="Upload photo"
+              icon={<FiImage />}
+              size="sm"
+              colorScheme="blue"
+              rounded="full"
+              position="absolute"
+              bottom="0"
+              right="0"
+              onClick={() => fileInputRef.current?.click()}
+            />
+          </Box>
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleImageChange}
+            accept="image/*"
+            style={{ display: "none" }}
+          />
+          <Text fontSize="sm" color="gray.500">
+            {selectedImage ? "Click icon to change" : "Upload a profile photo"}
+          </Text>
+        </VStack>
+        <FormControl
+          isInvalid={!!errors.username}
+          _hover={{ transform: "scale(1.02)" }}
+          mt={-10}
         >
-          <label htmlFor="username" className="form-label">
-            <strong>UserName</strong>
-          </label>
-          {errors.username && (
-            <span className="text-danger" style={{ fontSize: "0.875rem" }}>
-              {errors.username.message}
-            </span>
-          )}
-        </div>
-        <input
-          {...register("username")}
-          id="username"
-          type="text"
-          className="form-control"
-          placeholder="Enter your username"
-        />
-      </div>
-      {/* 2. Password */}
-      <div className="mb-3">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <label htmlFor="password" className="form-label">
-            <strong>Password</strong>
-          </label>
-          {errors.password && (
-            <span className="text-danger" style={{ fontSize: "0.875rem" }}>
-              {errors.password.message}
-            </span>
-          )}
-        </div>
-        <input
-          {...register("password")}
-          id="password"
-          // Should use 'password' type for security
-          type="password"
-          className="form-control"
-          placeholder="Enter your password"
-        />
-      </div>
+          <FormLabel fontWeight="bold">Username</FormLabel>
+          <InputGroup size="md">
+            <InputLeftElement
+              pointerEvents="none"
+              children={<FiUser color="gray.300" />}
+            />
+            <Input
+              pr="4.5rem"
+              id="username"
+              type="text"
+              placeholder="Enter your Username"
+              {...register("username")}
+              borderRadius="full"
+            />
+          </InputGroup>
+        </FormControl>
 
-      {/* 3. First Name */}
-      <div className="mb-3">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
+        <FormControl
+          isInvalid={!!errors.password}
+          _hover={{ transform: "scale(1.02)" }}
         >
-          <label htmlFor="firstName" className="form-label">
-            <strong>First name</strong>
-          </label>
-          {errors.firstName && (
-            <span className="text-danger" style={{ fontSize: "0.875rem" }}>
-              {errors.firstName.message}
-            </span>
-          )}
-        </div>
-        <input
-          {...register("firstName")}
-          id="firstName"
-          type="text"
-          className="form-control"
-          placeholder="Enter your first name"
-        />
-      </div>
+          <FormLabel fontWeight="bold">Password</FormLabel>
+          <InputGroup size="md">
+            <InputLeftElement
+              pointerEvents="none"
+              children={<FiKey color="gray.300" />}
+            />
+            <Input
+              pr="4.5rem"
+              id="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter your Password"
+              {...register("password")}
+              borderRadius="full"
+            />
+            <InputRightElement>
+              <IconButton
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                icon={showPassword ? <FiEyeOff /> : <FiEye />}
+                onClick={() => setShowPassword(!showPassword)}
+                variant="ghost"
+                size="md"
+                _hover={{ bg: "transparent", color: "blue.200" }}
+              />
+            </InputRightElement>
+          </InputGroup>
+        </FormControl>
 
-      {/* 4. Last Name */}
-      <div className="mb-3">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
+        <FormControl
+          isInvalid={!!errors.firstName}
+          _hover={{ transform: "scale(1.02)" }}
         >
-          <label htmlFor="lastname" className="form-label">
-            <strong>Last name</strong>
-          </label>
-          {errors.lastname && (
-            <span className="text-danger" style={{ fontSize: "0.875rem" }}>
-              {errors.lastname.message}
-            </span>
-          )}
-        </div>
-        <input
-          {...register("lastname")}
-          id="lastname"
-          type="text"
-          className="form-control"
-          placeholder="Enter your last name"
-        />
-      </div>
+          <FormLabel fontWeight="bold">First name</FormLabel>
+          <InputGroup size="md">
+            <InputLeftElement
+              pointerEvents="none"
+              children={<FiType color="gray.300" />}
+            />
+            <Input
+              pr="4.5rem"
+              id="firstName"
+              type="text"
+              placeholder="Enter your First name"
+              {...register("firstName")}
+              borderRadius="full"
+            />
+          </InputGroup>
+        </FormControl>
 
-      {/* 5. Phone number */}
-      <div className="mb-3">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
+        <FormControl
+          isInvalid={!!errors.lastname}
+          _hover={{ transform: "scale(1.02)" }}
         >
-          <label htmlFor="phoneNumber" className="form-label">
-            <strong>Phone number</strong>
-          </label>
-          {errors.phoneNumber && (
-            <span className="text-danger" style={{ fontSize: "0.875rem" }}>
-              {errors.phoneNumber.message}
-            </span>
-          )}
-        </div>
-        <input
-          {...register("phoneNumber")}
-          id="phoneNumber"
-          type="tel"
-          className="form-control"
-          placeholder="Enter your phone number"
-        />
-      </div>
-      {/* 6. Email */}
-      <div className="mb-3">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
+          <FormLabel fontWeight="bold">Last name</FormLabel>
+          <InputGroup size="md">
+            <InputLeftElement
+              pointerEvents="none"
+              children={<FiType color="gray.300" />}
+            />
+            <Input
+              pr="4.5rem"
+              id="lastName"
+              type="text"
+              placeholder="Enter your Last name"
+              {...register("lastname")}
+              borderRadius="full"
+            />
+          </InputGroup>
+        </FormControl>
+
+        <FormControl
+          isInvalid={!!errors.phoneNumber}
+          _hover={{ transform: "scale(1.02)" }}
         >
-          <label htmlFor="emailAddress" className="form-label">
-            <strong>Email Address</strong>
-          </label>
-          {errors.emailAddress && (
-            <span className="text-danger" style={{ fontSize: "0.875rem" }}>
-              {errors.emailAddress.message}
-            </span>
-          )}
-        </div>
-        <input
-          {...register("emailAddress")}
-          id="emailAddress"
-          type="email"
-          className="form-control"
-          placeholder="Enter your email address"
-        />
-      </div>
-      {/* 7. Shipping address */}
-      <div className="mb-3">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
+          <FormLabel fontWeight="bold">Phone number</FormLabel>
+          <InputGroup size="md">
+            <InputLeftElement
+              pointerEvents="none"
+              children={<FiPhone color="gray.300" />}
+            />
+            <Input
+              pr="4.5rem"
+              id="phoneNumber"
+              type="text"
+              placeholder="Enter your Phone number"
+              {...register("phoneNumber")}
+              borderRadius="full"
+            />
+          </InputGroup>
+        </FormControl>
+        <FormControl
+          isInvalid={!!errors.emailAddress}
+          _hover={{ transform: "scale(1.02)" }}
         >
-          <label htmlFor="shippingAddress" className="form-label">
-            <strong>Shipping address</strong>
-          </label>
-          {errors.shippingAddress && (
-            <span className="text-danger" style={{ fontSize: "0.875rem" }}>
-              {errors.shippingAddress.message}
-            </span>
-          )}
-        </div>
-        {/* Using a 'textarea' is better for long addresses */}
-        <textarea
-          {...register("shippingAddress")}
-          id="shippingAddress"
-          className="form-control"
-          placeholder="Enter your shipping address"
-        />
-      </div>
-      <button className="btn btn-primary" type="submit" disabled={isPending}>
-        Sign Up
-      </button>
+          <FormLabel fontWeight="bold">Email address</FormLabel>
+          <InputGroup size="md">
+            <InputLeftElement
+              pointerEvents="none"
+              children={<FiMail color="gray.300" />}
+            />
+            <Input
+              pr="4.5rem"
+              id="emailAddress"
+              type="text"
+              placeholder="Enter your Email address"
+              {...register("emailAddress")}
+              borderRadius="full"
+            />
+          </InputGroup>
+        </FormControl>
+        <FormControl
+          isInvalid={!!errors.shippingAddress}
+          _hover={{ transform: "scale(1.02)" }}
+        >
+          <FormLabel fontWeight="bold">Shipping address</FormLabel>
+          <InputGroup size="md">
+            <InputLeftElement
+              pointerEvents="none"
+              children={<FiMapPin color="gray.300" />}
+            />
+            <Input
+              pr="4.5rem"
+              id="shippingAddress"
+              type="text"
+              placeholder="Enter your Shipping address"
+              {...register("shippingAddress")}
+              borderRadius="full"
+            />
+          </InputGroup>
+        </FormControl>
+
+        <Button
+          type="submit"
+          height="42px"
+          paddingRight="18px"
+          colorScheme="blue"
+          size="2xl"
+          fontSize="lg"
+          leftIcon={<FiLogIn />}
+          borderRadius="full"
+          transition="all 0.2s"
+          _hover={{ transform: "scale(1.05)" }}
+          width="100%"
+        >
+          {isPending ? "Signing up..." : "Sign Up"}
+        </Button>
+      </VStack>
     </form>
   );
 };
-export default Form;
+export default SignupPage;

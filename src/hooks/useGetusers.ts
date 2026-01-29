@@ -9,6 +9,7 @@ export interface User {
   phoneNumber: string;
   shippingAddress: string;
   emailAddress: string;
+  photoUrl?: string;
   role : string;
 }
 const useGetUser = () =>{

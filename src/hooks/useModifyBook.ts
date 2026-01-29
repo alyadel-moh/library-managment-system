@@ -1,27 +1,14 @@
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-interface Book {
-    isbn : string;
-    title : string;
-    publicationYear : number;
-    publisherId : number;
-    authorIds : Array<number>;
-    categoryId : number;
-    sellingPrice : number;
-    stockQuantity    : number;
-    threshold : number;
-}
-
-interface ModifyResponse {
-  message: string;
-}
+import type { Book2 } from "../entities/Book";
+import type BackendResponsemessage from "../entities/Response";
 
 export const useModifyBook = (isbn: string) => {
-  return useMutation<ModifyResponse, AxiosError<{ message: string }>, Book>({
-    mutationFn:async (updatedBook: Book) => {
+  return useMutation<BackendResponsemessage, AxiosError<{ message: string }>, Book2>({
+    mutationFn:async (updatedBook: Book2) => {
       const token = localStorage.getItem("accessToken");
       return axios
-        .put<ModifyResponse>(
+        .put<BackendResponsemessage>(
           `http://localhost:8080/api/admin/book/${isbn}`,
           updatedBook,
           {
@@ -32,7 +19,7 @@ export const useModifyBook = (isbn: string) => {
         )
         .then((response) => response.data);
     },
-    onSuccess: (data: ModifyResponse) => {
+    onSuccess: (data: BackendResponsemessage) => {
       console.log("Book modified successfully:", data);
     },
     onError: (error: AxiosError<{ message: string }>) => {

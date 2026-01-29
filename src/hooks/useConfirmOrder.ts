@@ -1,17 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-
-interface ModifyResponse {
-  message: string;
-}
-
-
+import type BackendResponsemessage from "../entities/Response";
 const useConfirmOrder = () => {
-  return useMutation<ModifyResponse, AxiosError<{ message: string }>, number>({
+  return useMutation<BackendResponsemessage, AxiosError<{ message: string }>, number>({
     mutationFn: async (orderid: number) => {
       const token = localStorage.getItem("accessToken");
       return axios
-        .put<ModifyResponse>(
+        .put<BackendResponsemessage>(
           `http://localhost:8080/api/admin/order/confirm/${orderid}`,
           {},
           {
@@ -22,7 +17,7 @@ const useConfirmOrder = () => {
         )
         .then((response) => response.data);
     },
-    onSuccess: (data: ModifyResponse) => {
+    onSuccess: (data: BackendResponsemessage) => {
       console.log("Order confirmed successfully:", data);
     },
     onError: (error: AxiosError<{ message: string }>) => {

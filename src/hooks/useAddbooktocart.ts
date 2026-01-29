@@ -1,14 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-interface LoginResponse {
-  status: string;
-  message: string;
-}
+import type BackendResponse from "../entities/Response";
 const useAddBooktocart = (isbn : string) =>{
-  return useMutation<LoginResponse, AxiosError<{message : string}>>({
+  return useMutation<BackendResponse, AxiosError<{message : string}>>({
     mutationFn: () => {
       const token = localStorage.getItem('accessToken');
-      return axios.post<LoginResponse>(
+      return axios.post<BackendResponse>(
         `http://localhost:8080/api/user/cart/add/${isbn}`,
         {},
         {
@@ -18,7 +15,7 @@ const useAddBooktocart = (isbn : string) =>{
         }
       ).then((response) => response.data);
     },
-      onSuccess : (data: LoginResponse) => {
+      onSuccess : (data: BackendResponse) => {
         console.log("Book added to Cart successfully : ", data);
       },
       onError :(error: AxiosError<{message : string}>) => {

@@ -6,23 +6,22 @@ interface checkout {
     cvv: string,
     expectedTotal: string
 }
-interface ModifyResponse {
-  message: string;
-}
-
+import type BackendResponsemessage from "../entities/Response";
 const useCardcheckout = () => {
-  return useMutation<ModifyResponse, AxiosError<{ message: string }>,checkout>({
+  return useMutation<BackendResponsemessage, AxiosError<{ message: string }>,checkout>({
     mutationFn: async (checkoutData) => {
       const token = localStorage.getItem('accessToken');
       return axios
-        .post<ModifyResponse>("https://localhost:8443/api/user/cart/checkout", checkoutData, {
+        .post<BackendResponsemessage>("https://localhost:8443/api/user/cart/checkout", checkoutData, {
           headers: {
             Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
           },
+          withCredentials: false,
         })
         .then((response) => response.data);
     },
-    onSuccess: (data: ModifyResponse) => {
+    onSuccess: (data: BackendResponsemessage) => {
       console.log("Checkout successful:", data);
     },
     onError: (error: AxiosError<{ message: string }>) => {

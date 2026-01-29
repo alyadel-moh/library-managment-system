@@ -1,272 +1,363 @@
+import {
+  Icon,
+  IconButton,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Tr,
+  Button,
+  FormControl,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+  useToast,
+  HStack,
+  Text,
+  InputGroup,
+  InputLeftElement,
+} from "@chakra-ui/react";
 import useGetUser from "../hooks/useGetusers";
-import { useNavigate } from "react-router-dom";
-const ViewProfile = () => {
-  const navigate = useNavigate();
-  const { data, isPending, isError, error } = useGetUser();
+import {
+  FiEdit2,
+  FiUser,
+  FiMail,
+  FiPhone,
+  FiMapPin,
+  FiType,
+  FiCheck,
+  FiKey,
+} from "react-icons/fi";
+import { useEffect, useState } from "react";
+import useModifyUser from "../hooks/useModifyuser";
+import ChangePassword from "./changePassword";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
+import { useForm } from "react-hook-form";
+import UpdateProfilePhoto from "./updateprofilephoto";
+const ViewProfile = ({
+  refetchphoto,
+}: {
+  refetchphoto?: (photo: string) => void;
+}) => {
+  const { data, refetch } = useGetUser();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isPasswordModalOpen,
+    onOpen: onPasswordModalOpen,
+    onClose: onPasswordModalClose,
+  } = useDisclosure();
+  const [editField, setEditField] = useState<string>("");
+  const toast = useToast({
+    position: "bottom-right",
+    duration: 3000,
+    isClosable: true,
+  });
+  const schema = z.object({
+    [editField]:
+      editField === "emailAddress"
+        ? z.string().email({ message: "Invalid email address" })
+        : z.string().min(1, { message: `${editField} is required` }),
+  });
 
-  if (isPending) {
-    return <div className="text-center mt-5">Loading profile...</div>;
-  }
+  type FormData = z.infer<typeof schema>;
 
-  if (isError) {
-    console.error("Profile error:", error);
-    return (
-      <div className="alert alert-danger mt-5">
-        Failed to load profile: {error?.message || "Unknown error"}
-        <br />
-        <small>Make sure you're logged in and have a valid token.</small>
-      </div>
-    );
-  }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
+  const handleEditClick = (field: string) => {
+    setEditField(field);
+    onOpen();
+  };
+  const {
+    mutateAsync,
+    isPending,
+    isSuccess,
+    isError,
+    error,
+    data: updateData,
+  } = useModifyUser();
+  useEffect(() => {
+    if (isSuccess && updateData) {
+      toast({
+        title: `${editField.replace(/([A-Z])/g, " $1").trim()} has been updated successfully !`,
+        status: "success",
+      });
+    }
+  }, [isSuccess]);
+  useEffect(() => {
+    if (isError && error) {
+      toast({
+        title: error?.response?.data?.message,
+        status: "error",
+      });
+    }
+  }, [isError, error]);
+  if (!data) return null;
+  const handleSave = async (formData: FormData) => {
+    const updatedUser = {
+      ...data,
+      [editField]: formData[editField].trim(),
+    };
+    await mutateAsync(updatedUser);
+    refetch();
+    onClose();
+  };
 
-  if (!data) {
-    return null;
-  }
+  const onInvalid = () => {
+    const fieldError = errors["emailAddress"];
+    if (fieldError) {
+      toast({
+        title: fieldError.message,
+        status: "error",
+      });
+    }
+  };
+
+  const getFieldIcon = (field: string) => {
+    switch (field) {
+      case "username":
+        return FiUser;
+      case "firstName":
+      case "lastname":
+        return FiType;
+      case "emailAddress":
+        return FiMail;
+      case "phoneNumber":
+        return FiPhone;
+      case "shippingAddress":
+        return FiMapPin;
+      default:
+        return FiEdit2;
+    }
+  };
 
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "100vh",
-        backgroundColor: "beige",
-        padding: "20px",
-        margin: "0",
-        overflow: "auto",
-        boxSizing: "border-box",
-      }}
-    >
-      <table
-        className="table table-bordered"
-        style={{
-          width: "100%",
-          height: "90%",
-          backgroundColor: "#e3f2fd",
-          margin: "0",
-          borderColor: "black",
-        }}
-      >
-        <thead style={{ backgroundColor: "beige" }}>
-          <tr>
-            <th
-              colSpan={3}
-              style={{
-                textAlign: "center",
-                fontSize: "2rem",
-                padding: "20px",
-                backgroundColor: "beige",
-              }}
+    <>
+      <UpdateProfilePhoto
+        user={data}
+        refetchphoto={refetchphoto}
+      />
+      <TableContainer>
+        <Table>
+          <Tbody>
+            <Tr>
+              <Td>
+                <HStack spacing={3}>
+                  <Icon as={FiUser} color="blue.400" />
+                  <Text fontWeight="medium" marginBottom="2px">
+                    Username
+                  </Text>
+                </HStack>
+              </Td>
+              <Td>{data.username}</Td>
+              <Td>
+                <IconButton
+                  icon={<Icon as={FiEdit2} />}
+                  size="md"
+                  variant="ghost"
+                  color="gray.600"
+                  _hover={{ color: "white" }}
+                  aria-label="Edit username"
+                  onClick={() => handleEditClick("username")}
+                />
+              </Td>
+            </Tr>
+            <Tr>
+              <Td>
+                <HStack spacing={3} align="center">
+                  <Icon as={FiType} color="blue.400" />
+                  <Text fontWeight="medium" marginBottom="2px">
+                    First name
+                  </Text>
+                </HStack>
+              </Td>
+              <Td>{data.firstName}</Td>
+              <Td>
+                <IconButton
+                  icon={<Icon as={FiEdit2} />}
+                  size="md"
+                  color="gray.600"
+                  _hover={{ color: "white" }}
+                  variant="ghost"
+                  aria-label="Edit first name"
+                  onClick={() => handleEditClick("firstName")}
+                />
+              </Td>
+            </Tr>
+            <Tr>
+              <Td>
+                <HStack spacing={3}>
+                  <Icon as={FiType} color="blue.400" />
+                  <Text fontWeight="medium" marginBottom="2px">
+                    Last name
+                  </Text>
+                </HStack>
+              </Td>
+              <Td>{data.lastname}</Td>
+              <Td>
+                <IconButton
+                  icon={<Icon as={FiEdit2} />}
+                  size="md"
+                  color="gray.600"
+                  _hover={{ color: "white" }}
+                  variant="ghost"
+                  aria-label="Edit last name"
+                  onClick={() => handleEditClick("lastname")}
+                />
+              </Td>
+            </Tr>
+            <Tr>
+              <Td>
+                <HStack spacing={3}>
+                  <Icon as={FiKey} color="blue.400" />
+                  <Text fontWeight="medium" marginBottom="2px">
+                    Password
+                  </Text>
+                </HStack>
+              </Td>
+              <Td>{data.password}</Td>
+              <Td>
+                <IconButton
+                  icon={<Icon as={FiEdit2} />}
+                  size="md"
+                  color="gray.600"
+                  _hover={{ color: "white" }}
+                  variant="ghost"
+                  aria-label="Edit password"
+                  onClick={onPasswordModalOpen}
+                />
+              </Td>
+            </Tr>
+            <Tr>
+              <Td>
+                <HStack spacing={3} align="center">
+                  <Icon as={FiMail} color="blue.400" />
+                  <Text fontWeight="medium" marginBottom="2px">
+                    Email address
+                  </Text>
+                </HStack>
+              </Td>
+              <Td>{data.emailAddress}</Td>
+              <Td>
+                <IconButton
+                  icon={<Icon as={FiEdit2} />}
+                  size="md"
+                  color="gray.600"
+                  _hover={{ color: "white" }}
+                  variant="ghost"
+                  aria-label="Edit email address"
+                  onClick={() => handleEditClick("emailAddress")}
+                />
+              </Td>
+            </Tr>
+            <Tr>
+              <Td>
+                <HStack spacing={3} align="center">
+                  <Icon as={FiPhone} color="blue.400" />
+                  <Text fontWeight="medium" marginBottom="2px">
+                    Phone number
+                  </Text>
+                </HStack>
+              </Td>
+              <Td>{data.phoneNumber}</Td>
+              <Td>
+                <IconButton
+                  icon={<Icon as={FiEdit2} />}
+                  size="md"
+                  color="gray.600"
+                  _hover={{ color: "white" }}
+                  variant="ghost"
+                  aria-label="Edit phone"
+                  onClick={() => handleEditClick("phoneNumber")}
+                />
+              </Td>
+            </Tr>
+            <Tr>
+              <Td>
+                <HStack spacing={3} align="center">
+                  <Icon as={FiMapPin} color="blue.400" />
+                  <Text fontWeight="medium" marginBottom="2px">
+                    Shipping address
+                  </Text>
+                </HStack>
+              </Td>
+              <Td>{data.shippingAddress}</Td>
+              <Td>
+                <IconButton
+                  icon={<Icon as={FiEdit2} />}
+                  size="md"
+                  color="gray.600"
+                  _hover={{ color: "white" }}
+                  variant="ghost"
+                  aria-label="Edit address"
+                  onClick={() => handleEditClick("shippingAddress")}
+                />
+              </Td>
+            </Tr>
+          </Tbody>
+        </Table>
+      </TableContainer>
+      <Modal isOpen={isOpen} onClose={onClose} size="lg">
+        <ModalOverlay />
+        <ModalContent borderRadius="2xl">
+          <ModalHeader fontSize="xl" fontWeight="bold" shadow="md" py={5}>
+            Edit {editField}
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody py={5}>
+            <FormControl isInvalid={!!errors[editField]}>
+              <InputGroup size="lg">
+                <InputLeftElement pointerEvents="none">
+                  <Icon as={getFieldIcon(editField)} color="gray.400" />
+                </InputLeftElement>
+                <Input
+                  {...register(editField)}
+                  placeholder={`Enter new ${editField}`}
+                  size="lg"
+                  focusBorderColor="blue.400"
+                  _placeholder={{ color: "gray.500" }}
+                  borderRadius="full"
+                />
+              </InputGroup>
+            </FormControl>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              variant="ghost"
+              mr={4}
+              onClick={onClose}
+              isDisabled={isPending}
+              _hover={{ bg: "gray.500", transform: "scale(1.05)" }}
+              borderRadius="full"
             >
-              {data.firstName} {data.lastname}'s Profile
-            </th>
-          </tr>
-          <tr>
-            <th
-              style={{
-                fontSize: "1.2rem",
-                padding: "15px",
-                backgroundColor: "beige",
-              }}
+              Cancel
+            </Button>
+            <Button
+              colorScheme="blue"
+              onClick={handleSubmit(handleSave, onInvalid)}
+              leftIcon={<Icon as={FiCheck} />}
+              borderRadius="full"
+              _hover={{ transform: "scale(1.05)" }}
             >
-              Field
-            </th>
-            <th
-              style={{
-                fontSize: "1.2rem",
-                padding: "15px",
-                backgroundColor: "beige",
-              }}
-            >
-              Value
-            </th>
-            <th
-              style={{
-                fontSize: "1.2rem",
-                padding: "15px",
-                backgroundColor: "beige",
-              }}
-            >
-              Action
-            </th>
-          </tr>
-        </thead>
-        <tbody style={{ backgroundColor: "beige" }}>
-          <tr>
-            <td
-              style={{
-                fontSize: "1.1rem",
-                padding: "15px",
-                backgroundColor: "beige",
-              }}
-            >
-              <strong>Username</strong>
-            </td>
-            <td
-              style={{
-                fontSize: "1.1rem",
-                padding: "15px",
-                backgroundColor: "beige",
-              }}
-            >
-              {data.username}
-            </td>
-            <td style={{ padding: "15px", backgroundColor: "beige" }}>
-              <button
-                className="btn btn-outline-danger"
-                style={{ fontSize: "1.1rem", padding: "12px 30px" }}
-                onClick={() => navigate("/modify/username")}
-              >
-                Modify
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td
-              style={{
-                fontSize: "1.1rem",
-                padding: "15px",
-                backgroundColor: "beige",
-              }}
-            >
-              <strong>First Name</strong>
-            </td>
-            <td
-              style={{
-                fontSize: "1.1rem",
-                padding: "15px",
-                backgroundColor: "beige",
-              }}
-            >
-              {data.firstName}
-            </td>
-            <td style={{ padding: "15px", backgroundColor: "beige" }}>
-              <button
-                className="btn btn-outline-danger"
-                style={{ fontSize: "1.1rem", padding: "12px 30px" }}
-                onClick={() => navigate("/modify/firstName")}
-              >
-                Modify
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td
-              style={{
-                fontSize: "1.1rem",
-                padding: "15px",
-                backgroundColor: "beige",
-              }}
-            >
-              <strong>Last Name</strong>
-            </td>
-            <td
-              style={{
-                fontSize: "1.1rem",
-                padding: "15px",
-                backgroundColor: "beige",
-              }}
-            >
-              {data.lastname}
-            </td>
-            <td style={{ padding: "15px", backgroundColor: "beige" }}>
-              <button
-                className="btn btn-outline-danger"
-                style={{ fontSize: "1.1rem", padding: "12px 30px" }}
-                onClick={() => navigate("/modify/lastName")}
-              >
-                Modify
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td
-              style={{
-                fontSize: "1.1rem",
-                padding: "15px",
-                backgroundColor: "beige",
-              }}
-            >
-              <strong>Email Address</strong>
-            </td>
-            <td
-              style={{
-                fontSize: "1.1rem",
-                padding: "15px",
-                backgroundColor: "beige",
-              }}
-            >
-              {data.emailAddress}
-            </td>
-            <td style={{ padding: "15px", backgroundColor: "beige" }}>
-              <button
-                className="btn btn-outline-danger"
-                style={{ fontSize: "1.1rem", padding: "12px 30px" }}
-                onClick={() => navigate("/modify/email")}
-              >
-                Modify
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td
-              style={{
-                fontSize: "1.1rem",
-                padding: "15px",
-                backgroundColor: "beige",
-              }}
-            >
-              <strong>Phone Number</strong>
-            </td>
-            <td
-              style={{
-                fontSize: "1.1rem",
-                padding: "15px",
-                backgroundColor: "beige",
-              }}
-            >
-              {data.phoneNumber}
-            </td>
-            <td style={{ padding: "15px", backgroundColor: "beige" }}>
-              <button
-                className="btn btn-outline-danger"
-                style={{ fontSize: "1.1rem", padding: "12px 30px" }}
-                onClick={() => navigate("/modify/phoneNumber")}
-              >
-                Modify
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td
-              style={{
-                fontSize: "1.1rem",
-                padding: "15px",
-                backgroundColor: "beige",
-              }}
-            >
-              <strong>Shipping Address</strong>
-            </td>
-            <td
-              style={{
-                fontSize: "1.1rem",
-                padding: "15px",
-                backgroundColor: "beige",
-              }}
-            >
-              {data.shippingAddress}
-            </td>
-            <td style={{ padding: "15px", backgroundColor: "beige" }}>
-              <button
-                className="btn btn-outline-danger"
-                style={{ fontSize: "1.1rem", padding: "12px 30px" }}
-                onClick={() => navigate("/modify/shippingAddress")}
-              >
-                Modify
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+              {isPending ? "Saving..." : "Save Changes"}
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <ChangePassword
+        isOpen={isPasswordModalOpen}
+        onClose={onPasswordModalClose}
+      />
+    </>
   );
 };
 

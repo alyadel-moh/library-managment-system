@@ -1,21 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import type { Author } from "./useGetauthors";
-import type { Publisher } from "./useGetpublishers";
-import type { Category } from "./useGetcategory";
-interface Book {
-    isbn : string;
-    title : string;
-    publicationYear : number;
-    publisher : Publisher;
-    authors : Array<Author>;
-    category : Category;
-    sellingPrice : number;
-    stockQuantity   : number;
-    threshold : number;
-}
-const useGetBooksbycategory = ({category} : {category: string}) =>{
-  return useQuery<Book[]>({
+import type Book1 from "../entities/Book";
+const useGetBooksbycategory = (category : string) =>{
+  return useQuery<Book1[]>({
     queryKey: ['books', category],
     queryFn: () => {
       const token = localStorage.getItem('accessToken');

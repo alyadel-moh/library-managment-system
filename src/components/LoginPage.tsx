@@ -2,33 +2,73 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
 import { useForm } from "react-hook-form";
 import useLoginUser from "../hooks/useLoginuser";
-import type { CSSProperties } from "react";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useGetUser from "../hooks/useGetusers";
+import {
+  FiKey,
+  FiLogIn,
+  FiUser,
+  FiUserPlus,
+  FiEye,
+  FiEyeOff,
+} from "react-icons/fi";
+import {
+  Button,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
+  IconButton,
+  Text,
+  useToast,
+  Box,
+} from "@chakra-ui/react";
+
 const schema = z.object({
   username: z.string().min(1, { message: "UserName is required" }),
   password: z.string().min(1, { message: "Password  is required" }),
 });
 type formdata = z.infer<typeof schema>; // infers input types (name and age) based on schema
 const Form = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const toast = useToast({
+    position: "bottom-right",
+    duration: 4000,
+    isClosable: true,
+  });
   const navigate = useNavigate();
-
-  const headingStyle: CSSProperties = {
-    marginBottom: "40px",
-    textAlign: "center",
-    fontSize: "2.5em",
-    whiteSpace: "nowrap",
-    marginLeft: "-60px",
-  };
   const {
     register,
     handleSubmit,
     formState: { errors }, // is valid for disabelling submit buttton and formsate used for displaying error messages
   } = useForm<formdata>({ resolver: zodResolver(schema) }); // manage form state errors validations submissionhandling i mean it builds and validate form
   const loginuser = useLoginUser();
-  const { isPending, isSuccess, isError, error, data } = loginuser;
+  const { isSuccess, data, error, isError, isPending } = loginuser;
   const { refetch } = useGetUser();
+
+  // Show success toast
+  useEffect(() => {
+    if (isSuccess && data?.token) {
+      toast({
+        title: data?.message,
+        status: "success",
+      });
+    }
+  }, [isSuccess, data]);
+
+  // Show error toast
+  useEffect(() => {
+    if (isError && error) {
+      toast({
+        title: "Username or Password is incorrect",
+        status: "error",
+      });
+    }
+  }, [isError, error]);
 
   // Navigate based on user role after successful login
   useEffect(() => {
@@ -36,12 +76,11 @@ const Form = () => {
       // Refetch user data after login to get role
       refetch().then(async (result) => {
         if (result.data?.role) {
-          await new Promise((resolve) => setTimeout(resolve, 1000));
           console.log("Navigating for role:", result.data.role);
           if (result.data.role === "ROLE_ADMIN") {
-            navigate("/admin/dashboard", { replace: true });
+            navigate("/Adminpage", { replace: true });
           } else if (result.data.role === "ROLE_CUSTOMER") {
-            navigate("/customer/dashboard", { replace: true });
+            navigate("/homepage", { replace: true });
           }
         }
       });
@@ -53,95 +92,104 @@ const Form = () => {
       onSubmit={handleSubmit((data) => {
         loginuser.mutate(data);
       })}
-      className="login-form"
+      style={{
+        width: "100%",
+        maxWidth: "400px",
+        display: "flex",
+        flexDirection: "column",
+        gap: "20px",
+      }}
     >
-      <h1 style={headingStyle}>Library Management System</h1>
+      <Box textAlign="center" mb={2}>
+        <Heading as="h1" fontSize="3xl" letterSpacing="tight">
+          The Next Chapter
+        </Heading>
+        <Text color="gray.400" mt={1}>
+          Enter your details to access your library.
+        </Text>
+      </Box>
+      <FormControl
+        isInvalid={!!errors.username}
+        _hover={{ transform: "scale(1.02)" }}
+      >
+        <FormLabel fontWeight="bold">Username</FormLabel>
+        <InputGroup size="md">
+          <InputLeftElement
+            pointerEvents="none"
+            children={<FiUser color="gray.300" />}
+          />
+          <Input
+            pr="4.5rem"
+            id="username"
+            type="text"
+            placeholder="Enter your Username"
+            {...register("username")}
+            borderRadius="full"
+          />
+        </InputGroup>
+      </FormControl>
 
-      {isSuccess && data && (
-        <div className="alert alert-success">
-          <p>
-            <strong>
-              Login successfully!
-              <br />
-              {data.message}
-            </strong>
-          </p>
-        </div>
-      )}
+      <FormControl
+        isInvalid={!!errors.password}
+        _hover={{ transform: "scale(1.02)" }}
+      >
+        <FormLabel fontWeight="bold">Password</FormLabel>
+        <InputGroup size="md">
+          <InputLeftElement
+            pointerEvents="none"
+            children={<FiKey color="gray.300" />}
+          />
+          <Input
+            pr="4.5rem"
+            id="password"
+            type={showPassword ? "text" : "password"}
+            placeholder="Enter your Password"
+            {...register("password")}
+            borderRadius="full"
+          />
+          <InputRightElement>
+            <IconButton
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              icon={showPassword ? <FiEyeOff /> : <FiEye />}
+              onClick={() => setShowPassword(!showPassword)}
+              variant="ghost"
+              size="md"
+              _hover={{ bg: "transparent", color: "blue.200" }}
+            />
+          </InputRightElement>
+        </InputGroup>
+      </FormControl>
 
-      {isError && (
-        <div className="alert alert-danger">
-          Login failed:{" "}
-          {error?.response?.data?.message ||
-            error?.message ||
-            "An unknown error occurred."}
-        </div>
-      )}
-      <div className="mb-3">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <label htmlFor="username" className="form-label">
-            <strong> UserName</strong>
-          </label>
-          {errors.username && (
-            <span className="text-danger" style={{ fontSize: "0.875rem" }}>
-              {errors.username.message}
-            </span>
-          )}
-        </div>
-        <input
-          {...register("username")}
-          id="username"
-          type="text"
-          className="form-control"
-          placeholder="Enter your username"
-        />
-      </div>
-      <div className="mb-3">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <label htmlFor="age" className="form-label">
-            <strong>Password</strong>
-          </label>
-          {errors.password && (
-            <span className="text-danger" style={{ fontSize: "0.875rem" }}>
-              {errors.password.message}
-            </span>
-          )}
-        </div>
-        <input
-          {...register("password")}
-          id="password"
-          type="password"
-          className="form-control"
-          placeholder="Enter your password"
-        />
-      </div>
-      <button className="btn btn-primary" type="submit" disabled={isPending}>
-        Login in
-      </button>
-      <strong>
-        <br />
-        Don't have an account?
-        <br />
-      </strong>
-      <button
-        className="btn btn-primary"
-        type="button"
+      <Button
+        type="submit"
+        height="45px"
+        paddingRight="18px"
+        colorScheme="blue"
+        size="2xl"
+        fontSize="lg"
+        leftIcon={<FiLogIn />}
+        borderRadius="full"
+        transition="all 0.2s"
+        _hover={{ transform: "scale(1.05)" }}
+      >
+        {isPending ? "Logging in..." : "Login"}
+      </Button>
+      <Text fontWeight="bold">Don't have an account ?</Text>
+      <Button
         onClick={() => navigate("/signup")}
+        size="2xl"
+        height="45px"
+        fontSize="lg"
+        variant="ghost"
+        border="0.5px solid"
+        transition="all 0.2s"
+        _hover={{ bg: "gray.500", transform: "scale(1.05)" }}
+        marginTop="-20px"
+        leftIcon={<FiUserPlus />}
+        borderRadius="full"
       >
         Sign up
-      </button>
+      </Button>
     </form>
   );
 };

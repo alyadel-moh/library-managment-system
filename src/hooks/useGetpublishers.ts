@@ -1,12 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";      
-
-export interface Publisher{
-    publisherId : number;
-    publisherName : string;
-    address : string;
-    Phone : string;
-}
+import type Publisher from "../entities/Publisher";
 const useGetPublishers = () =>{
   return useQuery<Publisher[]>({
     queryKey: ['Publishers'],

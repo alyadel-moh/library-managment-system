@@ -1,30 +1,18 @@
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-
-interface User {
-  username: string;
-  password: string;
-  firstName: string;
-  lastname: string;
-  phoneNumber: string;
-  shippingAddress: string;
-  emailAddress: string;
-}
-interface LoginResponse {
-  status: string;
-  message: string;
-}
+import type User from "../entities/User";
+import type BackendResponse from "../entities/Response";
 const useAddUser = () =>{
-  return useMutation<LoginResponse, AxiosError<{message : string}>, User>({
+  return useMutation<BackendResponse, AxiosError<{message : string}>, User>({
     mutationFn: async (newUser: User) => 
-      axios.post<LoginResponse>(
+      axios.post<BackendResponse>(
         "http://localhost:8080/api/auth/signup",
         newUser
       ).then((response) => response.data),
       onMutate :(newUser: User) => {
         console.log("Adding user:", newUser);
       },
-      onSuccess : (data: LoginResponse) => {
+      onSuccess : (data: BackendResponse) => {
         console.log("User added successfully:", data);
       },
       onError :(error: AxiosError<{message : string}>) => {

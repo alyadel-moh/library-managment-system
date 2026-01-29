@@ -1,11 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-;
-
-export interface Category {
-    id: number;
-    name: string;
-}
+;import type Category from "../entities/Category";
 const useGetCategories = () =>{
   return useQuery<Category[]>({
     queryKey: ['categories'],

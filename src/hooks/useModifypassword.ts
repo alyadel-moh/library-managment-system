@@ -4,23 +4,20 @@ interface User {
   oldPassword: string;
   newPassword: string;
 }
-interface ModifyResponse {
-  message: string;
-}
-
+import type BackendResponsemessage from "../entities/Response";
 const useModifyUser = () => {
-  return useMutation<ModifyResponse, AxiosError<{ message: string }>, User>({
+  return useMutation<BackendResponsemessage, AxiosError<{ message: string }>, User>({
     mutationFn:async (newUser: User) => {
       const token = localStorage.getItem('accessToken');
       return axios
-        .put<ModifyResponse>("http://localhost:8080/api/user/profile/password", newUser, {
+        .put<BackendResponsemessage>("http://localhost:8080/api/user/profile/password", newUser, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         })
         .then((response) => response.data);
     },
-    onSuccess: (data: ModifyResponse) => {
+    onSuccess: (data: BackendResponsemessage) => {
       console.log("password modified successfully:", data);
     },
     onError: (error: AxiosError<{ message: string }>) => {

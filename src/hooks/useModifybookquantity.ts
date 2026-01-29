@@ -1,16 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-interface ModifyResponse {
-  message: string;
-}
-
+import type BackendResponsemessage from "../entities/Response";
 const useModifyquantity = (quantity: number, isbn: string) => {
-  return useMutation<ModifyResponse, AxiosError<{ message: string }>>({
+  return useMutation<BackendResponsemessage, AxiosError<{ message: string }>>({
     mutationFn:async () => {
       const token = localStorage.getItem('accessToken');
       return axios
-        .put<ModifyResponse>(
-          `http://localhost:8080/api/user/cart/decrease/${isbn}/${quantity}`,
+        .put<BackendResponsemessage>(
+          `http://localhost:8080/api/user/cart/update/${isbn}/${quantity}`,
           {},
           {
             headers: {
@@ -20,7 +17,7 @@ const useModifyquantity = (quantity: number, isbn: string) => {
         )
         .then((response) => response.data);
     },
-    onSuccess: (data: ModifyResponse) => {
+    onSuccess: (data: BackendResponsemessage) => {
       console.log("quantity modified successfully:", data);
     },
     onError: (error: AxiosError<{ message: string }>) => {

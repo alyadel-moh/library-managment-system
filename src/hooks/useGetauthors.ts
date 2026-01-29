@@ -1,10 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-export interface Author {
-    authorId: number;
-    firstName: string;
-    lastName: string;
-}
+import type Author from "../entities/Author";
 const useGetAuthors = () =>{
   return useQuery<Author[]>({
     queryKey: ['authors'],
