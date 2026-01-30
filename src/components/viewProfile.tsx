@@ -22,6 +22,7 @@ import {
   Text,
   InputGroup,
   InputLeftElement,
+  Spinner,
 } from "@chakra-ui/react";
 import useGetUser from "../hooks/useGetusers";
 import {
@@ -139,13 +140,19 @@ const ViewProfile = ({
         return FiEdit2;
     }
   };
-
+  if (!data) {
+    return (
+      <HStack direction="row" align="center" spacing={3} padding={5}>
+        <Spinner size="lg" color="blue.400" />
+        <Text paddingLeft="2px" color="blue.400" marginTop="10px">
+          Loading System reports...
+        </Text>
+      </HStack>
+    );
+  }
   return (
     <>
-      <UpdateProfilePhoto
-        user={data}
-        refetchphoto={refetchphoto}
-      />
+      <UpdateProfilePhoto user={data} refetchphoto={refetchphoto} />
       <TableContainer>
         <Table>
           <Tbody>

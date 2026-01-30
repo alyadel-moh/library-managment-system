@@ -1,4 +1,5 @@
-import { Box, Grid, GridItem, Heading, Show } from "@chakra-ui/react";
+/* eslint-disable react-hooks/set-state-in-effect */
+import { Box, Grid, GridItem, Show } from "@chakra-ui/react";
 import { useSearchParams } from "react-router-dom";
 import BooksList from "../components/booksList";
 import ViewProfile from "../components/viewProfile";
@@ -9,16 +10,32 @@ import type Book1 from "../entities/Book";
 import Publisherorders from "../components/Publisherorders";
 import BrowseCategories from "../components/browseCategories";
 import Reports from "../components/reports";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import type { BookSearchCriteria } from "../hooks/useGetbook";
+import YearInput from "../components/yearSelector";
+import PriceRangeSelector from "../components/priceSelector";
 const Adminpage = () => {
-  const [selectedView, setSelectedView] = useState<string>("All Categories");
+  const [selectedView, setSelectedView] = useState<string>("books");
   const [selectedBook, setSelectedBook] = useState<Book1 | null>(null);
+  const [criteria, setCriteria] = useState<BookSearchCriteria | null>(null);
   const [photoUrl, setPhotoUrl] = useState<string>("");
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("search");
   const handleViewDetails = (bookData: Book1) => {
     setSelectedBook(bookData);
     setSelectedView("modifyBook");
+  };
+  useEffect(() => {
+    if (searchQuery) {
+      setCriteria((prev) => ({ ...prev, keyword: searchQuery }));
+    }
+  }, [searchQuery]);
+
+  const handleCriteriaChange = (newCriteria: Partial<BookSearchCriteria>) => {
+    setCriteria((prev) => ({
+      ...prev,
+      ...newCriteria,
+    }));
   };
 
   return (
@@ -56,19 +73,17 @@ const Adminpage = () => {
             <Publisherorders />
           ) : selectedView === "reports" ? (
             <Reports />
-          ) : (
+          ) : selectedView === "books" ? (
             <>
-              <BrowseCategories onViewChange={setSelectedView} />
-              <Heading as="h1" marginY={5} fontSize="3xl">
-                {searchQuery ? `Search results for "${searchQuery}"` : ""}
-              </Heading>
+              <BrowseCategories setCriteria={handleCriteriaChange} />
+              <YearInput setCriteria={handleCriteriaChange} />
+              <PriceRangeSelector setCriteria={handleCriteriaChange} />
               <BooksList
                 onViewDetails={handleViewDetails}
-                search={searchQuery || ""}
-                category={selectedView}
+                criteria={criteria || undefined}
               />
             </>
-          )}
+          ) : null}
         </Box>
       </GridItem>
     </Grid>

@@ -1,6 +1,8 @@
 import { Box, HStack, useRadio, useRadioGroup, Text } from "@chakra-ui/react";
+import type { BookSearchCriteria } from "../hooks/useGetbook";
 interface categoryProps {
-  onViewChange: (view: string) => void;
+  setCriteria: (newCriteria: Partial<BookSearchCriteria>) => void;
+  criteria?: BookSearchCriteria;
 }
 function SegmentItem(props: any) {
   const { getInputProps, getRadioProps } = useRadio(props);
@@ -36,9 +38,9 @@ function SegmentItem(props: any) {
   );
 }
 
-const BrowseCategories = ({ onViewChange }: categoryProps) => {
+const BrowseCategories = ({ setCriteria, criteria }: categoryProps) => {
   const options = [
-    { value: "All Categories", label: "All Categories" },
+    { value: "All", label: "All Categories" },
     { value: "2", label: "Art" },
     { value: "4", label: "History" },
     { value: "1", label: "Science" },
@@ -46,11 +48,14 @@ const BrowseCategories = ({ onViewChange }: categoryProps) => {
     { value: "3", label: "Religion" },
   ];
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: "framework",
-    defaultValue: "All Categories",
-    onChange: (value) => onViewChange(value),
+    defaultValue: "All",
+    onChange: (value) =>
+      setCriteria({
+        ...criteria,
+        categoryId: value === "All" ? undefined : value,
+      }),
   });
 
   const group = getRootProps();

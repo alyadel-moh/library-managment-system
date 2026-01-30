@@ -23,6 +23,7 @@ import {
   InputGroup,
   InputLeftElement,
   Select,
+  Spinner,
 } from "@chakra-ui/react";
 import {
   FiEdit2,
@@ -36,6 +37,7 @@ import {
   FiAlertTriangle,
   FiType,
   FiCheck,
+  FiAlertCircle,
 } from "react-icons/fi";
 import { useEffect, useState } from "react";
 import { z } from "zod";
@@ -51,7 +53,7 @@ interface BookdetailpageProps {
   book: Book1;
 }
 const ModifyBook = ({ book }: BookdetailpageProps) => {
-  const { data, refetch } = useGetBook(book.title);
+  const { data, refetch } = useGetBook({ isbn: book.isbn });
   const [editField, setEditField] = useState<string>("");
   const toast = useToast({
     position: "bottom-right",
@@ -110,7 +112,14 @@ const ModifyBook = ({ book }: BookdetailpageProps) => {
   }, [isError, error]);
 
   if (!data || data.length === 0) {
-    return null;
+    return (
+      <HStack direction="row" align="center" spacing={3} padding={5}>
+        <Spinner size="lg" color="blue.400" />
+        <Text paddingLeft="2px" color="blue.400" marginTop="10px">
+          Loading book details...
+        </Text>
+      </HStack>
+    );
   }
   const bookData = data[0];
 
@@ -142,7 +151,7 @@ const ModifyBook = ({ book }: BookdetailpageProps) => {
       case "stockQuantity":
         return FiLayers;
       case "threshold":
-        return FiCalendar;
+        return FiAlertCircle;
       case "sellingPrice":
         return FiDollarSign;
       default:

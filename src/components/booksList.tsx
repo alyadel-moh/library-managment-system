@@ -3,22 +3,17 @@ import { SimpleGrid, Text } from "@chakra-ui/react";
 import BookCardContainer from "./bookCardcountainer";
 import BookCardskeleton from "./bookCardskeleton";
 import Bookcard from "./Bookcard";
+import useGetBook, { type BookSearchCriteria } from "../hooks/useGetbook";
 import useGetbooks from "../hooks/useGetbooks";
-import useGetbook from "../hooks/useGetbook";
-import useGetBooksbycategory from "../hooks/useGetbookbycategory";
+
 interface viewdetails {
   onViewDetails: (bookData: any) => void;
-  search?: string;
-  category?: string;
+  criteria?: BookSearchCriteria;
 }
-const BooksList = ({ onViewDetails, search, category }: viewdetails) => {
-  const { data, error, isLoading } =
-    category === "All Categories" && search
-      ? useGetbook(search || "")
-      : category && category !== "All Categories"
-        ? useGetBooksbycategory(category || "")
-        : useGetbooks();
-
+const BooksList = ({ onViewDetails, criteria }: viewdetails) => {
+  const { data, error, isLoading } = criteria
+    ? useGetBook(criteria)
+    : useGetbooks();
   const skeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   if (error) return <Text>Error loading books.</Text>;
   return (

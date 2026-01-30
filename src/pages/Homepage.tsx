@@ -1,4 +1,4 @@
-import { Box, Grid, GridItem, Heading, Show } from "@chakra-ui/react";
+import { Box, Grid, GridItem, Show } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import BooksList from "../components/booksList";
@@ -9,14 +9,25 @@ import ViewOrderhistory from "../components/viewOrderhistory";
 import Checkoutform from "../components/Checkoutform";
 import Bookdetailpage from "./Bookdetailpage";
 import BrowseCategories from "../components/browseCategories";
+import type { BookSearchCriteria } from "../hooks/useGetbook";
+import YearInput from "../components/yearSelector";
+import PriceRangeSelector from "../components/priceSelector";
 
 const Homepage = () => {
   const [selectedView, setSelectedView] = useState<string>("books");
   const [selectedBook, setSelectedBook] = useState<any>(null);
+  const [criteria, setCriteria] = useState<BookSearchCriteria | null>(null);
   const [expectedTotal, setExpectedTotal] = useState<string>("");
   const [photoUrl, setPhotoUrl] = useState<string>("");
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("search");
+  if (searchQuery && (!criteria || criteria.keyword !== searchQuery)) {
+    setCriteria((prev) => ({ ...prev, keyword: searchQuery }));
+  }
+  const handleCriteriaChange = (newCriteria: Partial<BookSearchCriteria>) => {
+    setCriteria((prev) => ({ ...prev, ...newCriteria }));
+  };
+
   const handleViewDetails = (book: any) => {
     setSelectedBook(book);
     setSelectedView("bookDetail");
@@ -49,12 +60,12 @@ const Homepage = () => {
             <Bookdetailpage book={selectedBook} />
           ) : selectedView === "books" ? (
             <>
-              <Heading as="h1" marginY={5} fontSize="3xl">
-                {searchQuery ? `Search results for "${searchQuery}"` : ""}
-              </Heading>
+              <BrowseCategories setCriteria={handleCriteriaChange} />
+              <YearInput setCriteria={handleCriteriaChange} />
+              <PriceRangeSelector setCriteria={handleCriteriaChange} />
               <BooksList
                 onViewDetails={handleViewDetails}
-                search={searchQuery || ""}
+                criteria={criteria || undefined}
               />
             </>
           ) : selectedView === "cart" ? (
