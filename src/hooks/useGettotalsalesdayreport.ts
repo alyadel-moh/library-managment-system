@@ -19,7 +19,11 @@ const useGettotalsalesbydayreport = (date : string) =>{
       ).then((response) => {
         console.log('Totalsalesbydayreport fetched successfully:', response.data);
         return response.data;
-      });
+      }).catch((error) => {
+        console.error('Error fetching Totalsalesbydayreport:', error);
+        throw error;
+      }
+    )
     },
     enabled: !!localStorage.getItem('accessToken') && !!date,  // only run if token exists and date is provided
     retry: false // do not retry on failure

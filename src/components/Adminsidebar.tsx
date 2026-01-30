@@ -1,4 +1,4 @@
-import { Avatar, Button, calc, useToast, VStack } from "@chakra-ui/react";
+import { Avatar, Button, useToast, VStack } from "@chakra-ui/react";
 import React, { useState } from "react";
 import {
   FiHome,
@@ -6,6 +6,7 @@ import {
   FiPackage,
   FiBookOpen,
   FiUser,
+  FiTrendingUp,
 } from "react-icons/fi";
 import useLogout from "../hooks/UseLogout";
 import { useNavigate } from "react-router-dom";
@@ -130,7 +131,7 @@ const Adminsidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
         Pending orders
       </Button>
       <Button
-        leftIcon={<FiHome />}
+        leftIcon={<FiTrendingUp />}
         variant={activeView === "reports" ? "solid" : "ghost"}
         backgroundColor={activeView === "reports" ? "blue.500" : "transparent"}
         color={activeView === "reports" ? "white" : "inherit"}

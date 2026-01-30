@@ -39,11 +39,11 @@ function SegmentItem(props: any) {
 const BrowseCategories = ({ onViewChange }: categoryProps) => {
   const options = [
     { value: "All Categories", label: "All Categories" },
-    { value: "Art", label: "Art" },
-    { value: "History", label: "History" },
-    { value: "Science", label: "Science" },
-    { value: "Geography", label: "Geography" },
-    { value: "Religion", label: "Religion" },
+    { value: "2", label: "Art" },
+    { value: "4", label: "History" },
+    { value: "1", label: "Science" },
+    { value: "5", label: "Geography" },
+    { value: "3", label: "Religion" },
   ];
 
   // eslint-disable-next-line react-hooks/rules-of-hooks

@@ -1,5 +1,4 @@
 import { Box, Grid, GridItem, Heading, Show } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import BooksList from "../components/booksList";
 import ViewProfile from "../components/viewProfile";
@@ -9,6 +8,8 @@ import ModifyBook from "../components/modifyBook";
 import type Book1 from "../entities/Book";
 import Publisherorders from "../components/Publisherorders";
 import BrowseCategories from "../components/browseCategories";
+import Reports from "../components/reports";
+import { useState } from "react";
 const Adminpage = () => {
   const [selectedView, setSelectedView] = useState<string>("All Categories");
   const [selectedBook, setSelectedBook] = useState<Book1 | null>(null);
@@ -53,6 +54,8 @@ const Adminpage = () => {
             <ModifyBook book={selectedBook} />
           ) : selectedView === "pending" ? (
             <Publisherorders />
+          ) : selectedView === "reports" ? (
+            <Reports />
           ) : (
             <>
               <BrowseCategories onViewChange={setSelectedView} />
