@@ -30,14 +30,9 @@ const Adminpage = () => {
       setCriteria((prev) => ({ ...prev, keyword: searchQuery }));
     }
   }, [searchQuery]);
-
   const handleCriteriaChange = (newCriteria: Partial<BookSearchCriteria>) => {
-    setCriteria((prev) => ({
-      ...prev,
-      ...newCriteria,
-    }));
+    setCriteria((prev) => ({ ...prev, ...newCriteria }));
   };
-
   return (
     <Grid
       templateAreas={{ base: `"main"`, lg: `"aside main"` }}

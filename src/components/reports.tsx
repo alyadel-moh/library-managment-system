@@ -5,6 +5,9 @@ import {
   Spinner,
   HStack,
   Text,
+  Box,
+  SimpleGrid,
+  Input,
 } from "@chakra-ui/react";
 import useGettop10sellingbooks from "../hooks/useGettop10sellingbooks";
 import useGettop5customers from "../hooks/useGettop5customers";
@@ -19,15 +22,14 @@ const Reports = () => {
   const { data: totalsalesmonth } = useGettotalsalesbymonthreport();
   const { data: totalsalesday } = useGettotalsalesbydayreport(searchValue);
   if (!topcustomer || !topsellingbooks || !totalsalesmonth) {
-      return (
-        <HStack direction="row" align="center" spacing={3} padding={5}>
-          <Spinner size="lg" color="blue.400" />
-          <Text paddingLeft="2px" color="blue.400" marginTop="10px">
-            Loading System reports...
-          </Text>
-        </HStack>
-      );
-    }
+    return (
+      <HStack direction="row" align="center" spacing={3} padding={5}>
+        <Spinner size="lg" color="blue.400" />
+        <Text paddingLeft="2px" color="blue.400" marginTop="10px">
+          Loading System reports...
+        </Text>
+      </HStack>
+    );
   }
   return (
     <>

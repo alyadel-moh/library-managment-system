@@ -47,7 +47,7 @@ const YearInput = ({ setCriteria }: yearProps) => {
       isInvalid={isInvalid}
       maxWidth="150px"
       marginLeft="670px"
-      marginTop="-44px"
+      marginTop="-45px"
     >
       <InputGroup>
         <InputLeftElement pointerEvents="none">

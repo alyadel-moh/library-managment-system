@@ -12,6 +12,8 @@ import BrowseCategories from "../components/browseCategories";
 import type { BookSearchCriteria } from "../hooks/useGetbook";
 import YearInput from "../components/yearSelector";
 import PriceRangeSelector from "../components/priceSelector";
+import ViewSaved from "../components/savedbooks";
+import useGetUser from "../hooks/useGetusers";
 
 const Homepage = () => {
   const [selectedView, setSelectedView] = useState<string>("books");
@@ -32,6 +34,17 @@ const Homepage = () => {
     setSelectedBook(book);
     setSelectedView("bookDetail");
   };
+  const { data: userData } = useGetUser();
+
+  useEffect(() => {
+    if (userData?.photoUrl) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setPhotoUrl(userData.photoUrl);
+    }
+  }, [userData]);
+  const handlePhotoUpdate = (newUrl: string) => {
+    setPhotoUrl(newUrl);
+  };
   useEffect(() => {
     if (searchQuery) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -47,7 +60,7 @@ const Homepage = () => {
         <GridItem
           area="aside"
           padding="5px"
-          position="sticky"
+          position="fixed"
           top="100px"
           height="calc(100vh - 100px)"
         >
@@ -79,12 +92,10 @@ const Homepage = () => {
             <ViewOrderhistory />
           ) : selectedView === "checkout" ? (
             <Checkoutform expectedTotal={expectedTotal} />
+          ) : selectedView === "saved" ? (
+            <ViewSaved onViewDetails={handleViewDetails} />
           ) : (
-            <ViewProfile
-              refetchphoto={(photo) => {
-                setPhotoUrl(photo);
-              }}
-            />
+            <ViewProfile refetchphoto={handlePhotoUpdate} />
           )}
         </Box>
       </GridItem>

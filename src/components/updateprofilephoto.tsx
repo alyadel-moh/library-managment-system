@@ -51,7 +51,7 @@ const UpdateProfilePhoto = ({
       });
       if (refetchphoto) refetchphoto(selectedImage || "");
     }
-  }, [isSuccess, data]);
+  }, [isSuccess]);
   return (
     <>
       <VStack spacing={1}>

@@ -5,8 +5,6 @@ import {
   Text,
   Divider,
   SimpleGrid,
-  HStack,
-  Spinner,
 } from "@chakra-ui/react";
 import useGetaddedbookstocart from "../hooks/useGetbooksaddedtocart";
 import useModifyquantity from "../hooks/useModifybookquantity";
@@ -35,12 +33,14 @@ const ViewCart = ({ onViewChange }: ViewCartProps) => {
     isError: removeError,
     error: removeErrorMsg,
     isPending: removeIsPending,
+    isSuccess: removeIsSuccess,
   } = removeBook;
   const modifyQuantity = useModifyquantity(quantity, modifyingIsbn);
   const {
     data: modifyData,
     isError: modifyError,
     error: modifyErrorMsg,
+    isSuccess : modifyIsSuccess,
   } = modifyQuantity;
   useEffect(() => {
     if (removeData || modifyData) {
@@ -51,7 +51,7 @@ const ViewCart = ({ onViewChange }: ViewCartProps) => {
         status: "success",
       });
     }
-  }, [removeData, modifyData]);
+  }, [removeIsSuccess, modifyIsSuccess]);
   useEffect(() => {
     if (removeError || modifyError) {
       toast({
@@ -62,16 +62,6 @@ const ViewCart = ({ onViewChange }: ViewCartProps) => {
       });
     }
   }, [removeError, modifyError]);
-  if (!addedBooks) {
-    return (
-      <HStack direction="row" align="center" spacing={3} padding={5}>
-        <Spinner size="lg" color="blue.400" />
-        <Text paddingLeft="2px" color="blue.400" marginTop="10px">
-          Loading System reports...
-        </Text>
-      </HStack>
-    );
-  }
   return (
     <Box>
       <SimpleGrid columns={2} spacing={4} mt={6}>

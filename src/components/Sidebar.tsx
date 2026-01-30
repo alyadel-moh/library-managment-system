@@ -1,4 +1,4 @@
-import { Avatar, Button, Heading, useToast, VStack } from "@chakra-ui/react";
+import { Avatar, Button, useToast, VStack } from "@chakra-ui/react";
 import React, { useState } from "react";
 import {
   FiBookOpen,
@@ -10,6 +10,7 @@ import {
 import useLogout from "../hooks/UseLogout";
 import { useNavigate } from "react-router-dom";
 import useGetUser from "../hooks/useGetusers";
+import { BsBookmark } from "react-icons/bs";
 interface SidebarProps {
   onViewChange: (view: string) => void;
   refetchphoto?: string;
@@ -36,7 +37,8 @@ const Sidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
       gap="6"
       spacing={8}
       align="stretch"
-      width="100%"
+      width="200px"
+      minHeight="calc(100vh - 100px)"
       height="100%"
     >
       <Button
@@ -80,6 +82,27 @@ const Sidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
         borderRadius="full"
       >
         Profile
+      </Button>
+      <Button
+        leftIcon={<BsBookmark />}
+        variant={activeView === "saved" ? "solid" : "ghost"}
+        backgroundColor={activeView === "saved" ? "blue.500" : "transparent"}
+        color={activeView === "saved" ? "white" : "inherit"}
+        onClick={() => handleViewChange("saved")}
+        transform={activeView === "saved" ? "scale(1.06)" : "scale(1)"}
+        _hover={
+          activeView === "saved"
+            ? { backgroundColor: "blue.600" }
+            : { backgroundColor: "gray.600" }
+        }
+        justifyContent="flex-start"
+        size="2xl"
+        fontSize="lg"
+        height="60px"
+        paddingLeft="30px"
+        borderRadius="full"
+      >
+        Saved
       </Button>
       <Button
         leftIcon={<FiShoppingCart />}
@@ -154,16 +177,13 @@ const Sidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
         {isPending ? "Logging out..." : "Logout"}
       </Button>
       <Avatar
-        marginTop="60px"
+        marginTop="10px"
         marginLeft="30px"
         size="xl"
         name={`${data?.firstName} ${data?.lastname}`}
         src={refetchphoto || data?.photoUrl}
         border="1px solid #3182ce"
       />
-      <Heading size="md" marginLeft="35px" color="blue.400">
-        {data?.firstName} {data?.lastname}
-      </Heading>
     </VStack>
   );
 };

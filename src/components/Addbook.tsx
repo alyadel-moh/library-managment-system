@@ -67,7 +67,7 @@ const Addbook = () => {
         status: "success",
       });
     }
-  }, [isSuccess, data]);
+  }, [isSuccess]);
 
   // Show error toast
   useEffect(() => {

@@ -101,7 +101,7 @@ const ModifyBook = ({ book }: BookdetailpageProps) => {
         status: "success",
       });
     }
-  }, [isSuccess, updateData]);
+  }, [isSuccess]);
   useEffect(() => {
     if (isError && error) {
       toast({

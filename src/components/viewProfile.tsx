@@ -89,7 +89,7 @@ const ViewProfile = ({
   useEffect(() => {
     if (isSuccess && updateData) {
       toast({
-        title: `${editField.replace(/([A-Z])/g, " $1").trim()} has been updated successfully !`,
+        title: `${editField} has been updated successfully !`,
         status: "success",
       });
     }
@@ -140,16 +140,6 @@ const ViewProfile = ({
         return FiEdit2;
     }
   };
-  if (!data) {
-    return (
-      <HStack direction="row" align="center" spacing={3} padding={5}>
-        <Spinner size="lg" color="blue.400" />
-        <Text paddingLeft="2px" color="blue.400" marginTop="10px">
-          Loading System reports...
-        </Text>
-      </HStack>
-    );
-  }
   return (
     <>
       <UpdateProfilePhoto user={data} refetchphoto={refetchphoto} />

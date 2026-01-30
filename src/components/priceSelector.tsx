@@ -22,13 +22,9 @@ const PriceRangeSelector = ({ setCriteria }: priceProps) => {
       borderRadius="3xl"
       maxWidth="300px"
       marginLeft="870px"
-      marginTop="-65px"
-      height="95px"
+      marginTop="-53px"
+      height="65px"
     >
-      <Text fontSize="md" fontWeight="bold" marginTop="-10px">
-        Price Range
-      </Text>
-
       <RangeSlider
         aria-label={["min", "max"]}
         defaultValue={[0, 1000]}

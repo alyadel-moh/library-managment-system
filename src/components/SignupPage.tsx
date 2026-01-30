@@ -88,7 +88,7 @@ const SignupPage = () => {
         status: "success",
       });
     }
-  }, [isSuccess, data]);
+  }, [isSuccess]);
 
   // Show error toast
   useEffect(() => {

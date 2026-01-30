@@ -72,7 +72,7 @@ const publisherOrderitem = ({
         status: "success",
       });
     }
-  }, [data, toast]);
+  }, [data]);
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (error) {
@@ -81,7 +81,7 @@ const publisherOrderitem = ({
         status: "error",
       });
     }
-  }, [error, toast]);
+  }, [error]);
   return (
     <Card
       display="flex"
