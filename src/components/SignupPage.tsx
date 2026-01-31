@@ -109,234 +109,260 @@ const SignupPage = () => {
     }
   };
   return (
-    <form
-      onSubmit={handleSubmit(async (data) => {
-        const cloudinaryData = await handleImageChange({
-          target: { files: fileInputRef.current?.files || null },
-        } as React.ChangeEvent<HTMLInputElement>);
-        await mutateAsync({
-          ...data,
-          photoUrl: cloudinaryData.secure_url || "",
-        });
-        navigate("/", { replace: true });
-      }, onInvalid)}
-      style={{
-        width: "100%",
-        maxWidth: "400px",
-        display: "flex",
-        flexDirection: "column",
-        gap: "15px",
-        marginTop: "10px", // reduced top margin
+    <Box
+      // --- Responsive Dimensions ---
+      w={["95%", "90%", "500px"]} // Mobile: 95% width, Tablet: 90%, Desktop: fixed 500px
+      h="auto" // Let height grow with content
+      mx="auto" // Center horizontally
+      my={[4, 8]} // Add top/bottom margin so it doesn't stick to screen edges on scroll
+      p={[6, 10]} // Mobile: 24px padding, Desktop: 40px padding
+      // --- Glassmorphism Styles ---
+      bg="rgba(255, 255, 255, 0.1)"
+      backdropFilter="blur(7px)"
+      borderRadius="44px"
+      border="1px solid rgba(255, 255, 255, 0.2)"
+      boxShadow="0 8px 32px 0 rgba(0, 0, 0, 0.37)"
+      sx={{
+        WebkitBackdropFilter: "blur(10px)", // Safari support via sx prop
       }}
+      // --- Content Alignment ---
+      textAlign="center"
+      color="white"
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
     >
-      <VStack spacing={3} mt={-5}>
-        <VStack spacing={1}>
-          <Box position="relative" marginTop="15px">
-            {/* The Visual "Icon" or Avatar */}
-            <Avatar
-              size="xl"
-              src={selectedImage || ""}
-              name="User Photo"
-              border="2px solid"
-              borderColor="blue.500"
-            />
-            {/* The Upload Button overlay */}
-            <IconButton
-              aria-label="Upload photo"
-              icon={<FiImage />}
-              size="sm"
-              colorScheme="blue"
-              rounded="full"
-              position="absolute"
-              bottom="0"
-              right="0"
-              onClick={() => fileInputRef.current?.click()}
-            />
-          </Box>
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleImageChange}
-            accept="image/*"
-            style={{ display: "none" }}
-          />
-          <Text fontSize="sm" color="gray.500">
-            {selectedImage ? "Click icon to change" : "Upload a profile photo"}
-          </Text>
-        </VStack>
-        <FormControl
-          isInvalid={!!errors.username}
-          _hover={{ transform: "scale(1.02)" }}
-          mt={-10}
-        >
-          <FormLabel fontWeight="bold">Username</FormLabel>
-          <InputGroup size="md">
-            <InputLeftElement
-              pointerEvents="none"
-              children={<FiUser color="gray.300" />}
-            />
-            <Input
-              pr="4.5rem"
-              id="username"
-              type="text"
-              placeholder="Enter your Username"
-              {...register("username")}
-              borderRadius="full"
-            />
-          </InputGroup>
-        </FormControl>
-
-        <FormControl
-          isInvalid={!!errors.password}
-          _hover={{ transform: "scale(1.02)" }}
-        >
-          <FormLabel fontWeight="bold">Password</FormLabel>
-          <InputGroup size="md">
-            <InputLeftElement
-              pointerEvents="none"
-              children={<FiKey color="gray.300" />}
-            />
-            <Input
-              pr="4.5rem"
-              id="password"
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter your Password"
-              {...register("password")}
-              borderRadius="full"
-            />
-            <InputRightElement>
-              <IconButton
-                aria-label={showPassword ? "Hide password" : "Show password"}
-                icon={showPassword ? <FiEyeOff /> : <FiEye />}
-                onClick={() => setShowPassword(!showPassword)}
-                variant="ghost"
-                size="md"
-                _hover={{ bg: "transparent", color: "blue.200" }}
+      <form
+        onSubmit={handleSubmit(async (data) => {
+          const cloudinaryData = await handleImageChange({
+            target: { files: fileInputRef.current?.files || null },
+          } as React.ChangeEvent<HTMLInputElement>);
+          await mutateAsync({
+            ...data,
+            photoUrl: cloudinaryData.secure_url || "",
+          });
+          navigate("/", { replace: true });
+        }, onInvalid)}
+        style={{
+          width: "100%",
+          maxWidth: "400px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "15px",
+          marginTop: "10px", // reduced top margin
+        }}
+      >
+        <VStack spacing={3} mt={-5}>
+          <VStack spacing={1}>
+            <Box position="relative" marginTop="15px">
+              {/* The Visual "Icon" or Avatar */}
+              <Avatar
+                size="xl"
+                src={selectedImage || ""}
+                name="User Photo"
+                border="2px solid"
+                borderColor="blue.500"
               />
-            </InputRightElement>
-          </InputGroup>
-        </FormControl>
+              {/* The Upload Button overlay */}
+              <IconButton
+                aria-label="Upload photo"
+                icon={<FiImage />}
+                size="sm"
+                colorScheme="blue"
+                rounded="full"
+                position="absolute"
+                bottom="0"
+                right="0"
+                onClick={() => fileInputRef.current?.click()}
+              />
+            </Box>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImageChange}
+              accept="image/*"
+              style={{ display: "none" }}
+            />
+            <Text fontSize="sm">
+              {selectedImage
+                ? "Click icon to change"
+                : "Upload a profile photo"}
+            </Text>
+          </VStack>
+          <FormControl
+            isInvalid={!!errors.username}
+            _hover={{ transform: "scale(1.02)" }}
+            mt={-10}
+          >
+            <FormLabel fontWeight="bold">Username</FormLabel>
+            <InputGroup size="md">
+              <InputLeftElement
+                pointerEvents="none"
+                children={<FiUser color="gray.300" />}
+              />
+              <Input
+                pr="4.5rem"
+                id="username"
+                type="text"
+                placeholder="Enter your Username"
+                {...register("username")}
+                borderRadius="full"
+              />
+            </InputGroup>
+          </FormControl>
 
-        <FormControl
-          isInvalid={!!errors.firstName}
-          _hover={{ transform: "scale(1.02)" }}
-        >
-          <FormLabel fontWeight="bold">First name</FormLabel>
-          <InputGroup size="md">
-            <InputLeftElement
-              pointerEvents="none"
-              children={<FiType color="gray.300" />}
-            />
-            <Input
-              pr="4.5rem"
-              id="firstName"
-              type="text"
-              placeholder="Enter your First name"
-              {...register("firstName")}
-              borderRadius="full"
-            />
-          </InputGroup>
-        </FormControl>
+          <FormControl
+            isInvalid={!!errors.password}
+            _hover={{ transform: "scale(1.02)" }}
+          >
+            <FormLabel fontWeight="bold">Password</FormLabel>
+            <InputGroup size="md">
+              <InputLeftElement
+                pointerEvents="none"
+                children={<FiKey color="gray.300" />}
+              />
+              <Input
+                pr="4.5rem"
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your Password"
+                {...register("password")}
+                borderRadius="full"
+              />
+              <InputRightElement>
+                <IconButton
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  icon={showPassword ? <FiEyeOff /> : <FiEye />}
+                  onClick={() => setShowPassword(!showPassword)}
+                  variant="ghost"
+                  size="md"
+                  _hover={{ bg: "transparent", color: "blue.200" }}
+                />
+              </InputRightElement>
+            </InputGroup>
+          </FormControl>
 
-        <FormControl
-          isInvalid={!!errors.lastname}
-          _hover={{ transform: "scale(1.02)" }}
-        >
-          <FormLabel fontWeight="bold">Last name</FormLabel>
-          <InputGroup size="md">
-            <InputLeftElement
-              pointerEvents="none"
-              children={<FiType color="gray.300" />}
-            />
-            <Input
-              pr="4.5rem"
-              id="lastName"
-              type="text"
-              placeholder="Enter your Last name"
-              {...register("lastname")}
-              borderRadius="full"
-            />
-          </InputGroup>
-        </FormControl>
+          <FormControl
+            isInvalid={!!errors.firstName}
+            _hover={{ transform: "scale(1.02)" }}
+          >
+            <FormLabel fontWeight="bold">First name</FormLabel>
+            <InputGroup size="md">
+              <InputLeftElement
+                pointerEvents="none"
+                children={<FiType color="gray.300" />}
+              />
+              <Input
+                pr="4.5rem"
+                id="firstName"
+                type="text"
+                placeholder="Enter your First name"
+                {...register("firstName")}
+                borderRadius="full"
+              />
+            </InputGroup>
+          </FormControl>
 
-        <FormControl
-          isInvalid={!!errors.phoneNumber}
-          _hover={{ transform: "scale(1.02)" }}
-        >
-          <FormLabel fontWeight="bold">Phone number</FormLabel>
-          <InputGroup size="md">
-            <InputLeftElement
-              pointerEvents="none"
-              children={<FiPhone color="gray.300" />}
-            />
-            <Input
-              pr="4.5rem"
-              id="phoneNumber"
-              type="text"
-              placeholder="Enter your Phone number"
-              {...register("phoneNumber")}
-              borderRadius="full"
-            />
-          </InputGroup>
-        </FormControl>
-        <FormControl
-          isInvalid={!!errors.emailAddress}
-          _hover={{ transform: "scale(1.02)" }}
-        >
-          <FormLabel fontWeight="bold">Email address</FormLabel>
-          <InputGroup size="md">
-            <InputLeftElement
-              pointerEvents="none"
-              children={<FiMail color="gray.300" />}
-            />
-            <Input
-              pr="4.5rem"
-              id="emailAddress"
-              type="text"
-              placeholder="Enter your Email address"
-              {...register("emailAddress")}
-              borderRadius="full"
-            />
-          </InputGroup>
-        </FormControl>
-        <FormControl
-          isInvalid={!!errors.shippingAddress}
-          _hover={{ transform: "scale(1.02)" }}
-        >
-          <FormLabel fontWeight="bold">Shipping address</FormLabel>
-          <InputGroup size="md">
-            <InputLeftElement
-              pointerEvents="none"
-              children={<FiMapPin color="gray.300" />}
-            />
-            <Input
-              pr="4.5rem"
-              id="shippingAddress"
-              type="text"
-              placeholder="Enter your Shipping address"
-              {...register("shippingAddress")}
-              borderRadius="full"
-            />
-          </InputGroup>
-        </FormControl>
+          <FormControl
+            isInvalid={!!errors.lastname}
+            _hover={{ transform: "scale(1.02)" }}
+          >
+            <FormLabel fontWeight="bold">Last name</FormLabel>
+            <InputGroup size="md">
+              <InputLeftElement
+                pointerEvents="none"
+                children={<FiType color="gray.300" />}
+              />
+              <Input
+                pr="4.5rem"
+                id="lastName"
+                type="text"
+                placeholder="Enter your Last name"
+                {...register("lastname")}
+                borderRadius="full"
+              />
+            </InputGroup>
+          </FormControl>
 
-        <Button
-          type="submit"
-          height="42px"
-          paddingRight="18px"
-          colorScheme="blue"
-          size="2xl"
-          fontSize="lg"
-          leftIcon={<FiLogIn />}
-          borderRadius="full"
-          transition="all 0.2s"
-          _hover={{ transform: "scale(1.05)" }}
-          width="100%"
-        >
-          {isPending ? "Signing up..." : "Sign Up"}
-        </Button>
-      </VStack>
-    </form>
+          <FormControl
+            isInvalid={!!errors.phoneNumber}
+            _hover={{ transform: "scale(1.02)" }}
+          >
+            <FormLabel fontWeight="bold">Phone number</FormLabel>
+            <InputGroup size="md">
+              <InputLeftElement
+                pointerEvents="none"
+                children={<FiPhone color="gray.300" />}
+              />
+              <Input
+                pr="4.5rem"
+                id="phoneNumber"
+                type="text"
+                placeholder="Enter your Phone number"
+                {...register("phoneNumber")}
+                borderRadius="full"
+              />
+            </InputGroup>
+          </FormControl>
+          <FormControl
+            isInvalid={!!errors.emailAddress}
+            _hover={{ transform: "scale(1.02)" }}
+          >
+            <FormLabel fontWeight="bold">Email address</FormLabel>
+            <InputGroup size="md">
+              <InputLeftElement
+                pointerEvents="none"
+                children={<FiMail color="gray.300" />}
+              />
+              <Input
+                pr="4.5rem"
+                id="emailAddress"
+                type="text"
+                placeholder="Enter your Email address"
+                {...register("emailAddress")}
+                borderRadius="full"
+              />
+            </InputGroup>
+          </FormControl>
+          <FormControl
+            isInvalid={!!errors.shippingAddress}
+            _hover={{ transform: "scale(1.02)" }}
+          >
+            <FormLabel fontWeight="bold">Shipping address</FormLabel>
+            <InputGroup size="md">
+              <InputLeftElement
+                pointerEvents="none"
+                children={<FiMapPin color="gray.300" />}
+              />
+              <Input
+                pr="4.5rem"
+                id="shippingAddress"
+                type="text"
+                placeholder="Enter your Shipping address"
+                {...register("shippingAddress")}
+                borderRadius="full"
+              />
+            </InputGroup>
+          </FormControl>
+
+          <Button
+            type="submit"
+            height="42px"
+            paddingRight="18px"
+            colorScheme="blue"
+            size="2xl"
+            fontSize="lg"
+            leftIcon={<FiLogIn />}
+            borderRadius="full"
+            transition="all 0.2s"
+            _hover={{ transform: "scale(1.05)" }}
+            width="100%"
+          >
+            {isPending ? "Signing up..." : "Sign Up"}
+          </Button>
+        </VStack>
+      </form>
+    </Box>
   );
 };
 export default SignupPage;
