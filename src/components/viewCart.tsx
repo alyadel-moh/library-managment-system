@@ -12,12 +12,7 @@ import useRemoveBookFromCart from "../hooks/useRemovebookfromcart";
 import ViewCartItem from "./viewCartitem";
 import { useEffect, useState } from "react";
 import { FiCheckCircle } from "react-icons/fi";
-import { loadStripe } from "@stripe/stripe-js";
-interface ViewCartProps {
-  onViewChange: (view: string, expectedTotal?: string) => void;
-}
-
-const ViewCart = ({ onViewChange }: ViewCartProps) => {
+const ViewCart = () => {
   const { data: addedBooks, refetch } = useGetaddedbookstocart();
   const [removingIsbn, setRemovingIsbn] = useState<string>("");
   const [modifyingIsbn, setModifyingIsbn] = useState<string>("");
