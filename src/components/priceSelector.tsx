@@ -41,6 +41,7 @@ const PriceRangeSelector = ({ setCriteria }: priceProps) => {
         }}
         height="10px"
         marginTop="-60px"
+        borderRadius="full"
       >
         <RangeSliderTrack bg="blue.100">
           <RangeSliderFilledTrack bg="blue.400" />

@@ -8,16 +8,36 @@ import {
   Text,
   VStack,
   Box,
+  IconButton,
+  useToast,
 } from "@chakra-ui/react";
-import { FiEye } from "react-icons/fi";
+import { FiBookmark, FiEye } from "react-icons/fi";
 import useGetGoogleBooks from "../hooks/useGetgooglebooksapi";
 import type Book1 from "../entities/Book";
+import useAddBooktosavedbooks from "../hooks/useAddsavedbook";
+import useGetUser from "../hooks/useGetusers";
+import { useEffect } from "react";
 interface BookcardProps {
   book: Book1;
   onViewDetails: (bookData: Book1) => void;
 }
 const Bookcard = ({ book, onViewDetails }: BookcardProps) => {
+  const toast = useToast({
+    position: "bottom-right",
+    duration: 3000,
+    isClosable: true,
+  });
   const bookDetails = useGetGoogleBooks(book.title).data?.items?.[0];
+  const addbook = useAddBooktosavedbooks();
+  const { data: user } = useGetUser();
+  useEffect(() => {
+    if (addbook.isSuccess) {
+      toast({
+        title: `Book has been added to saved books successfully`,
+        status: "success",
+      });
+    }
+  }, [addbook.isSuccess]);
   return (
     <Card
       height="100%"
@@ -25,12 +45,35 @@ const Bookcard = ({ book, onViewDetails }: BookcardProps) => {
       flexDirection="column"
       transition="all 0.3s"
       borderRadius="3xl"
-      _hover={{}}
       overflow="hidden"
-      borderBottom='1px solid'
+      borderBottom="1px solid"
       borderColor="blue.200"
     >
       <Box position="relative" overflow="hidden" bg="gray.50">
+        {user?.role === "ROLE_CUSTOMER" && (
+          <IconButton
+            aria-label="Save book"
+            icon={
+              <FiBookmark
+                style={{ transition: "all 0.2s" }}
+              />
+            }
+            position="absolute"
+            top={3}
+            right={3}
+            zIndex={2}
+            colorScheme="blue"
+            variant="solid"
+            size="sm"
+            borderRadius="full"
+            boxShadow="md"
+            onClick={(e) => {
+              e.stopPropagation(); // Prevents triggering card clicks
+              addbook.mutate(book.isbn);
+            }}
+            _hover={{ transform: "scale(1.1)" }}
+          />
+        )}
         <Image
           src={bookDetails?.volumeInfo.imageLinks?.thumbnail}
           alt="Book cover"
@@ -56,8 +99,8 @@ const Bookcard = ({ book, onViewDetails }: BookcardProps) => {
               ${book.sellingPrice}
             </Text>
 
-            <Text 
-              fontSize="xs" 
+            <Text
+              fontSize="xs"
               color={
                 book.stockQuantity === 0
                   ? "red.500"

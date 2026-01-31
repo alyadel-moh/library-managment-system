@@ -54,11 +54,7 @@ const Sidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
         height="60px"
         paddingLeft="30px"
         borderRadius="full"
-        _hover={
-          activeView === "books"
-            ? { backgroundColor: "blue.600" }
-            : { backgroundColor: "gray.600" }
-        }
+        _hover={{ backgroundColor: "gray.600", transform: "scale(1.02)" }}
       >
         Books
       </Button>
@@ -67,11 +63,7 @@ const Sidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
         variant={activeView === "profile" ? "solid" : "ghost"}
         backgroundColor={activeView === "profile" ? "blue.600" : "transparent"}
         color={activeView === "profile" ? "white" : "inherit"}
-        _hover={
-          activeView === "profile"
-            ? { backgroundColor: "blue.600" }
-            : { backgroundColor: "gray.600" }
-        }
+        _hover={{ backgroundColor: "gray.600", transform: "scale(1.02)" }}
         onClick={() => handleViewChange("profile")}
         transform={activeView === "profile" ? "scale(1.06)" : "scale(1)"}
         justifyContent="flex-start"
@@ -90,11 +82,7 @@ const Sidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
         color={activeView === "saved" ? "white" : "inherit"}
         onClick={() => handleViewChange("saved")}
         transform={activeView === "saved" ? "scale(1.06)" : "scale(1)"}
-        _hover={
-          activeView === "saved"
-            ? { backgroundColor: "blue.600" }
-            : { backgroundColor: "gray.600" }
-        }
+        _hover={{ backgroundColor: "gray.600", transform: "scale(1.02)" }}
         justifyContent="flex-start"
         size="2xl"
         fontSize="lg"
@@ -111,11 +99,7 @@ const Sidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
         color={activeView === "cart" ? "white" : "inherit"}
         onClick={() => handleViewChange("cart")}
         transform={activeView === "cart" ? "scale(1.06)" : "scale(1)"}
-        _hover={
-          activeView === "cart"
-            ? { backgroundColor: "blue.600" }
-            : { backgroundColor: "gray.600" }
-        }
+        _hover={{ backgroundColor: "gray.600", transform: "scale(1.02)" }}
         justifyContent="flex-start"
         size="2xl"
         fontSize="lg"
@@ -132,11 +116,7 @@ const Sidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
         color={activeView === "orders" ? "white" : "inherit"}
         onClick={() => handleViewChange("orders")}
         transform={activeView === "orders" ? "scale(1.06)" : "scale(1)"}
-        _hover={
-          activeView === "orders"
-            ? { backgroundColor: "blue.600" }
-            : { backgroundColor: "gray.600" }
-        }
+        _hover={{ backgroundColor: "gray.600", transform: "scale(1.02)" }}
         justifyContent="flex-start"
         size="2xl"
         fontSize="lg"
@@ -150,7 +130,7 @@ const Sidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
         leftIcon={<FiLogOut />}
         variant="ghost"
         color="inherit"
-        _hover={{ backgroundColor: "gray.600" }}
+        _hover={{ backgroundColor: "gray.600", transform: "scale(1.02)" }}
         justifyContent="flex-start"
         size="2xl"
         fontSize="lg"

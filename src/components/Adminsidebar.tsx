@@ -56,11 +56,7 @@ const Adminsidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
         transition="all 0.3s"
         transform={activeView === "books" ? "scale(1.06)" : "scale(1)"}
         borderRadius="full"
-        _hover={
-          activeView === "books"
-            ? { backgroundColor: "blue.600" }
-            : { backgroundColor: "gray.600" }
-        }
+        _hover={{ backgroundColor: "gray.600", transform: "scale(1.02)" }}
       >
         Books
       </Button>
@@ -78,11 +74,7 @@ const Adminsidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
         borderRadius="full"
         transition="all 0.3s"
         transform={activeView === "profile" ? "scale(1.06)" : "scale(1)"}
-        _hover={
-          activeView === "profile"
-            ? { backgroundColor: "blue.600" }
-            : { backgroundColor: "gray.600" }
-        }
+        _hover={{ backgroundColor: "gray.600", transform: "scale(1.02)" }}
       >
         Profile
       </Button>
@@ -100,11 +92,7 @@ const Adminsidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
         borderRadius="full"
         transition="all 0.3s"
         transform={activeView === "Addbook" ? "scale(1.06)" : "scale(1)"}
-        _hover={
-          activeView === "Addbook"
-            ? { backgroundColor: "blue.600" }
-            : { backgroundColor: "gray.600" }
-        }
+        _hover={{ backgroundColor: "gray.600", transform: "scale(1.02)" }}
       >
         Add book
       </Button>
@@ -121,11 +109,7 @@ const Adminsidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
         paddingLeft="22px"
         transition="all 0.3s"
         transform={activeView === "pending" ? "scale(1.06)" : "scale(1)"}
-        _hover={
-          activeView === "pending"
-            ? { backgroundColor: "blue.600" }
-            : { backgroundColor: "gray.600" }
-        }
+        _hover={{ backgroundColor: "gray.600", transform: "scale(1.02)" }}
         borderRadius="full"
       >
         Pending orders
@@ -144,11 +128,7 @@ const Adminsidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
         transition="all 0.3s"
         transform={activeView === "reports" ? "scale(1.06)" : "scale(1)"}
         borderRadius="full"
-        _hover={
-          activeView === "reports"
-            ? { backgroundColor: "blue.600" }
-            : { backgroundColor: "gray.600" }
-        }
+        _hover={{ backgroundColor: "gray.600", transform: "scale(1.02)" }}
       >
         Reports
       </Button>
@@ -156,7 +136,7 @@ const Adminsidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
         leftIcon={<FiLogOut />}
         variant="ghost"
         color="inherit"
-        _hover={{ backgroundColor: "gray.600" }}
+        _hover={{ backgroundColor: "gray.600", transform: "scale(1.02)" }}
         justifyContent="flex-start"
         size="2xl"
         fontSize="lg"

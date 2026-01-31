@@ -63,7 +63,7 @@ const YearInput = ({ setCriteria }: yearProps) => {
               setCriteria({ publicationYear: e.target.value });
             }
           }}
-          borderRadius={20}
+          borderRadius="full"
         />
       </InputGroup>
     </FormControl>

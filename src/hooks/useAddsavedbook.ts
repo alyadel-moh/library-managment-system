@@ -1,9 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import type BackendResponse from "../entities/Response";
-const useAddBooktosavedbooks = (isbn : string) =>{
-  return useMutation<BackendResponse, AxiosError<{message : string}>>({
-    mutationFn: () => {
+const useAddBooktosavedbooks = () =>{
+  return useMutation<BackendResponse, AxiosError<{message : string}>,string>({
+      mutationFn : (isbn: string) => {
       const token = localStorage.getItem('accessToken');
       return axios.post<BackendResponse>(
         `http://localhost:8080/api/user/book/saved-books/${isbn}`,

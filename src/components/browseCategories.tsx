@@ -1,5 +1,6 @@
 import { Box, HStack, useRadio, useRadioGroup, Text } from "@chakra-ui/react";
 import type { BookSearchCriteria } from "../hooks/useGetbook";
+import { transform } from "framer-motion";
 interface categoryProps {
   setCriteria: (newCriteria: Partial<BookSearchCriteria>) => void;
   criteria?: BookSearchCriteria;
@@ -14,13 +15,13 @@ function SegmentItem(props: any) {
       <Box
         {...checkbox}
         cursor="pointer"
-        borderWidth="0px"
-        borderRadius="3xl"
+        borderRadius="full"
         height="45px"
         _checked={{
           bg: "blue.400",
           color: "white",
           shadow: "md",
+          transform: "scale(1.05)",
         }}
         _focus={{
           boxShadow: "outline",
@@ -31,6 +32,7 @@ function SegmentItem(props: any) {
         transition="all 0.2s"
         width="auto"
         minW={0}
+        _hover={{ backgroundColor: "gray.600", transform: "scale(1.02)" }}
       >
         <Text fontWeight="medium">{props.label}</Text>
       </Box>
