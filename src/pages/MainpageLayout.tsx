@@ -1,20 +1,8 @@
-import Colormodeswitch from "../components/Colormodeswitch";
 import bookpageImage from "../assets/bookpage.png";
 import { Outlet } from "react-router-dom";
-import { HStack, Text } from "@chakra-ui/react";
 const MainpageLayout = () => {
   return (
     <>
-      <div
-        style={{
-          position: "absolute",
-          top: "20px",
-          right: "20px",
-          zIndex: 10,
-        }}
-      >
-        <Colormodeswitch />
-      </div>
       <div
         style={{
           display: "flex",
@@ -35,54 +23,28 @@ const MainpageLayout = () => {
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
-          }}
-        >
-          <HStack spacing={2} position="absolute" top={3} left={700} zIndex={5}>
-            <Text
-              fontSize="3xl"
-              fontWeight="900"
-              letterSpacing="tighter"
-              color="blue.200"
-            >
-              Book
-            </Text>
-            <Text fontSize="3xl" fontWeight="300">
-              shelf
-            </Text>
-          </HStack>
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundColor: "rgba(0, 0, 0, 0.3)",
-              backdropFilter: "blur(1px)",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              right: 0,
-              bottom: 0,
-              width: "150px",
-              background:
-                "linear-gradient(to right, transparent, var(--chakra-colors-chakra-body-bg))",
-            }}
-          />
-        </div>
-        <div
-          style={{
-            flex: 1,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            padding: "40px",
           }}
         >
-          <Outlet />
+          <div
+            style={{
+              width: "90%",
+              maxWidth: "500px", // Limits the width on desktop
+              padding: "40px",
+              backgroundColor: "rgba(255, 255, 255, 0.1)", // Transparent white
+              backdropFilter: "blur(7px)", // Frosted glass effect
+              WebkitBackdropFilter: "blur(10px)", // Safari support
+              borderRadius: "44px", // Rounded corners
+              border: "1px solid rgba(255, 255, 255, 0.2)", // Subtle outline
+              boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.37)", // Depth shadow
+              textAlign: "center",
+              color: "white",
+            }}
+          >
+            <Outlet />
+          </div>
         </div>
       </div>
     </>

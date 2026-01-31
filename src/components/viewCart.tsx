@@ -64,10 +64,6 @@ const ViewCart = ({ onViewChange }: ViewCartProps) => {
   }, [removeError, modifyError]);
   const makepayment = async () => {
     const token = localStorage.getItem("accessToken");
-
-    // Note: You no longer need loadStripe() on the frontend
-    // if you are just redirecting to a Hosted Checkout URL.
-
     const body = {
       amount: addedBooks?.totalCartPrice || 0,
       currency: "usd",

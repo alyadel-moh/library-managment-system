@@ -113,7 +113,7 @@ const Form = () => {
         _hover={{ transform: "scale(1.02)" }}
       >
         <FormLabel fontWeight="bold">Username</FormLabel>
-        <InputGroup size="md">
+        <InputGroup size="md" >
           <InputLeftElement
             pointerEvents="none"
             children={<FiUser color="gray.300" />}
