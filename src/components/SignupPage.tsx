@@ -17,6 +17,7 @@ import {
   useToast,
   VStack,
   Text,
+  HStack,
 } from "@chakra-ui/react";
 import {
   FiUser,
@@ -189,121 +190,104 @@ const SignupPage = () => {
                 : "Upload a profile photo"}
             </Text>
           </VStack>
-          <FormControl
-            isInvalid={!!errors.username}
-            _hover={{ transform: "scale(1.02)" }}
-            mt={-10}
-          >
-            <FormLabel fontWeight="bold">Username</FormLabel>
-            <InputGroup size="md">
-              <InputLeftElement
-                pointerEvents="none"
-                children={<FiUser color="gray.300" />}
-              />
-              <Input
-                pr="4.5rem"
-                id="username"
-                type="text"
-                placeholder="Enter your Username"
-                {...register("username")}
-                borderRadius="full"
-              />
-            </InputGroup>
-          </FormControl>
-
-          <FormControl
-            isInvalid={!!errors.password}
-            _hover={{ transform: "scale(1.02)" }}
-          >
-            <FormLabel fontWeight="bold">Password</FormLabel>
-            <InputGroup size="md">
-              <InputLeftElement
-                pointerEvents="none"
-                children={<FiKey color="gray.300" />}
-              />
-              <Input
-                pr="4.5rem"
-                id="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="Enter your Password"
-                {...register("password")}
-                borderRadius="full"
-              />
-              <InputRightElement>
-                <IconButton
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                  icon={showPassword ? <FiEyeOff /> : <FiEye />}
-                  onClick={() => setShowPassword(!showPassword)}
-                  variant="ghost"
-                  size="md"
-                  _hover={{ bg: "transparent", color: "blue.200" }}
+          <HStack spacing={4} width="100%">
+            <FormControl
+              isInvalid={!!errors.username}
+              _hover={{ transform: "scale(1.02)" }}
+            >
+              <FormLabel fontWeight="bold">Username</FormLabel>
+              <InputGroup size="md">
+                <InputLeftElement
+                  pointerEvents="none"
+                  children={<FiUser color="gray.300" />}
                 />
-              </InputRightElement>
-            </InputGroup>
-          </FormControl>
+                <Input
+                  pr="4.5rem"
+                  id="username"
+                  type="text"
+                  placeholder="Username"
+                  {...register("username")}
+                  borderRadius="full"
+                />
+              </InputGroup>
+            </FormControl>
 
-          <FormControl
-            isInvalid={!!errors.firstName}
-            _hover={{ transform: "scale(1.02)" }}
-          >
-            <FormLabel fontWeight="bold">First name</FormLabel>
-            <InputGroup size="md">
-              <InputLeftElement
-                pointerEvents="none"
-                children={<FiType color="gray.300" />}
-              />
-              <Input
-                pr="4.5rem"
-                id="firstName"
-                type="text"
-                placeholder="Enter your First name"
-                {...register("firstName")}
-                borderRadius="full"
-              />
-            </InputGroup>
-          </FormControl>
+            <FormControl
+              isInvalid={!!errors.password}
+              _hover={{ transform: "scale(1.02)" }}
+            >
+              <FormLabel fontWeight="bold">Password</FormLabel>
+              <InputGroup size="md">
+                <InputLeftElement
+                  pointerEvents="none"
+                  children={<FiKey color="gray.300" />}
+                />
+                <Input
+                  pr="4.5rem"
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  {...register("password")}
+                  borderRadius="full"
+                />
+                <InputRightElement>
+                  <IconButton
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
+                    icon={showPassword ? <FiEyeOff /> : <FiEye />}
+                    onClick={() => setShowPassword(!showPassword)}
+                    variant="ghost"
+                    size="md"
+                    _hover={{ bg: "transparent", color: "blue.200" }}
+                  />
+                </InputRightElement>
+              </InputGroup>
+            </FormControl>
+          </HStack>
+          <HStack spacing={4} width="100%">
+            <FormControl
+              isInvalid={!!errors.firstName}
+              _hover={{ transform: "scale(1.02)" }}
+            >
+              <FormLabel fontWeight="bold">First name</FormLabel>
+              <InputGroup size="md">
+                <InputLeftElement
+                  pointerEvents="none"
+                  children={<FiType color="gray.300" />}
+                />
+                <Input
+                  pr="4.5rem"
+                  id="firstName"
+                  type="text"
+                  placeholder="First name"
+                  {...register("firstName")}
+                  borderRadius="full"
+                />
+              </InputGroup>
+            </FormControl>
 
-          <FormControl
-            isInvalid={!!errors.lastname}
-            _hover={{ transform: "scale(1.02)" }}
-          >
-            <FormLabel fontWeight="bold">Last name</FormLabel>
-            <InputGroup size="md">
-              <InputLeftElement
-                pointerEvents="none"
-                children={<FiType color="gray.300" />}
-              />
-              <Input
-                pr="4.5rem"
-                id="lastName"
-                type="text"
-                placeholder="Enter your Last name"
-                {...register("lastname")}
-                borderRadius="full"
-              />
-            </InputGroup>
-          </FormControl>
-
-          <FormControl
-            isInvalid={!!errors.phoneNumber}
-            _hover={{ transform: "scale(1.02)" }}
-          >
-            <FormLabel fontWeight="bold">Phone number</FormLabel>
-            <InputGroup size="md">
-              <InputLeftElement
-                pointerEvents="none"
-                children={<FiPhone color="gray.300" />}
-              />
-              <Input
-                pr="4.5rem"
-                id="phoneNumber"
-                type="text"
-                placeholder="Enter your Phone number"
-                {...register("phoneNumber")}
-                borderRadius="full"
-              />
-            </InputGroup>
-          </FormControl>
+            <FormControl
+              isInvalid={!!errors.lastname}
+              _hover={{ transform: "scale(1.02)" }}
+            >
+              <FormLabel fontWeight="bold">Last name</FormLabel>
+              <InputGroup size="md">
+                <InputLeftElement
+                  pointerEvents="none"
+                  children={<FiType color="gray.300" />}
+                />
+                <Input
+                  pr="4.5rem"
+                  id="lastName"
+                  type="text"
+                  placeholder="Last name"
+                  {...register("lastname")}
+                  borderRadius="full"
+                />
+              </InputGroup>
+            </FormControl>
+          </HStack>
           <FormControl
             isInvalid={!!errors.emailAddress}
             _hover={{ transform: "scale(1.02)" }}
@@ -318,32 +302,55 @@ const SignupPage = () => {
                 pr="4.5rem"
                 id="emailAddress"
                 type="text"
-                placeholder="Enter your Email address"
+                placeholder="email@example.com"
                 {...register("emailAddress")}
                 borderRadius="full"
               />
             </InputGroup>
           </FormControl>
-          <FormControl
-            isInvalid={!!errors.shippingAddress}
-            _hover={{ transform: "scale(1.02)" }}
-          >
-            <FormLabel fontWeight="bold">Shipping address</FormLabel>
-            <InputGroup size="md">
-              <InputLeftElement
-                pointerEvents="none"
-                children={<FiMapPin color="gray.300" />}
-              />
-              <Input
-                pr="4.5rem"
-                id="shippingAddress"
-                type="text"
-                placeholder="Enter your Shipping address"
-                {...register("shippingAddress")}
-                borderRadius="full"
-              />
-            </InputGroup>
-          </FormControl>
+
+          <HStack spacing={4} width="100%">
+            <FormControl
+              isInvalid={!!errors.shippingAddress}
+              _hover={{ transform: "scale(1.02)" }}
+            >
+              <FormLabel fontWeight="bold">Shipping address</FormLabel>
+              <InputGroup size="md">
+                <InputLeftElement
+                  pointerEvents="none"
+                  children={<FiMapPin color="gray.300" />}
+                />
+                <Input
+                  pr="4.5rem"
+                  id="shippingAddress"
+                  type="text"
+                  placeholder="City, country"
+                  {...register("shippingAddress")}
+                  borderRadius="full"
+                />
+              </InputGroup>
+            </FormControl>
+            <FormControl
+              isInvalid={!!errors.phoneNumber}
+              _hover={{ transform: "scale(1.02)" }}
+            >
+              <FormLabel fontWeight="bold">Phone number</FormLabel>
+              <InputGroup size="md">
+                <InputLeftElement
+                  pointerEvents="none"
+                  children={<FiPhone color="gray.300" />}
+                />
+                <Input
+                  pr="4.5rem"
+                  id="phoneNumber"
+                  type="text"
+                  placeholder="number"
+                  {...register("phoneNumber")}
+                  borderRadius="full"
+                />
+              </InputGroup>
+            </FormControl>
+          </HStack>
 
           <Button
             type="submit"
