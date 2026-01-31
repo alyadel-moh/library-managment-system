@@ -6,7 +6,6 @@ import Sidebar from "../components/Sidebar";
 import ViewProfile from "../components/viewProfile";
 import ViewCart from "../components/viewCart";
 import ViewOrderhistory from "../components/viewOrderhistory";
-import Checkoutform from "../components/Checkoutform";
 import Bookdetailpage from "./Bookdetailpage";
 import BrowseCategories from "../components/browseCategories";
 import type { BookSearchCriteria } from "../hooks/useGetbook";
@@ -90,8 +89,6 @@ const Homepage = () => {
             />
           ) : selectedView === "orders" ? (
             <ViewOrderhistory />
-          ) : selectedView === "checkout" ? (
-            <Checkoutform expectedTotal={expectedTotal} />
           ) : selectedView === "saved" ? (
             <ViewSaved onViewDetails={handleViewDetails} />
           ) : (
