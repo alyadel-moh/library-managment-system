@@ -18,7 +18,7 @@ const Homepage = () => {
   const [selectedView, setSelectedView] = useState<string>("books");
   const [selectedBook, setSelectedBook] = useState<any>(null);
   const [criteria, setCriteria] = useState<BookSearchCriteria | null>(null);
- // const [expectedTotal, setExpectedTotal] = useState<string>("");
+  // const [expectedTotal, setExpectedTotal] = useState<string>("");
   const [photoUrl, setPhotoUrl] = useState<string>("");
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("search");
@@ -81,12 +81,7 @@ const Homepage = () => {
               />
             </>
           ) : selectedView === "cart" ? (
-            <ViewCart
-              onViewChange={(view, total) => {
-                setSelectedView(view);
-                if (total !== undefined) setExpectedTotal(total);
-              }}
-            />
+            <ViewCart />
           ) : selectedView === "orders" ? (
             <ViewOrderhistory />
           ) : selectedView === "saved" ? (
