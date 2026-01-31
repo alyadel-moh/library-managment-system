@@ -11,7 +11,7 @@ import {
   Input,
   IconButton,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { useState } from "react";
 import useGetGoogleBooks from "../hooks/useGetgooglebooksapi";
 import {
   FiHash,

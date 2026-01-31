@@ -1,4 +1,3 @@
-import React from "react";
 import useGetorderhistory from "../hooks/useGetorderhistory";
 import ViewOrderItem from "./viewOrderitem";
 import { Text } from "@chakra-ui/react";

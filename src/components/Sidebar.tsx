@@ -1,5 +1,5 @@
 import { Avatar, Button, useToast, VStack } from "@chakra-ui/react";
-import React, { useState } from "react";
+import  { useState } from "react";
 import {
   FiBookOpen,
   FiLogOut,

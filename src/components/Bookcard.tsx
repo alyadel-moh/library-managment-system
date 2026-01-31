@@ -53,11 +53,7 @@ const Bookcard = ({ book, onViewDetails }: BookcardProps) => {
         {user?.role === "ROLE_CUSTOMER" && (
           <IconButton
             aria-label="Save book"
-            icon={
-              <FiBookmark
-                style={{ transition: "all 0.2s" }}
-              />
-            }
+            icon={<FiBookmark style={{ transition: "all 0.2s" }} />}
             position="absolute"
             top={3}
             right={3}
@@ -89,48 +85,50 @@ const Bookcard = ({ book, onViewDetails }: BookcardProps) => {
         justifyContent="space-between"
         p={4}
       >
-        <VStack align="stretch" spacing={2}>
-          <Heading fontSize="md" noOfLines={2}>
-            {book.title}
-          </Heading>
+        <Box flex="1">
+          <VStack align="stretch" spacing={2}>
+            <Heading fontSize="md" noOfLines={2}>
+              {book.title}
+            </Heading>
 
-          <HStack justifyContent="space-between" alignItems="center">
-            <Text fontSize="sm" fontWeight="semibold">
-              ${book.sellingPrice}
-            </Text>
+            <HStack justifyContent="space-between" alignItems="center">
+              <Text fontSize="sm" fontWeight="semibold">
+                ${book.sellingPrice}
+              </Text>
 
-            <Text
-              fontSize="xs"
-              color={
-                book.stockQuantity === 0
-                  ? "red.500"
+              <Text
+                fontSize="xs"
+                color={
+                  book.stockQuantity === 0
+                    ? "red.500"
+                    : book.stockQuantity > book.threshold
+                      ? "green.500"
+                      : "orange.500"
+                }
+                fontWeight="medium"
+              >
+                {book.stockQuantity === 0
+                  ? "OUT OF STOCK"
                   : book.stockQuantity > book.threshold
-                    ? "green.500"
-                    : "orange.500"
-              }
-              fontWeight="medium"
-            >
-              {book.stockQuantity === 0
-                ? "OUT OF STOCK"
-                : book.stockQuantity > book.threshold
-                  ? "IN STOCK"
-                  : "LOW STOCK"}
-            </Text>
-          </HStack>
+                    ? "IN STOCK"
+                    : "LOW STOCK"}
+              </Text>
+            </HStack>
 
-          <Button
-            borderRadius="full"
-            colorScheme="blue"
-            width="100%"
-            leftIcon={<FiEye />}
-            size="md"
-            transition="all 0.2s"
-            _hover={{ transform: "scale(1.05)" }}
-            onClick={() => onViewDetails(book)}
-          >
-            View Details
-          </Button>
-        </VStack>
+            <Button
+              borderRadius="full"
+              colorScheme="blue"
+              width="100%"
+              leftIcon={<FiEye />}
+              size="md"
+              transition="all 0.2s"
+              _hover={{ transform: "scale(1.05)" }}
+              onClick={() => onViewDetails(book)}
+            >
+              View Details
+            </Button>
+          </VStack>
+        </Box>
       </CardBody>
     </Card>
   );

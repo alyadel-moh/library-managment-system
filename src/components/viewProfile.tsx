@@ -21,8 +21,7 @@ import {
   HStack,
   Text,
   InputGroup,
-  InputLeftElement,
-  Spinner,
+  InputLeftElement
 } from "@chakra-ui/react";
 import useGetUser from "../hooks/useGetusers";
 import {

@@ -1,4 +1,3 @@
-import React from "react";
 import Colormodeswitch from "../components/Colormodeswitch";
 import bookpageImage from "../assets/bookpage.png";
 import { Outlet } from "react-router-dom";

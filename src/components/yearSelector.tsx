@@ -2,8 +2,6 @@
 import {
   Input,
   FormControl,
-  FormLabel,
-  FormErrorMessage,
   InputGroup,
   InputLeftElement,
   useToast,
@@ -22,7 +20,7 @@ const YearInput = ({ setCriteria }: yearProps) => {
   });
   const [year, setYear] = useState("");
   const currentYear = new Date().getFullYear();
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     const value = e.target.value;
     if (/^\d{0,4}$/.test(value)) {
       setYear(value);
@@ -57,8 +55,8 @@ const YearInput = ({ setCriteria }: yearProps) => {
           type="text"
           placeholder="YYYY"
           value={year}
-          onChange={(e) => {
-            handleChange(e);
+          onChange={(e: any) => {
+            handleChange(e as any);
             if (e.target.value.length === 4) {
               setCriteria({ publicationYear: e.target.value });
             }
