@@ -1,19 +1,14 @@
 import { useMutation } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import ApiClient1 from "../api-client";
 import type User from "../entities/User";
 import type BackendResponsemessage from "../entities/Response";
+
+const apiClient = new ApiClient1<User>("/user/profile");
+
 const useModifyUser = () => {
   return useMutation<BackendResponsemessage, AxiosError<{ message: string }>, User>({
-    mutationFn:async (newUser: User) => {
-      const token = localStorage.getItem('accessToken');
-      return axios
-        .put<BackendResponsemessage>("http://localhost:8080/api/user/profile", newUser, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => response.data);
-    },
+    mutationFn:(newUser: User) => apiClient.put(newUser) as unknown as Promise<BackendResponsemessage>,
     onSuccess: (data: BackendResponsemessage) => {
       console.log("User modified successfully:", data);
     },

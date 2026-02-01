@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import {
   Box,
   RangeSlider,
@@ -21,8 +21,8 @@ const PriceRangeSelector = ({ setCriteria }: priceProps) => {
       borderWidth="1px"
       borderRadius="3xl"
       maxWidth="300px"
-      marginLeft="870px"
-      marginTop="-53px"
+      marginLeft="755px"
+      marginTop="-54px"
       height="65px"
     >
       <RangeSlider

@@ -1,20 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
+import ApiClient1 from "../api-client";
+import type BackendResponse from "../entities/Response";
+const apiClient = new ApiClient1<BackendResponse>("/auth/logout");
 
 const useLogout = () => {
   return useMutation({
-    mutationFn: async () => {
-      const token = localStorage.getItem('accessToken');
-      const response = await axios.get(
-        "http://localhost:8080/api/auth/logout",
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      );
-      return response.data;
-    },
+    mutationFn: () => apiClient.getSingle(),
     onSuccess: (data) => {
        console.log(data.message)
       localStorage.removeItem("accessToken");

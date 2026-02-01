@@ -1,20 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import ApiClient1 from "../api-client";
 import type BackendResponse from "../entities/Response";
+
+const apiClient = new ApiClient1<BackendResponse>("/user/book/saved-books");
+
 const useAddBooktosavedbooks = () =>{
   return useMutation<BackendResponse, AxiosError<{message : string}>,string>({
-      mutationFn : (isbn: string) => {
-      const token = localStorage.getItem('accessToken');
-      return axios.post<BackendResponse>(
-        `http://localhost:8080/api/user/book/saved-books/${isbn}`,
-        {},
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      ).then((response) => response.data);
-    },
+      mutationFn : (isbn: string) => apiClient.post({}, isbn),
       onSuccess : (data: BackendResponse) => {
         console.log("Book added to saved books successfully : ", data);
       },

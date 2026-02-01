@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import ApiClient1 from "../api-client";
 import type Book1 from "../entities/Book";
+
 export interface BookSearchCriteria {
   keyword?: string;       
   categoryId?: string;
@@ -11,32 +12,22 @@ export interface BookSearchCriteria {
   publicationYear?: string;
   isbn?: string;
 }
+
+const apiClient = new ApiClient1<Book1>("/user/book/search");
+
 const useGetBook = (criteria?: BookSearchCriteria) =>{
   return useQuery<Book1[]>({
     queryKey: ['books', criteria],
-    queryFn: () => {
-      const token = localStorage.getItem('accessToken');
-      return axios.get(
-        `http://localhost:8080/api/user/book/search?${new URLSearchParams({
-          ...(criteria?.keyword && { keyword: criteria.keyword }),
-          ...(criteria?.categoryId && { categoryId: criteria.categoryId }),
-          ...(criteria?.authorName && { authorName: criteria.authorName }),
-          ...(criteria?.publisherName && { publisherName: criteria.publisherName }),
-          ...(criteria?.minPrice && { minPrice: criteria.minPrice }),
-          ...(criteria?.maxPrice && { maxPrice: criteria.maxPrice }),
-          ...(criteria?.publicationYear && { publicationYear: criteria.publicationYear }),
-          ...(criteria?.isbn && { isbn: criteria.isbn }),
-        })}`,
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      ).then((response) => {
-        console.log('Book fetched successfully:', response.data);
-        return response.data;
-      });
-    },
+    queryFn: () => apiClient.getAll({
+      ...(criteria?.keyword && { keyword: criteria.keyword }),
+      ...(criteria?.categoryId && { categoryId: criteria.categoryId }),
+      ...(criteria?.authorName && { authorName: criteria.authorName }),
+      ...(criteria?.publisherName && { publisherName: criteria.publisherName }),
+      ...(criteria?.minPrice && { minPrice: criteria.minPrice }),
+      ...(criteria?.maxPrice && { maxPrice: criteria.maxPrice }),
+      ...(criteria?.publicationYear && { publicationYear: criteria.publicationYear }),
+      ...(criteria?.isbn && { isbn: criteria.isbn }),
+    }),
     enabled: !!criteria,  // only run if criteria is provided
     retry: false // do not retry on failure
   });

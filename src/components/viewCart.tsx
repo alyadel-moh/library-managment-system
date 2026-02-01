@@ -77,18 +77,30 @@ const ViewCart = () => {
           body: JSON.stringify(body),
         },
       );
-      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+
+      const text = await response.text();
+      if (!text) {
+        throw new Error("Empty response from server");
+      }
+
+      const data = JSON.parse(text);
       if (data.url) {
         window.location.href = data.url;
       } else {
-        throw new Error("No checkout URL received from server.");
+        throw new Error("No checkout URL received");
       }
+      refetch();
     } catch (err: any) {
       toast({
         title: "Checkout Error",
         description: err.message || "Could not initiate payment.",
         status: "error",
       });
+      refetch();
     }
   };
 
@@ -103,7 +115,7 @@ const ViewCart = () => {
   }, [removeIsSuccess, modifyIsSuccess]);
 
   return (
-    <Box>
+    <Box marginLeft={8}>
       <SimpleGrid columns={2} spacing={4} mt={6}>
         {addedBooks?.items?.map((book) => (
           <ViewCartItem

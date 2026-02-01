@@ -142,7 +142,7 @@ const ViewProfile = ({
   return (
     <>
       <UpdateProfilePhoto user={data} refetchphoto={refetchphoto} />
-      <TableContainer>
+      <TableContainer marginLeft={51} width="1100px">
         <Table>
           <Tbody>
             <Tr>

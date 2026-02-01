@@ -9,7 +9,7 @@ function SegmentItem(props: any) {
   const input = getInputProps();
   const checkbox = getRadioProps();
   return (
-    <Box as="label" width="auto">
+    <Box as="label" width="auto" >
       <input {...input} />
       <Box
         {...checkbox}

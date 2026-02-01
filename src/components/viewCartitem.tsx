@@ -69,6 +69,7 @@ const ViewCartItem = ({
       borderLeft="3px solid"
       borderRight="3px solid"
       borderColor="blue.200"
+      marginLeft={6}
     >
       <Box width="150px" flexShrink={0} bg="gray.50">
         <Image

@@ -7,8 +7,9 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
-import { FiImage } from "react-icons/fi";
+import { FiImage, FiTrash2 } from "react-icons/fi";
 import useUpdateProfilePhoto from "../hooks/useUpdateprofilephoto";
+import Usedeletephoto from "../hooks/usedeletephoto";
 
 const UpdateProfilePhoto = ({
   user,
@@ -22,7 +23,16 @@ const UpdateProfilePhoto = ({
     duration: 3000,
     isClosable: true,
   });
-  const { mutate, isSuccess, data } = useUpdateProfilePhoto();
+  const {
+    mutate: updateMutate,
+    isSuccess: updateIsSuccess,
+    data: updateData,
+  } = useUpdateProfilePhoto();
+  const {
+    mutate: deleteMutate,
+    isSuccess: deleteIsSuccess,
+    data: deleteData,
+  } = Usedeletephoto();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,17 +51,31 @@ const UpdateProfilePhoto = ({
       },
     );
     const cloudinaryData = await response.json();
-    mutate(cloudinaryData.secure_url);
+    updateMutate(cloudinaryData.secure_url);
   };
   useEffect(() => {
-    if (isSuccess && data) {
+    if (updateIsSuccess && updateData) {
       toast({
-        title: data.message,
+        title: updateData.message,
         status: "success",
       });
       if (refetchphoto) refetchphoto(selectedImage || "");
     }
-  }, [isSuccess]);
+  }, [updateIsSuccess]);
+
+  const handleDeletePhoto = () => {
+    deleteMutate();
+  };
+  useEffect(() => {
+    if (deleteIsSuccess && deleteData) {
+      toast({
+        title: deleteData.message,
+        status: "success",
+      });
+      setSelectedImage(null);
+      if (refetchphoto) refetchphoto("");
+    }
+  }, [deleteIsSuccess]);
   return (
     <>
       <VStack spacing={1}>
@@ -75,6 +99,19 @@ const UpdateProfilePhoto = ({
             right="0"
             onClick={() => fileInputRef.current?.click()}
           />
+          {(selectedImage || user.photoUrl) && (
+            <IconButton
+              aria-label="Delete photo"
+              icon={<FiTrash2 />}
+              size="sm"
+              colorScheme="red"
+              rounded="full"
+              position="absolute"
+              bottom="0"
+              left="0"
+              onClick={handleDeletePhoto}
+            />
+          )}
         </Box>
         <input
           type="file"

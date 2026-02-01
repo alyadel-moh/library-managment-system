@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import ApiClient1 from "../api-client";
+
 interface orderhistory {
     orderId : number,
     totalPrice : number,
@@ -12,23 +13,13 @@ interface orderhistory {
         total_price_book : number
     }>
 }
+
+const apiClient = new ApiClient1<orderhistory>("/user/history");
+
 const useGetorderhistory = () =>{
   return useQuery<orderhistory []>({
     queryKey: ['orderHistory'],
-    queryFn: () => {
-        const token = localStorage.getItem('accessToken');
-        return axios.get(
-            "http://localhost:8080/api/user/history",
-            {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            }
-        ).then((response) => {
-            console.log('Order history fetched successfully:', response.data);
-            return response.data;
-        });
-    },
+    queryFn: () => apiClient.getAll(),
     enabled: !!localStorage.getItem('accessToken'),
     retry: false 
   });

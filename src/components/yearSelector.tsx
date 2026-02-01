@@ -43,9 +43,9 @@ const YearInput = ({ setCriteria }: yearProps) => {
   return (
     <FormControl
       isInvalid={isInvalid}
-      maxWidth="150px"
-      marginLeft="670px"
-      marginTop="-45px"
+      maxWidth="100px"
+      marginLeft="640px"
+      marginTop="-47px"
     >
       <InputGroup>
         <InputLeftElement pointerEvents="none">

@@ -55,7 +55,7 @@ const ViewSaved = ({ onViewDetails }: ViewSavedProps) => {
     );
   }
   return (
-    <Box>
+    <Box marginLeft={7}>
       <SimpleGrid columns={2} spacing={4} mt={6}>
         {addedBooks?.map((book) => (
           <ViewSaveditem

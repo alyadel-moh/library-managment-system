@@ -1,4 +1,4 @@
-import { Box, Grid, GridItem, Show } from "@chakra-ui/react";
+import { Box, Button, Grid, GridItem, Show } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import BooksList from "../components/booksList";
@@ -13,6 +13,7 @@ import YearInput from "../components/yearSelector";
 import PriceRangeSelector from "../components/priceSelector";
 import ViewSaved from "../components/savedbooks";
 import useGetUser from "../hooks/useGetusers";
+import { FiX } from "react-icons/fi";
 
 const Homepage = () => {
   const [selectedView, setSelectedView] = useState<string>("books");
@@ -20,11 +21,14 @@ const Homepage = () => {
   const [criteria, setCriteria] = useState<BookSearchCriteria | null>(null);
   // const [expectedTotal, setExpectedTotal] = useState<string>("");
   const [photoUrl, setPhotoUrl] = useState<string>("");
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("search");
-  if (searchQuery && (!criteria || criteria.keyword !== searchQuery)) {
-    setCriteria((prev) => ({ ...prev, keyword: searchQuery }));
-  }
+  useEffect(() => {
+    if (searchQuery) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setCriteria((prev) => ({ ...prev, keyword: searchQuery }));
+    }
+  }, [searchQuery]);
   const handleCriteriaChange = (newCriteria: Partial<BookSearchCriteria>) => {
     setCriteria((prev) => ({ ...prev, ...newCriteria }));
   };
@@ -75,6 +79,25 @@ const Homepage = () => {
               <BrowseCategories setCriteria={handleCriteriaChange} />
               <YearInput setCriteria={handleCriteriaChange} />
               <PriceRangeSelector setCriteria={handleCriteriaChange} />
+              <Button
+                mt={4}
+                mb={4}
+                borderRadius="full"
+                colorScheme="red"
+                width="120px"
+                size="sm"
+                marginLeft="1063px"
+                marginTop="-70px"
+                transition="all 0.2s"
+                _hover={{ transform: "scale(1.05)" }}
+                leftIcon={<FiX />}
+                onClick={() => {
+                  setCriteria(null);
+                  setSearchParams(new URLSearchParams());
+                }}
+              >
+                Clear Filters
+              </Button>
               <BooksList
                 onViewDetails={handleViewDetails}
                 criteria={criteria || undefined}

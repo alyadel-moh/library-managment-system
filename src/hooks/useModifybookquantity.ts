@@ -1,22 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import ApiClient1 from "../api-client";
 import type BackendResponsemessage from "../entities/Response";
+
 const useModifyquantity = (quantity: number, isbn: string) => {
+  const apiClient = new ApiClient1<BackendResponsemessage>(`/user/cart/update/${isbn}`);
   return useMutation<BackendResponsemessage, AxiosError<{ message: string }>>({
-    mutationFn:async () => {
-      const token = localStorage.getItem('accessToken');
-      return axios
-        .put<BackendResponsemessage>(
-          `http://localhost:8080/api/user/cart/update/${isbn}/${quantity}`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then((response) => response.data);
-    },
+    mutationFn:() => apiClient.put({}, quantity) as unknown as Promise<BackendResponsemessage>,
     onSuccess: (data: BackendResponsemessage) => {
       console.log("quantity modified successfully:", data);
     },

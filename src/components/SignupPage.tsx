@@ -146,7 +146,7 @@ const SignupPage = () => {
         }, onInvalid)}
         style={{
           width: "100%",
-          maxWidth: "400px",
+          maxWidth: "650px",
           display: "flex",
           flexDirection: "column",
           gap: "15px",
@@ -226,7 +226,7 @@ const SignupPage = () => {
                   pr="4.5rem"
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="Password"
+                  placeholder="strong"
                   {...register("password")}
                   borderRadius="full"
                 />

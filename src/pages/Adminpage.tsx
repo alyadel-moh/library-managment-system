@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/set-state-in-effect */
-import { Box, Grid, GridItem, Show } from "@chakra-ui/react";
+import { Box, Button, Grid, GridItem, Show } from "@chakra-ui/react";
 import { useSearchParams } from "react-router-dom";
 import BooksList from "../components/booksList";
 import ViewProfile from "../components/viewProfile";
@@ -14,12 +14,13 @@ import { useEffect, useState } from "react";
 import type { BookSearchCriteria } from "../hooks/useGetbook";
 import YearInput from "../components/yearSelector";
 import PriceRangeSelector from "../components/priceSelector";
+import { FiX } from "react-icons/fi";
 const Adminpage = () => {
   const [selectedView, setSelectedView] = useState<string>("books");
   const [selectedBook, setSelectedBook] = useState<Book1 | null>(null);
   const [criteria, setCriteria] = useState<BookSearchCriteria | null>(null);
   const [photoUrl, setPhotoUrl] = useState<string>("");
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("search");
   const handleViewDetails = (bookData: Book1) => {
     setSelectedBook(bookData);
@@ -73,6 +74,25 @@ const Adminpage = () => {
               <BrowseCategories setCriteria={handleCriteriaChange} />
               <YearInput setCriteria={handleCriteriaChange} />
               <PriceRangeSelector setCriteria={handleCriteriaChange} />
+              <Button
+                mt={4}
+                mb={4}
+                borderRadius="full"
+                colorScheme="red"
+                width="120px"
+                size="sm"
+                marginLeft="1063px"
+                marginTop="-70px"
+                transition="all 0.2s"
+                _hover={{ transform: "scale(1.05)" }}
+                leftIcon={<FiX />}
+                onClick={() => {
+                  setCriteria(null);
+                  setSearchParams(new URLSearchParams());
+                }}
+              >
+                Clear Filters
+              </Button>
               <BooksList
                 onViewDetails={handleViewDetails}
                 criteria={criteria || undefined}
