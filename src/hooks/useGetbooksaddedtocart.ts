@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";      
+import ApiClient1 from "../api-client";
 
 interface cart {
     items: Array<Item>,
@@ -13,23 +13,13 @@ interface Item {
     quantity: number,
     subTotal: number
 }
+
+const apiClient = new ApiClient1<cart>("/user/cart");
+
 const useGetaddedbookstocart = () =>{
   return useQuery<cart>({
     queryKey: ['userProfile'],
-    queryFn: () => {
-      const token = localStorage.getItem('accessToken');
-      return axios.get(
-        "http://localhost:8080/api/user/cart",
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      ).then((response) => {
-        console.log('Books added to cart fetched successfully:', response.data);
-        return response.data;
-      });
-    },
+    queryFn: () => apiClient.getSingle(),
     enabled: !!localStorage.getItem('accessToken'),  // only run if token exists
     retry: false // do not retry on failure
   });

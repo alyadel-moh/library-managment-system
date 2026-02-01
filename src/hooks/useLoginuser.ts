@@ -1,5 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import ApiClient1 from "../api-client";
+
 interface User1 {
   username: string;
   password: string;
@@ -9,12 +11,12 @@ interface LoginResponse {
   message: string;
   token: string;
 }
+
+const apiClient = new ApiClient1<LoginResponse>("/auth/login");
+
 const useLoginUser = () =>{
   return useMutation<LoginResponse, AxiosError<{message : string}>, User1>({
-    mutationFn : (newUser: User1) => axios.post<LoginResponse>(
-        "http://localhost:8080/api/auth/login",
-        newUser
-      ).then((response) => response.data),
+    mutationFn : (newUser: User1) => apiClient.postPublic(newUser),
       onSuccess : (data: LoginResponse) => {
         if (data.token) {
         localStorage.setItem('accessToken', data.token);

@@ -1,24 +1,26 @@
 import { Box, HStack, useRadio, useRadioGroup, Text } from "@chakra-ui/react";
+import type { BookSearchCriteria } from "../hooks/useGetbook";
 interface categoryProps {
-  onViewChange: (view: string) => void;
+  setCriteria: (newCriteria: Partial<BookSearchCriteria>) => void;
+  criteria?: BookSearchCriteria;
 }
 function SegmentItem(props: any) {
   const { getInputProps, getRadioProps } = useRadio(props);
   const input = getInputProps();
   const checkbox = getRadioProps();
   return (
-    <Box as="label" width="auto">
+    <Box as="label" width="auto" >
       <input {...input} />
       <Box
         {...checkbox}
         cursor="pointer"
-        borderWidth="0px"
-        borderRadius="3xl"
+        borderRadius="full"
         height="45px"
         _checked={{
           bg: "blue.400",
           color: "white",
           shadow: "md",
+          transform: "scale(1.05)",
         }}
         _focus={{
           boxShadow: "outline",
@@ -29,6 +31,7 @@ function SegmentItem(props: any) {
         transition="all 0.2s"
         width="auto"
         minW={0}
+        _hover={{ backgroundColor: "gray.600", transform: "scale(1.02)" }}
       >
         <Text fontWeight="medium">{props.label}</Text>
       </Box>
@@ -36,21 +39,24 @@ function SegmentItem(props: any) {
   );
 }
 
-const BrowseCategories = ({ onViewChange }: categoryProps) => {
+const BrowseCategories = ({ setCriteria, criteria }: categoryProps) => {
   const options = [
-    { value: "All Categories", label: "All Categories" },
-    { value: "Art", label: "Art" },
-    { value: "History", label: "History" },
-    { value: "Science", label: "Science" },
-    { value: "Geography", label: "Geography" },
-    { value: "Religion", label: "Religion" },
+    { value: "All", label: "All Categories" },
+    { value: "2", label: "Art" },
+    { value: "4", label: "History" },
+    { value: "1", label: "Science" },
+    { value: "5", label: "Geography" },
+    { value: "3", label: "Religion" },
   ];
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: "framework",
-    defaultValue: "All Categories",
-    onChange: (value) => onViewChange(value),
+    defaultValue: "All",
+    onChange: (value) =>
+      setCriteria({
+        ...criteria,
+        categoryId: value === "All" ? undefined : value,
+      }),
   });
 
   const group = getRootProps();

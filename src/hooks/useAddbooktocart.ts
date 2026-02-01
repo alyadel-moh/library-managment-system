@@ -1,20 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import ApiClient1 from "../api-client";
 import type BackendResponse from "../entities/Response";
+
 const useAddBooktocart = (isbn : string) =>{
+  const apiClient = new ApiClient1<BackendResponse>("/user/cart/add");
   return useMutation<BackendResponse, AxiosError<{message : string}>>({
-    mutationFn: () => {
-      const token = localStorage.getItem('accessToken');
-      return axios.post<BackendResponse>(
-        `http://localhost:8080/api/user/cart/add/${isbn}`,
-        {},
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      ).then((response) => response.data);
-    },
+    mutationFn: () => apiClient.post({}, isbn),
       onSuccess : (data: BackendResponse) => {
         console.log("Book added to Cart successfully : ", data);
       },

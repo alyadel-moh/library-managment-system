@@ -1,21 +1,14 @@
 import { useMutation } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import ApiClient1 from "../api-client";
 import type { Book2 } from "../entities/Book";
-import type BackendResponse from "../entities/Response"; 
+import type BackendResponse from "../entities/Response";
+
+const apiClient = new ApiClient1<Book2>("/admin/book");
+
 const useAddBook = () =>{
   return useMutation<BackendResponse, AxiosError<{message : string}>, Book2>({
-    mutationFn: async (newBook: Book2) => {
-      const token = localStorage.getItem('accessToken');
-      return axios.post<BackendResponse>(
-        "http://localhost:8080/api/admin/book",
-        newBook,
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      ).then((response) => response.data);
-    },
+    mutationFn: (newBook: Book2) => apiClient.post(newBook) as unknown as Promise<BackendResponse>,
       onMutate :(newBook: Book2) => {
         console.log("Adding book:", newBook);
       },

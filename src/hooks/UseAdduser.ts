@@ -1,14 +1,14 @@
 import { useMutation } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import ApiClient1 from "../api-client";
 import type User from "../entities/User";
 import type BackendResponse from "../entities/Response";
+
+const apiClient = new ApiClient1<BackendResponse>("/auth/signup");
+
 const useAddUser = () =>{
   return useMutation<BackendResponse, AxiosError<{message : string}>, User>({
-    mutationFn: async (newUser: User) => 
-      axios.post<BackendResponse>(
-        "http://localhost:8080/api/auth/signup",
-        newUser
-      ).then((response) => response.data),
+    mutationFn: (newUser: User) => apiClient.postPublic(newUser),
       onMutate :(newUser: User) => {
         console.log("Adding user:", newUser);
       },

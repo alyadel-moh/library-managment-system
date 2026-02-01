@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";      
+import ApiClient1 from "../api-client";
 
 export interface User {
   username: string;
@@ -12,23 +12,13 @@ export interface User {
   photoUrl?: string;
   role : string;
 }
+
+const apiClient = new ApiClient1<User>("/user/profile");
+
 const useGetUser = () =>{
   return useQuery<User>({
     queryKey: ['userProfile'],
-    queryFn: () => {
-      const token = localStorage.getItem('accessToken');
-      return axios.get(
-        "http://localhost:8080/api/user/profile",
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      ).then((response) => {
-        console.log('User fetched successfully:', response.data);
-        return response.data;
-      });
-    },
+    queryFn: () => apiClient.getSingle(),
     enabled: !!localStorage.getItem('accessToken'),  // only run if token exists
     retry: false // do not retry on failure
   });

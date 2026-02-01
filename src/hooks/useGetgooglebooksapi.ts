@@ -1,5 +1,5 @@
 import {  useQuery } from "@tanstack/react-query";
-import ApiClient from "../api-client";
+import { ApiClient } from "../api-client";
 interface IndustryIdentifier {
   type: string;
   identifier: string;

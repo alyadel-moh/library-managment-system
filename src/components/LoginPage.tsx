@@ -13,6 +13,7 @@ import {
   FiEye,
   FiEyeOff,
 } from "react-icons/fi";
+import { FaGoogle } from "react-icons/fa"; // Added Google Icon
 import {
   Button,
   FormControl,
@@ -26,13 +27,16 @@ import {
   Text,
   useToast,
   Box,
+  HStack,  // Added HStack
+  Divider, // Added Divider
 } from "@chakra-ui/react";
 
 const schema = z.object({
   username: z.string().min(1, { message: "UserName is required" }),
-  password: z.string().min(1, { message: "Password  is required" }),
+  password: z.string().min(1, { message: "Password is required" }),
 });
-type formdata = z.infer<typeof schema>; // infers input types (name and age) based on schema
+type formdata = z.infer<typeof schema>;
+
 const Form = () => {
   const [showPassword, setShowPassword] = useState(false);
   const toast = useToast({
@@ -44,8 +48,9 @@ const Form = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors }, // is valid for disabelling submit buttton and formsate used for displaying error messages
-  } = useForm<formdata>({ resolver: zodResolver(schema) }); // manage form state errors validations submissionhandling i mean it builds and validate form
+    formState: { errors },
+  } = useForm<formdata>({ resolver: zodResolver(schema) });
+  
   const loginuser = useLoginUser();
   const { isSuccess, data, error, isError, isPending } = loginuser;
   const { refetch } = useGetUser();
@@ -73,7 +78,6 @@ const Form = () => {
   // Navigate based on user role after successful login
   useEffect(() => {
     if (isSuccess && data?.token) {
-      // Refetch user data after login to get role
       refetch().then(async (result) => {
         if (result.data?.role) {
           console.log("Navigating for role:", result.data.role);
@@ -88,109 +92,152 @@ const Form = () => {
   }, [isSuccess, data, refetch, navigate]);
 
   return (
-    <form
-      onSubmit={handleSubmit((data) => {
-        loginuser.mutate(data);
-      })}
+    <div
       style={{
-        width: "100%",
-        maxWidth: "400px",
-        display: "flex",
-        flexDirection: "column",
-        gap: "20px",
+        width: "90%",
+        maxWidth: "500px",
+        padding: "40px",
+        backgroundColor: "rgba(255, 255, 255, 0.1)",
+        backdropFilter: "blur(7px)",
+        WebkitBackdropFilter: "blur(10px)",
+        borderRadius: "44px",
+        border: "1px solid rgba(255, 255, 255, 0.2)",
+        boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.37)",
+        textAlign: "center",
+        color: "white",
       }}
     >
-      <Box textAlign="center" mb={2}>
-        <Heading as="h1" fontSize="3xl" letterSpacing="tight">
-          The Next Chapter
-        </Heading>
-        <Text color="gray.400" mt={1}>
-          Enter your details to access your library.
-        </Text>
-      </Box>
-      <FormControl
-        isInvalid={!!errors.username}
-        _hover={{ transform: "scale(1.02)" }}
+      <form
+        onSubmit={handleSubmit((data) => {
+          loginuser.mutate(data);
+        })}
+        style={{
+          width: "100%",
+          maxWidth: "400px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "20px",
+        }}
       >
-        <FormLabel fontWeight="bold">Username</FormLabel>
-        <InputGroup size="md">
-          <InputLeftElement
-            pointerEvents="none"
-            children={<FiUser color="gray.300" />}
-          />
-          <Input
-            pr="4.5rem"
-            id="username"
-            type="text"
-            placeholder="Enter your Username"
-            {...register("username")}
-            borderRadius="full"
-          />
-        </InputGroup>
-      </FormControl>
-
-      <FormControl
-        isInvalid={!!errors.password}
-        _hover={{ transform: "scale(1.02)" }}
-      >
-        <FormLabel fontWeight="bold">Password</FormLabel>
-        <InputGroup size="md">
-          <InputLeftElement
-            pointerEvents="none"
-            children={<FiKey color="gray.300" />}
-          />
-          <Input
-            pr="4.5rem"
-            id="password"
-            type={showPassword ? "text" : "password"}
-            placeholder="Enter your Password"
-            {...register("password")}
-            borderRadius="full"
-          />
-          <InputRightElement>
-            <IconButton
-              aria-label={showPassword ? "Hide password" : "Show password"}
-              icon={showPassword ? <FiEyeOff /> : <FiEye />}
-              onClick={() => setShowPassword(!showPassword)}
-              variant="ghost"
-              size="md"
-              _hover={{ bg: "transparent", color: "blue.200" }}
+        <Box textAlign="center" mb={2}>
+          <Heading as="h1" fontSize="3xl" letterSpacing="tight">
+            The Next Chapter
+          </Heading>
+          <Text color="gray.400" mt={1}>
+            Enter your details to access your library.
+          </Text>
+        </Box>
+        <FormControl
+          isInvalid={!!errors.username}
+          _hover={{ transform: "scale(1.02)" }}
+        >
+          <FormLabel fontWeight="bold">Username</FormLabel>
+          <InputGroup size="md">
+            <InputLeftElement
+              pointerEvents="none"
+              children={<FiUser color="gray.300" />}
             />
-          </InputRightElement>
-        </InputGroup>
-      </FormControl>
+            <Input
+              pr="4.5rem"
+              id="username"
+              type="text"
+              placeholder="Enter your Username"
+              {...register("username")}
+              borderRadius="full"
+            />
+          </InputGroup>
+        </FormControl>
 
-      <Button
-        type="submit"
-        height="45px"
-        paddingRight="18px"
-        colorScheme="blue"
-        size="2xl"
-        fontSize="lg"
-        leftIcon={<FiLogIn />}
-        borderRadius="full"
-        transition="all 0.2s"
-        _hover={{ transform: "scale(1.05)" }}
-      >
-        {isPending ? "Logging in..." : "Login"}
-      </Button>
-      <Text fontWeight="bold">Don't have an account ?</Text>
-      <Button
-        onClick={() => navigate("/signup")}
-        size="2xl"
-        height="45px"
-        fontSize="lg"
-        variant="ghost"
-        border="0.5px solid"
-        transition="all 0.2s"
-        _hover={{ bg: "gray.500", transform: "scale(1.05)" }}
-        marginTop="-20px"
-        leftIcon={<FiUserPlus />}
-        borderRadius="full"
-      >
-        Sign up
-      </Button>
-    </form>
+        <FormControl
+          isInvalid={!!errors.password}
+          _hover={{ transform: "scale(1.02)" }}
+        >
+          <FormLabel fontWeight="bold">Password</FormLabel>
+          <InputGroup size="md">
+            <InputLeftElement
+              pointerEvents="none"
+              children={<FiKey color="gray.300" />}
+            />
+            <Input
+              pr="4.5rem"
+              id="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter your Password"
+              {...register("password")}
+              borderRadius="full"
+            />
+            <InputRightElement>
+              <IconButton
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                icon={showPassword ? <FiEyeOff /> : <FiEye />}
+                onClick={() => setShowPassword(!showPassword)}
+                variant="ghost"
+                size="md"
+                _hover={{ bg: "transparent", color: "blue.200" }}
+              />
+            </InputRightElement>
+          </InputGroup>
+        </FormControl>
+
+        <Button
+          type="submit"
+          height="45px"
+          paddingRight="18px"
+          colorScheme="blue"
+          size="2xl"
+          fontSize="lg"
+          leftIcon={<FiLogIn />}
+          borderRadius="full"
+          transition="all 0.2s"
+          _hover={{ transform: "scale(1.05)" }}
+        >
+          {isPending ? "Logging in..." : "Login"}
+        </Button>
+
+        {/* --- NEW: Divider --- */}
+        <HStack w="100%" py={0}>
+            <Divider />
+            <Text fontSize="sm" color="gray.300">OR</Text>
+            <Divider />
+        </HStack>
+
+        {/* --- NEW: Google Login Button --- */}
+        <Button
+          as="a"
+          href="http://localhost:8080/oauth2/authorization/google"
+          height="45px"
+          width="100%"
+          colorScheme="red"
+          fontSize="lg"
+          leftIcon={<FaGoogle />}
+          borderRadius="full"
+          transition="all 0.2s"
+          _hover={{ transform: "scale(1.05)", bg: "red.600" }}
+        >
+          Log in with Google
+        </Button>
+
+        <Box>
+            <Text fontWeight="bold" mt={2}>Don't have an account ?</Text>
+            <Button
+            onClick={() => navigate("/signup")}
+            size="2xl"
+            height="45px"
+            fontSize="lg"
+            variant="ghost"
+            border="0.5px solid"
+            transition="all 0.2s"
+            _hover={{ bg: "gray.500", transform: "scale(1.05)" }}
+            marginTop="10px"
+            width="100%" // Made full width to match others
+            leftIcon={<FiUserPlus />}
+            borderRadius="full"
+            >
+            Sign up
+            </Button>
+        </Box>
+      </form>
+    </div>
   );
 };
 

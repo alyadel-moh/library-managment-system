@@ -13,11 +13,7 @@ import ViewCartItem from "./viewCartitem";
 import { useEffect, useState } from "react";
 import { FiCheckCircle } from "react-icons/fi";
 
-interface ViewCartProps {
-  onViewChange: (view: string, expectedTotal?: string) => void;
-}
-
-const ViewCart = ({ onViewChange }: ViewCartProps) => {
+const ViewCart = () => {
   const { data: addedBooks, refetch } = useGetaddedbookstocart();
   const [removingIsbn, setRemovingIsbn] = useState<string>("");
   const [modifyingIsbn, setModifyingIsbn] = useState<string>("");
@@ -33,13 +29,16 @@ const ViewCart = ({ onViewChange }: ViewCartProps) => {
     isError: removeError,
     error: removeErrorMsg,
     isPending: removeIsPending,
+    isSuccess: removeIsSuccess,
   } = removeBook;
   const modifyQuantity = useModifyquantity(quantity, modifyingIsbn);
   const {
     data: modifyData,
     isError: modifyError,
     error: modifyErrorMsg,
+    isSuccess: modifyIsSuccess,
   } = modifyQuantity;
+
   useEffect(() => {
     if (removeData || modifyData) {
       toast({
@@ -49,7 +48,8 @@ const ViewCart = ({ onViewChange }: ViewCartProps) => {
         status: "success",
       });
     }
-  }, [removeData, modifyData]);
+  }, [removeIsSuccess, modifyIsSuccess]);
+
   useEffect(() => {
     if (removeError || modifyError) {
       toast({
@@ -60,6 +60,54 @@ const ViewCart = ({ onViewChange }: ViewCartProps) => {
       });
     }
   }, [removeError, modifyError]);
+
+  const makepayment = async () => {
+    const token = localStorage.getItem("accessToken");
+
+    if (!token) {
+      toast({
+        title: "Authentication Error",
+        description: "Please log in to continue.",
+        status: "error",
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        "http://localhost:8080/api/payments/create-checkout-session",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      // Parse JSON first
+      const data = await response.json();
+
+      // Then check if response is ok
+      if (!response.ok) {
+        throw new Error(data.message || `Server error: ${response.status}`);
+      }
+      
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error("No checkout URL received from server.");
+      }
+    } catch (err: any) {
+      console.error("Checkout error:", err);
+      toast({
+        title: "Checkout Error",
+        description: err.message || "Could not initiate payment.",
+        status: "error",
+      });
+    }
+  };
+
   return (
     <Box>
       <SimpleGrid columns={2} spacing={4} mt={6}>
@@ -124,7 +172,7 @@ const ViewCart = ({ onViewChange }: ViewCartProps) => {
           _hover={{ transform: "scale(1.05)" }}
           leftIcon={<FiCheckCircle />}
           onClick={() => {
-            onViewChange("checkout", addedBooks?.totalCartPrice);
+            makepayment();
           }}
         >
           Checkout

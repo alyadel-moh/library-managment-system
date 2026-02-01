@@ -1,24 +1,13 @@
- import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import ApiClient1 from "../api-client";
 import type Book1 from "../entities/Book";
+
+const apiClient = new ApiClient1<Book1>("/user/book/all");
 
 const useGetbooks = () => {
   return useQuery<Book1[]>({
     queryKey: ['books'],
-    queryFn: () => {
-      const token = localStorage.getItem('accessToken');
-      return axios.get(
-        `http://localhost:8080/api/user/book/all`,
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      ).then((response) => {
-        console.log('Books fetched successfully:', response.data);
-        return response.data;
-      });
-    },
+    queryFn: () => apiClient.getAll(),
     enabled: true,  // always run
     retry: false // do not retry on failure
   });

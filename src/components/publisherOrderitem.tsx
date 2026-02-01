@@ -72,7 +72,7 @@ const publisherOrderitem = ({
         status: "success",
       });
     }
-  }, [data, toast]);
+  }, [data]);
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     if (error) {
@@ -81,7 +81,7 @@ const publisherOrderitem = ({
         status: "error",
       });
     }
-  }, [error, toast]);
+  }, [error]);
   return (
     <Card
       display="flex"
@@ -94,8 +94,10 @@ const publisherOrderitem = ({
       borderLeft="3px solid"
       borderRight="3px solid"
       borderColor="blue.200"
+      width="1120px"
+      marginLeft={10}
     >
-      <CardBody p={8}>
+      <CardBody p={6} paddingLeft={10}>
         <VStack align="stretch" spacing={2}>
           {/* Header Section */}
           <Box>
@@ -235,9 +237,15 @@ const publisherOrderitem = ({
                 </Text>
               </HStack>
               <Divider />
-              <HStack fontSize="md" color="green.600" p={1} borderRadius="md">
+              <HStack
+                fontSize="md"
+                color="green.600"
+                p={1}
+                borderRadius="md"
+                paddingLeft={2}
+              >
                 <Text fontWeight="bold" marginBottom="1px">
-                  Total Order Price :
+                  Total order Price :
                 </Text>
                 <Text
                   color="green.600"
@@ -247,11 +255,7 @@ const publisherOrderitem = ({
                 >
                   ${totalOrderPrice}
                 </Text>
-                <Box
-                  display="flex"
-                  justifyContent="flex-end"
-                  paddingLeft="731px"
-                >
+                <Box display="flex" justifyContent="flex-end" marginLeft="auto">
                   <Button
                     colorScheme="blue"
                     borderRadius="full"

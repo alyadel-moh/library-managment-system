@@ -1,26 +1,17 @@
 import { useMutation } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import ApiClient1 from "../api-client";
 import type BackendResponsemessage from "../entities/Response";
+
+const apiClient = new ApiClient1<{ photoUrl: string }>("/user/profile/picture");
+
 const useUpdateProfilePhoto = () => {
   return useMutation<
     BackendResponsemessage,
     AxiosError<{ message: string }>,
     string
   >({
-    mutationFn: async (photoUrl: string) => {
-      const token = localStorage.getItem("accessToken");
-      return axios
-        .put<BackendResponsemessage>(
-          "http://localhost:8080/api/user/profile/picture",
-          { photoUrl },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        )
-        .then((response) => response.data);
-    },
+    mutationFn: (photoUrl: string) => apiClient.put({ photoUrl }) as unknown as Promise<BackendResponsemessage>,
     onSuccess: (data: BackendResponsemessage) => {
       console.log("profile photo updated successfully:", data);
     },

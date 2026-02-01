@@ -21,7 +21,7 @@ import {
   HStack,
   Text,
   InputGroup,
-  InputLeftElement,
+  InputLeftElement
 } from "@chakra-ui/react";
 import useGetUser from "../hooks/useGetusers";
 import {
@@ -88,7 +88,7 @@ const ViewProfile = ({
   useEffect(() => {
     if (isSuccess && updateData) {
       toast({
-        title: `${editField.replace(/([A-Z])/g, " $1").trim()} has been updated successfully !`,
+        title: `${editField} has been updated successfully !`,
         status: "success",
       });
     }
@@ -139,14 +139,10 @@ const ViewProfile = ({
         return FiEdit2;
     }
   };
-
   return (
     <>
-      <UpdateProfilePhoto
-        user={data}
-        refetchphoto={refetchphoto}
-      />
-      <TableContainer>
+      <UpdateProfilePhoto user={data} refetchphoto={refetchphoto} />
+      <TableContainer marginLeft={51} width="1100px">
         <Table>
           <Tbody>
             <Tr>

@@ -11,7 +11,7 @@ import {
   Input,
   IconButton,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { useState } from "react";
 import useGetGoogleBooks from "../hooks/useGetgooglebooksapi";
 import {
   FiHash,
@@ -69,6 +69,7 @@ const ViewCartItem = ({
       borderLeft="3px solid"
       borderRight="3px solid"
       borderColor="blue.200"
+      marginLeft={6}
     >
       <Box width="150px" flexShrink={0} bg="gray.50">
         <Image

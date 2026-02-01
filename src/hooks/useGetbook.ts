@@ -1,25 +1,35 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import ApiClient1 from "../api-client";
 import type Book1 from "../entities/Book";
-const useGetBooksbytitle = (title : string) =>{
+
+export interface BookSearchCriteria {
+  keyword?: string;       
+  categoryId?: string;
+  authorName?: string;
+  publisherName?: string;
+  minPrice?: string;
+  maxPrice?: string;
+  publicationYear?: string;
+  isbn?: string;
+}
+
+const apiClient = new ApiClient1<Book1>("/user/book/search");
+
+const useGetBook = (criteria?: BookSearchCriteria) =>{
   return useQuery<Book1[]>({
-    queryKey: ['books', title],
-    queryFn: () => {
-      const token = localStorage.getItem('accessToken');
-      return axios.get(
-        `http://localhost:8080/api/user/book/search/${encodeURIComponent(title)}`,
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      ).then((response) => {
-        console.log('Book fetched successfully:', response.data);
-        return response.data;
-      });
-    },
-    enabled: !!title,  // only run if title is provided
+    queryKey: ['books', criteria],
+    queryFn: () => apiClient.getAll({
+      ...(criteria?.keyword && { keyword: criteria.keyword }),
+      ...(criteria?.categoryId && { categoryId: criteria.categoryId }),
+      ...(criteria?.authorName && { authorName: criteria.authorName }),
+      ...(criteria?.publisherName && { publisherName: criteria.publisherName }),
+      ...(criteria?.minPrice && { minPrice: criteria.minPrice }),
+      ...(criteria?.maxPrice && { maxPrice: criteria.maxPrice }),
+      ...(criteria?.publicationYear && { publicationYear: criteria.publicationYear }),
+      ...(criteria?.isbn && { isbn: criteria.isbn }),
+    }),
+    enabled: !!criteria,  // only run if criteria is provided
     retry: false // do not retry on failure
   });
 }
-export default useGetBooksbytitle;
+export default useGetBook;

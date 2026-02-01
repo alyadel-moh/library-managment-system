@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import ApiClient1 from "../api-client";
 
 interface order {
     orderId: number,
@@ -15,23 +15,13 @@ interface order {
         isbn: string,
         totalOrderPrice: number
 }
+
+const apiClient = new ApiClient1<order>("/admin/order/pending");
+
 const useGetpendingOrders = () =>{
   return useQuery<order[]>({
     queryKey: ['pendingOrders'],
-    queryFn: () => {
-        const token = localStorage.getItem('accessToken');
-        return axios.get(
-            "http://localhost:8080/api/admin/order/pending",
-            {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            }
-        ).then((response) => {
-            console.log('Pending orders fetched successfully:', response.data);
-            return response.data;
-        });
-    },
+    queryFn: () => apiClient.getAll(),
     enabled: !!localStorage.getItem('accessToken'),
     retry: false 
   });

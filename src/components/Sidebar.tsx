@@ -1,5 +1,5 @@
-import { Avatar, Button, Heading, useToast, VStack } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { Avatar, Button, useToast, VStack } from "@chakra-ui/react";
+import  { useState } from "react";
 import {
   FiBookOpen,
   FiLogOut,
@@ -10,6 +10,7 @@ import {
 import useLogout from "../hooks/UseLogout";
 import { useNavigate } from "react-router-dom";
 import useGetUser from "../hooks/useGetusers";
+import { BsBookmark } from "react-icons/bs";
 interface SidebarProps {
   onViewChange: (view: string) => void;
   refetchphoto?: string;
@@ -36,7 +37,8 @@ const Sidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
       gap="6"
       spacing={8}
       align="stretch"
-      width="100%"
+      width="200px"
+      minHeight="calc(100vh - 100px)"
       height="100%"
     >
       <Button
@@ -52,11 +54,7 @@ const Sidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
         height="60px"
         paddingLeft="30px"
         borderRadius="full"
-        _hover={
-          activeView === "books"
-            ? { backgroundColor: "blue.600" }
-            : { backgroundColor: "gray.600" }
-        }
+        _hover={{ backgroundColor: "gray.600", transform: "scale(1.02)" }}
       >
         Books
       </Button>
@@ -65,11 +63,7 @@ const Sidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
         variant={activeView === "profile" ? "solid" : "ghost"}
         backgroundColor={activeView === "profile" ? "blue.600" : "transparent"}
         color={activeView === "profile" ? "white" : "inherit"}
-        _hover={
-          activeView === "profile"
-            ? { backgroundColor: "blue.600" }
-            : { backgroundColor: "gray.600" }
-        }
+        _hover={{ backgroundColor: "gray.600", transform: "scale(1.02)" }}
         onClick={() => handleViewChange("profile")}
         transform={activeView === "profile" ? "scale(1.06)" : "scale(1)"}
         justifyContent="flex-start"
@@ -82,17 +76,30 @@ const Sidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
         Profile
       </Button>
       <Button
+        leftIcon={<BsBookmark />}
+        variant={activeView === "saved" ? "solid" : "ghost"}
+        backgroundColor={activeView === "saved" ? "blue.500" : "transparent"}
+        color={activeView === "saved" ? "white" : "inherit"}
+        onClick={() => handleViewChange("saved")}
+        transform={activeView === "saved" ? "scale(1.06)" : "scale(1)"}
+        _hover={{ backgroundColor: "gray.600", transform: "scale(1.02)" }}
+        justifyContent="flex-start"
+        size="2xl"
+        fontSize="lg"
+        height="60px"
+        paddingLeft="30px"
+        borderRadius="full"
+      >
+        Saved
+      </Button>
+      <Button
         leftIcon={<FiShoppingCart />}
         variant={activeView === "cart" ? "solid" : "ghost"}
         backgroundColor={activeView === "cart" ? "blue.600" : "transparent"}
         color={activeView === "cart" ? "white" : "inherit"}
         onClick={() => handleViewChange("cart")}
         transform={activeView === "cart" ? "scale(1.06)" : "scale(1)"}
-        _hover={
-          activeView === "cart"
-            ? { backgroundColor: "blue.600" }
-            : { backgroundColor: "gray.600" }
-        }
+        _hover={{ backgroundColor: "gray.600", transform: "scale(1.02)" }}
         justifyContent="flex-start"
         size="2xl"
         fontSize="lg"
@@ -109,11 +116,7 @@ const Sidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
         color={activeView === "orders" ? "white" : "inherit"}
         onClick={() => handleViewChange("orders")}
         transform={activeView === "orders" ? "scale(1.06)" : "scale(1)"}
-        _hover={
-          activeView === "orders"
-            ? { backgroundColor: "blue.600" }
-            : { backgroundColor: "gray.600" }
-        }
+        _hover={{ backgroundColor: "gray.600", transform: "scale(1.02)" }}
         justifyContent="flex-start"
         size="2xl"
         fontSize="lg"
@@ -127,7 +130,7 @@ const Sidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
         leftIcon={<FiLogOut />}
         variant="ghost"
         color="inherit"
-        _hover={{ backgroundColor: "gray.600" }}
+        _hover={{ backgroundColor: "gray.600", transform: "scale(1.02)" }}
         justifyContent="flex-start"
         size="2xl"
         fontSize="lg"
@@ -154,16 +157,13 @@ const Sidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
         {isPending ? "Logging out..." : "Logout"}
       </Button>
       <Avatar
-        marginTop="60px"
+        marginTop="10px"
         marginLeft="30px"
         size="xl"
         name={`${data?.firstName} ${data?.lastname}`}
         src={refetchphoto || data?.photoUrl}
         border="1px solid #3182ce"
       />
-      <Heading size="md" marginLeft="35px" color="blue.400">
-        {data?.firstName} {data?.lastname}
-      </Heading>
     </VStack>
   );
 };

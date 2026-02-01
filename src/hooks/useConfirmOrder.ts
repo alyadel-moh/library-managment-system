@@ -1,22 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import ApiClient1 from "../api-client";
 import type BackendResponsemessage from "../entities/Response";
+
+const apiClient = new ApiClient1<BackendResponsemessage>("/admin/order/confirm");
+
 const useConfirmOrder = () => {
   return useMutation<BackendResponsemessage, AxiosError<{ message: string }>, number>({
-    mutationFn: async (orderid: number) => {
-      const token = localStorage.getItem("accessToken");
-      return axios
-        .put<BackendResponsemessage>(
-          `http://localhost:8080/api/admin/order/confirm/${orderid}`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then((response) => response.data);
-    },
+    mutationFn: (orderid: number) => apiClient.put({}, orderid) as unknown as Promise<BackendResponsemessage>,
     onSuccess: (data: BackendResponsemessage) => {
       console.log("Order confirmed successfully:", data);
     },
