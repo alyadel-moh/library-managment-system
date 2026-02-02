@@ -40,6 +40,8 @@ const ViewOrderItem = ({
       borderLeft="3px solid"
       borderRight="3px solid"
       borderColor="blue.200"
+      width="1120px"
+      marginLeft={10}
     >
       <CardBody
         flex="1"

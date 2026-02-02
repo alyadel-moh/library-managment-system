@@ -1,6 +1,6 @@
 import { Box, Button, Grid, GridItem, Show, useToast } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import BooksList from "../components/booksList";
 import Sidebar from "../components/Sidebar";
 import ViewProfile from "../components/viewProfile";
@@ -19,14 +19,12 @@ const Homepage = () => {
   const [selectedView, setSelectedView] = useState<string>("books");
   const [selectedBook, setSelectedBook] = useState<any>(null);
   const [criteria, setCriteria] = useState<BookSearchCriteria | null>(null);
-  const navigate = useNavigate();
   const toast = useToast({
     position: "bottom-right",
     duration: 3000,
     isClosable: true,
   });
   const processedRef = useRef(false);
-  const oauthProcessedRef = useRef(false); // ⭐ Separate ref for OAuth
   const { data: userData } = useGetUser();
   const [photoUrl, setPhotoUrl] = useState<string>("");
   const [searchParams, setSearchParams] = useSearchParams();
@@ -46,42 +44,6 @@ const Homepage = () => {
   const handleCriteriaChange = (newCriteria: Partial<BookSearchCriteria>) => {
     setCriteria((prev) => ({ ...prev, ...newCriteria }));
   };
-
-  // --- ⭐ NEW: OAUTH TOKEN HANDLING ---
-  useEffect(() => {
-    const token = searchParams.get("token");
-    const error = searchParams.get("error");
-
-    // Handle OAuth errors
-    if (error && !oauthProcessedRef.current) {
-      oauthProcessedRef.current = true;
-      navigate("/", { replace: true });
-      return;
-    }
-
-    // Handle successful OAuth login
-    if (token && !oauthProcessedRef.current) {
-      oauthProcessedRef.current = true;
-      // Save token to localStorage
-      localStorage.setItem("accessToken", token); // ⭐ Using your existing token key
-      const newParams = new URLSearchParams(searchParams);
-      newParams.delete("token");
-      newParams.delete("error");
-      newParams.delete("message");
-      setSearchParams(newParams, { replace: true });
-    }
-  }, [searchParams, navigate, setSearchParams]);
-  useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (
-      !token &&
-      !searchParams.get("token") &&
-      !searchParams.get("session_id")
-    ) {
-      navigate("/", { replace: true });
-    }
-  }, [navigate, searchParams]);
-
   // --- PAYMENT VERIFICATION LOGIC ---
   useEffect(() => {
     const sessionId = searchParams.get("session_id");

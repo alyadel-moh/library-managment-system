@@ -34,12 +34,12 @@ const Item = ({
       overflow="hidden"
       mb={4}
       borderRadius="3xl"
-      minWidth="550px"
       maxWidth="2000px"
       bg="gray.800"
       borderLeft="2px solid"
       borderRight="2px solid"
       borderColor="blue.200"
+      width="520px"
     >
       <Box width="150px" flexShrink={0} bg="gray.50">
         <Image

@@ -144,6 +144,28 @@ const Viewprofilegoogle = ({
           <Tbody>
             <Tr>
               <Td>
+                <HStack spacing={3}>
+                  <Icon as={FiUser} color="blue.400" />
+                  <Text fontWeight="medium" marginBottom="2px">
+                    Username
+                  </Text>
+                </HStack>
+              </Td>
+              <Td>{data.username}</Td>
+              <Td>
+                <IconButton
+                  icon={<Icon as={FiEdit2} />}
+                  size="md"
+                  variant="ghost"
+                  color="gray.600"
+                  _hover={{ color: "white" }}
+                  aria-label="Edit username"
+                  onClick={() => handleEditClick("username")}
+                />
+              </Td>
+            </Tr>
+            <Tr>
+              <Td>
                 <HStack spacing={3} align="center">
                   <Icon as={FiType} color="blue.400" />
                   <Text fontWeight="medium" marginBottom="2px">
@@ -154,13 +176,13 @@ const Viewprofilegoogle = ({
               <Td>{data.firstName}</Td>
               <Td>
                 <IconButton
-                  icon={<Icon as={FiEdit2} />}
+                  icon={<Icon as={FiLock} />}
                   size="md"
-                  color="gray.600"
-                  _hover={{ color: "white" }}
+                  color="gray.400"
                   variant="ghost"
-                  aria-label="Edit first name"
-                  onClick={() => handleEditClick("firstName")}
+                  aria-label="Email is read-only"
+                  isDisabled
+                  cursor="not-allowed"
                 />
               </Td>
             </Tr>
@@ -176,13 +198,13 @@ const Viewprofilegoogle = ({
               <Td>{data.lastname}</Td>
               <Td>
                 <IconButton
-                  icon={<Icon as={FiEdit2} />}
+                  icon={<Icon as={FiLock} />}
                   size="md"
-                  color="gray.600"
-                  _hover={{ color: "white" }}
+                  color="gray.400"
                   variant="ghost"
-                  aria-label="Edit last name"
-                  onClick={() => handleEditClick("lastname")}
+                  aria-label="Email is read-only"
+                  isDisabled
+                  cursor="not-allowed"
                 />
               </Td>
             </Tr>
