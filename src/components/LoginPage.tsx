@@ -203,7 +203,7 @@ const Form = () => {
         {/* --- NEW: Google Login Button --- */}
         <Button
           as="a"
-          href="http://localhost:8080/oauth2/authorization/google"
+          href="https://ordering-system-58at.onrender.com/oauth2/authorization/google"
           height="45px"
           width="100%"
           colorScheme="red"
