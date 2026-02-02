@@ -5,7 +5,6 @@ import {
   HStack,
   Spinner,
   Text,
-  Divider,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import useGetsavedbooks from "../hooks/useGetsavedbooks";

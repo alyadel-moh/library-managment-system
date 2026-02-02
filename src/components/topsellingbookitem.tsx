@@ -36,6 +36,7 @@ const topSellingBookItem = ({
       borderLeft="3px solid"
       borderRight="3px solid"
       borderColor="blue.200"
+      height="170px"
     >
       <Box width="150px" flexShrink={0} bg="gray.50">
         <Image
@@ -68,7 +69,12 @@ const topSellingBookItem = ({
           </HStack>
           <HStack fontSize="xs" mb={1}>
             <Icon as={FiShoppingBag} color="green.500" />
-            <Text fontSize="sm" fontWeight="bold" color="blue.600" marginTop={3}>
+            <Text
+              fontSize="sm"
+              fontWeight="bold"
+              color="blue.600"
+              marginTop={3}
+            >
               Total sold : {total_sold} units
             </Text>
           </HStack>

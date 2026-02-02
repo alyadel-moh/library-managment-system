@@ -86,7 +86,7 @@ const Reports = () => {
               >
                 (Last 3 Months Performance)
               </Text>
-              <SimpleGrid columns={2} spacing={4} mt={6} height={200}>
+              <SimpleGrid columns={2} spacing={4} mt={6}>
                 {topsellingbooks.map((item) => (
                   <TopSellingBookItem key={item.isbn} {...item} />
                 ))}

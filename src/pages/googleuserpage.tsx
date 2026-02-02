@@ -20,7 +20,11 @@ const GoogleUserPage = () => {
   const [selectedBook, setSelectedBook] = useState<any>(null);
   const [criteria, setCriteria] = useState<BookSearchCriteria | null>(null);
   const navigate = useNavigate();
-  const toast = useToast();
+  const toast = useToast({
+    position: "bottom-right",
+    duration: 3000,
+    isClosable: true,
+  });
   const { data: userData } = useGetUser();
   const processedRef = useRef(false);
   const oauthProcessedRef = useRef(false); // ⭐ Separate ref for OAuth
@@ -28,14 +32,14 @@ const GoogleUserPage = () => {
   const [photoUrl, setPhotoUrl] = useState<string>("");
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("search");
-  
+
   // Initialize photoUrl from user data when it loads
   useEffect(() => {
     if (userData?.photoUrl && !photoUrl) {
       setPhotoUrl(userData.photoUrl);
     }
   }, [userData?.photoUrl]);
-  
+
   useEffect(() => {
     if (searchQuery) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -140,11 +144,7 @@ const GoogleUserPage = () => {
       if (response.ok) {
         toast({
           title: "Payment Successful!",
-          description: "Your order has been placed successfully.",
           status: "success",
-          duration: 5000,
-          isClosable: true,
-          position: "top",
         });
 
         setSelectedView("orders");
@@ -155,12 +155,9 @@ const GoogleUserPage = () => {
     } catch (error) {
       console.error(error);
       toast({
-        title: "Order Verification Failed",
-        description:
+        title:
           "We could not verify your payment. Please check your order history.",
         status: "error",
-        duration: 5000,
-        isClosable: true,
       });
     }
   };
