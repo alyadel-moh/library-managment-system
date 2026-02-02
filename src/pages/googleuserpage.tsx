@@ -25,6 +25,7 @@ const GoogleUserPage = () => {
     duration: 3000,
     isClosable: true,
   });
+
   const { data: userData } = useGetUser();
   const processedRef = useRef(false);
   const oauthProcessedRef = useRef(false); // ⭐ Separate ref for OAuth
@@ -62,12 +63,8 @@ const GoogleUserPage = () => {
 
       console.error("OAuth error:", message);
       toast({
-        title: "Login Failed",
-        description: message || "Authentication failed. Please try again.",
+        title: message || "Authentication failed. Please try again.",
         status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "top",
       });
 
       // Clear error params and redirect to login
@@ -84,12 +81,8 @@ const GoogleUserPage = () => {
 
       console.log("OAuth login successful!");
       toast({
-        title: "Welcome!",
-        description: "You have successfully logged in with Google.",
+        title: "You have successfully logged in with Google.",
         status: "success",
-        duration: 3000,
-        isClosable: true,
-        position: "top",
       });
 
       // Remove token from URL (clean up)
