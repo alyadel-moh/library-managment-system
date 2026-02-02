@@ -7,9 +7,9 @@ interface ReactN {
 const BookCardContainer = ({ children }: ReactN) => {
   return (
     <Box
-      width="100%"
-      height="400px"
-      borderRadius={10}
+      height={{ base: "440px", sm: "320px", md: "380px", lg: "400px" }}
+      width={{ base: "340px", sm: "200px", md: "220px", lg: "100%" }}
+      borderRadius={{ base: 6, md: 10 }}
       overflow="hidden"
       _hover={{
         transform: "scale(1.05)",

@@ -98,16 +98,6 @@ const ViewCart = () => {
       });
     }
   };
-  // Updated Success Effect
-  useEffect(() => {
-    if (removeIsSuccess) {
-      toast({ title: "Book removed successfully!", status: "success" });
-    }
-    if (modifyIsSuccess) {
-      toast({ title: "Quantity updated!", status: "success" });
-    }
-  }, [removeIsSuccess, modifyIsSuccess]);
-
   return (
     <Box marginLeft={8}>
       <SimpleGrid columns={2} spacing={4} mt={6}>
