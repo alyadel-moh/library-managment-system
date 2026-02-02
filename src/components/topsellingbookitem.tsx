@@ -6,9 +6,10 @@ import {
   Heading,
   Image,
   Text,
+  Icon,
 } from "@chakra-ui/react";
 import useGetGoogleBooks from "../hooks/useGetgooglebooksapi";
-import { FiHash } from "react-icons/fi";
+import { FiHash, FiTag, FiShoppingBag } from "react-icons/fi";
 interface Top10sellingbooksResponse {
   isbn: string;
   category: string;
@@ -58,16 +59,19 @@ const topSellingBookItem = ({
             {title}
           </Heading>
           <HStack fontSize="xs" color="gray.600" mb={1}>
-            <FiHash />
+            <Icon as={FiHash} />
             <Text marginBottom="1px">ISBN : {isbn}</Text>
           </HStack>
-          <HStack fontSize="xs" color="gray.600" mb={1}>
-            <FiHash />
+          <HStack fontSize="xs" color="gray.600" mt={2}>
+            <Icon as={FiTag} color="purple.500" />
             <Text marginBottom="1px">Category : {category}</Text>
           </HStack>
-          <Text fontSize="sm" fontWeight="bold" color="blue.600" mb={1}>
-            Total sold : ${total_sold}
-          </Text>
+          <HStack fontSize="xs" mb={1}>
+            <Icon as={FiShoppingBag} color="green.500" />
+            <Text fontSize="sm" fontWeight="bold" color="blue.600" marginTop={3}>
+              Total sold : {total_sold} units
+            </Text>
+          </HStack>
         </Box>
       </CardBody>
     </Card>

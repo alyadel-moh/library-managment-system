@@ -55,13 +55,7 @@ const Adminpage = () => {
       </Show>
       <GridItem area="main">
         <Box paddingLeft={3}>
-          {selectedView === "profile" ? (
-            <ViewProfile
-              refetchphoto={(photo) => {
-                setPhotoUrl(photo);
-              }}
-            />
-          ) : selectedView === "Addbook" ? (
+          {selectedView === "Addbook" ? (
             <Addbook />
           ) : selectedView === "modifyBook" && selectedBook ? (
             <ModifyBook book={selectedBook} />
@@ -98,7 +92,13 @@ const Adminpage = () => {
                 criteria={criteria || undefined}
               />
             </>
-          ) : null}
+          ) : (
+            <ViewProfile
+              refetchphoto={(photo) => {
+                setPhotoUrl(photo);
+              }}
+            />
+          )}
         </Box>
       </GridItem>
     </Grid>

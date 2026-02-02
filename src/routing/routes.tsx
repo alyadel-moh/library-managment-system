@@ -8,6 +8,8 @@ import Layout from "../pages/Layout.tsx";
 import LoginPage from "../components/LoginPage.tsx";
 import MainpageLayout from "../pages/MainpageLayout.tsx";
 import Adminpage from "../pages/Adminpage.tsx";
+import AuthCallback from "../components/AuthCallback.tsx";
+import GoogleUserPage from "../pages/googleuserpage.tsx";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -15,25 +17,27 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <LoginPage /> },
       { path: "signup", element: <SignupPage /> },
+      { path: "auth/callback", element: <AuthCallback /> },
     ],
   },
   {
     path: "homepage",
     element: <Layout />,
-    children: [
-      { index: true, element: <Homepage /> },
-    ],
+    children: [{ index: true, element: <Homepage /> }],
   },
   {
     path: "Adminpage",
     element: <Layout />,
-    children: [
-      { index: true, element: <Adminpage /> },
-    ],
+    children: [{ index: true, element: <Adminpage /> }],
   },
   {
     path: "/reports",
     element: <Reports />,
+  },
+  {
+    path: "googleuserpage",
+    element: <Layout />,
+    children: [{ index: true, element: <GoogleUserPage /> }],
   },
   {
     path: "/pendingorders",

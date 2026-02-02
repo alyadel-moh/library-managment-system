@@ -21,7 +21,7 @@ import {
   HStack,
   Text,
   InputGroup,
-  InputLeftElement
+  InputLeftElement,
 } from "@chakra-ui/react";
 import useGetUser from "../hooks/useGetusers";
 import {
@@ -32,44 +32,35 @@ import {
   FiMapPin,
   FiType,
   FiCheck,
-  FiKey,
+  FiLock,
 } from "react-icons/fi";
 import { useEffect, useState } from "react";
 import useModifyUser from "../hooks/useModifyuser";
-import ChangePassword from "./changePassword";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js";
 import { useForm } from "react-hook-form";
 import UpdateProfilePhoto from "./updateprofilephoto";
-const ViewProfile = ({
+const Viewprofilegoogle = ({
   refetchphoto,
 }: {
   refetchphoto?: (photo: string) => void;
 }) => {
   const { data, refetch } = useGetUser();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const {
-    isOpen: isPasswordModalOpen,
-    onOpen: onPasswordModalOpen,
-    onClose: onPasswordModalClose,
-  } = useDisclosure();
   const [editField, setEditField] = useState<string>("");
   const toast = useToast({
     position: "bottom-right",
     duration: 3000,
     isClosable: true,
   });
-  
+
   const handlePhotoUpdate = (photo: string) => {
     if (refetchphoto) refetchphoto(photo);
     refetch(); // Refetch user data to get the updated photo
   };
-  
+
   const schema = z.object({
-    [editField]:
-      editField === "emailAddress"
-        ? z.string().email({ message: "Invalid email address" })
-        : z.string().min(1, { message: `${editField} is required` }),
+    [editField]: z.string().min(1, { message: `${editField} is required` }),
   });
 
   type FormData = z.infer<typeof schema>;
@@ -153,28 +144,6 @@ const ViewProfile = ({
           <Tbody>
             <Tr>
               <Td>
-                <HStack spacing={3}>
-                  <Icon as={FiUser} color="blue.400" />
-                  <Text fontWeight="medium" marginBottom="2px">
-                    Username
-                  </Text>
-                </HStack>
-              </Td>
-              <Td>{data.username}</Td>
-              <Td>
-                <IconButton
-                  icon={<Icon as={FiEdit2} />}
-                  size="md"
-                  variant="ghost"
-                  color="gray.600"
-                  _hover={{ color: "white" }}
-                  aria-label="Edit username"
-                  onClick={() => handleEditClick("username")}
-                />
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>
                 <HStack spacing={3} align="center">
                   <Icon as={FiType} color="blue.400" />
                   <Text fontWeight="medium" marginBottom="2px">
@@ -219,28 +188,6 @@ const ViewProfile = ({
             </Tr>
             <Tr>
               <Td>
-                <HStack spacing={3}>
-                  <Icon as={FiKey} color="blue.400" />
-                  <Text fontWeight="medium" marginBottom="2px">
-                    Password
-                  </Text>
-                </HStack>
-              </Td>
-              <Td>{data.password}</Td>
-              <Td>
-                <IconButton
-                  icon={<Icon as={FiEdit2} />}
-                  size="md"
-                  color="gray.600"
-                  _hover={{ color: "white" }}
-                  variant="ghost"
-                  aria-label="Edit password"
-                  onClick={onPasswordModalOpen}
-                />
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>
                 <HStack spacing={3} align="center">
                   <Icon as={FiMail} color="blue.400" />
                   <Text fontWeight="medium" marginBottom="2px">
@@ -251,13 +198,13 @@ const ViewProfile = ({
               <Td>{data.emailAddress}</Td>
               <Td>
                 <IconButton
-                  icon={<Icon as={FiEdit2} />}
+                  icon={<Icon as={FiLock} />}
                   size="md"
-                  color="gray.600"
-                  _hover={{ color: "white" }}
+                  color="gray.400"
                   variant="ghost"
-                  aria-label="Edit email address"
-                  onClick={() => handleEditClick("emailAddress")}
+                  aria-label="Email is read-only"
+                  isDisabled
+                  cursor="not-allowed"
                 />
               </Td>
             </Tr>
@@ -355,12 +302,8 @@ const ViewProfile = ({
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <ChangePassword
-        isOpen={isPasswordModalOpen}
-        onClose={onPasswordModalClose}
-      />
     </>
   );
 };
 
-export default ViewProfile;
+export default Viewprofilegoogle;

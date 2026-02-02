@@ -13,6 +13,7 @@ import {
   FiEye,
   FiEyeOff,
 } from "react-icons/fi";
+import { FaGoogle } from "react-icons/fa";
 import {
   Button,
   FormControl,
@@ -26,6 +27,8 @@ import {
   Text,
   useToast,
   Box,
+  Divider,
+  HStack,
 } from "@chakra-ui/react";
 
 const schema = z.object({
@@ -115,7 +118,7 @@ const Form = () => {
           gap: "20px",
         }}
       >
-        <Box textAlign="center" mb={2}>
+        <Box textAlign="center" marginBottom="-10px">
           <Heading as="h1" fontSize="3xl" letterSpacing="tight">
             The Next Chapter
           </Heading>
@@ -189,7 +192,29 @@ const Form = () => {
         >
           {isPending ? "Logging in..." : "Login"}
         </Button>
-        <Text fontWeight="bold">Don't have an account ?</Text>
+            <HStack w="100%" py={0} marginTop={-1} >
+            <Divider marginTop={-1}/>
+            <Text fontSize="sm" color="gray.300">OR</Text>
+            <Divider marginTop={-1}/>
+        </HStack>
+
+        {/* --- NEW: Google Login Button --- */}
+        <Button
+          as="a"
+          href="http://localhost:8080/oauth2/authorization/google"
+          height="45px"
+          width="100%"
+          colorScheme="red"
+          fontSize="lg"
+          leftIcon={<FaGoogle />}
+          borderRadius="full"
+          transition="all 0.2s"
+          _hover={{ transform: "scale(1.05)", bg: "red.600" }}
+          marginTop={-6}
+        >
+          Log in with Google
+        </Button>
+        <Text fontWeight="bold"  marginTop={-2}>Don't have an account ?</Text>
         <Button
           onClick={() => navigate("/signup")}
           size="2xl"
@@ -199,7 +224,7 @@ const Form = () => {
           border="0.5px solid"
           transition="all 0.2s"
           _hover={{ bg: "gray.500", transform: "scale(1.05)" }}
-          marginTop="-20px"
+          marginTop="-22px"
           leftIcon={<FiUserPlus />}
           borderRadius="full"
         >

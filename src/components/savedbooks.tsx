@@ -5,6 +5,7 @@ import {
   HStack,
   Spinner,
   Text,
+  Divider,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import useGetsavedbooks from "../hooks/useGetsavedbooks";
@@ -55,8 +56,8 @@ const ViewSaved = ({ onViewDetails }: ViewSavedProps) => {
     );
   }
   return (
-    <Box marginLeft={7}>
-      <SimpleGrid columns={2} spacing={4} mt={6}>
+    <Box marginLeft={8}>
+      <SimpleGrid columns={2} spacing={4} mt={6} height={200}>
         {addedBooks?.map((book) => (
           <ViewSaveditem
             key={book.isbn}

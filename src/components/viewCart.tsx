@@ -59,51 +59,45 @@ const ViewCart = () => {
   }, [removeError, modifyError]);
   const makepayment = async () => {
     const token = localStorage.getItem("accessToken");
-    const body = {
-      amount: addedBooks?.totalCartPrice || 0,
-      currency: "usd",
-      description: "Purchase from BookShelf",
-    };
 
+    if (!token) {
+      toast({
+        title: "Authentication Error",
+        description: "Please log in to continue.",
+        status: "error",
+      });
+      return;
+    }
     try {
       const response = await fetch(
-        "http://localhost:8080/api/payments/create-payment-intent",
+        "http://localhost:8080/api/payments/create-checkout-session",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(body),
         },
       );
-
+      const data = await response.json();
       if (!response.ok) {
-        throw new Error(`Server error: ${response.status}`);
+        throw new Error(data.message || `Server error: ${response.status}`);
       }
 
-      const text = await response.text();
-      if (!text) {
-        throw new Error("Empty response from server");
-      }
-
-      const data = JSON.parse(text);
       if (data.url) {
         window.location.href = data.url;
       } else {
-        throw new Error("No checkout URL received");
+        throw new Error("No checkout URL received from server.");
       }
-      refetch();
     } catch (err: any) {
+      console.error("Checkout error:", err);
       toast({
         title: "Checkout Error",
         description: err.message || "Could not initiate payment.",
         status: "error",
       });
-      refetch();
     }
   };
-
   // Updated Success Effect
   useEffect(() => {
     if (removeIsSuccess) {
@@ -116,7 +110,7 @@ const ViewCart = () => {
 
   return (
     <Box marginLeft={8}>
-      <SimpleGrid columns={2} spacing={4} mt={6}>
+      <SimpleGrid columns={2} spacing={4} mt={6} height={420}>
         {addedBooks?.items?.map((book) => (
           <ViewCartItem
             key={book.isbn}
@@ -146,7 +140,7 @@ const ViewCart = () => {
         ))}
       </SimpleGrid>
 
-      <Divider my={6} />
+      <Divider marginLeft={3} />
 
       <Box
         display="flex"

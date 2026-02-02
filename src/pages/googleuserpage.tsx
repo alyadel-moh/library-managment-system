@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import BooksList from "../components/booksList";
 import Sidebar from "../components/Sidebar";
-import ViewProfile from "../components/viewProfile";
 import ViewCart from "../components/viewCart";
 import ViewOrderhistory from "../components/viewOrderhistory";
 import Bookdetailpage from "./Bookdetailpage";
@@ -13,8 +12,9 @@ import YearInput from "../components/yearSelector";
 import PriceRangeSelector from "../components/priceSelector";
 import ViewSaved from "../components/savedbooks";
 import { FiX } from "react-icons/fi";
+import Viewprofilegoogle from "../components/viewprofilegoogle";
 
-const Homepage = () => {
+const GoogleUserPage = () => {
   const [selectedView, setSelectedView] = useState<string>("books");
   const [selectedBook, setSelectedBook] = useState<any>(null);
   const [criteria, setCriteria] = useState<BookSearchCriteria | null>(null);
@@ -87,7 +87,7 @@ const Homepage = () => {
       newParams.delete("message");
       setSearchParams(newParams, { replace: true });
     }
-  }, [searchParams, navigate, toast, setSearchParams]);
+  }, [searchParams, navigate, setSearchParams]);
 
   // --- ⭐ CHECK AUTHENTICATION ---
   useEffect(() => {
@@ -217,7 +217,7 @@ const Homepage = () => {
           ) : selectedView === "saved" ? (
             <ViewSaved onViewDetails={handleViewDetails} />
           ) : (
-            <ViewProfile
+            <Viewprofilegoogle
               refetchphoto={(photo) => {
                 setPhotoUrl(photo);
               }}
@@ -229,4 +229,4 @@ const Homepage = () => {
   );
 };
 
-export default Homepage;
+export default GoogleUserPage;

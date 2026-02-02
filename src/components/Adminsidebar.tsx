@@ -6,7 +6,7 @@ import {
   FiPackage,
   FiBookOpen,
   FiUser,
-  FiTrendingUp,
+  FiBarChart2,
 } from "react-icons/fi";
 import useLogout from "../hooks/UseLogout";
 import { useNavigate } from "react-router-dom";
@@ -115,7 +115,7 @@ const Adminsidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
         Pending orders
       </Button>
       <Button
-        leftIcon={<FiTrendingUp />}
+        leftIcon={<FiBarChart2 />}
         variant={activeView === "reports" ? "solid" : "ghost"}
         backgroundColor={activeView === "reports" ? "blue.500" : "transparent"}
         color={activeView === "reports" ? "white" : "inherit"}
