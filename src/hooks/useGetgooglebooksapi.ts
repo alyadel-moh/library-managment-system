@@ -125,9 +125,13 @@ interface GoogleBooksResponse {
 const useGetGoogleBooks = (query: string) => {
   return useQuery<GoogleBooksResponse>({
     queryKey: ["googleBooks", query],
-    queryFn: async () => new ApiClient<Book>(`/volumes?q=${query}`).getAll()
-
-})
+    queryFn: async () => new ApiClient<Book>(`/volumes?q=${query}`).getAll(),
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+    gcTime: 10 * 60 * 1000, // Keep in cache for 10 minutes (formerly cacheTime)
+    retry: 1, // Only retry once on failure
+    retryDelay: 2000, // Wait 2 seconds before retry
+    enabled: !!query && query.length > 0, // Only run if query exists
+  })
 };
 
 export default useGetGoogleBooks;

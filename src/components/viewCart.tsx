@@ -110,7 +110,7 @@ const ViewCart = () => {
 
   return (
     <Box marginLeft={8}>
-      <SimpleGrid columns={2} spacing={4} mt={6} height={420}>
+      <SimpleGrid columns={2} spacing={4} mt={6} >
         {addedBooks?.items?.map((book) => (
           <ViewCartItem
             key={book.isbn}

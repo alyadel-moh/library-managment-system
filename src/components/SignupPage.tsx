@@ -135,14 +135,26 @@ const SignupPage = () => {
     >
       <form
         onSubmit={handleSubmit(async (data) => {
-          const cloudinaryData = await handleImageChange({
-            target: { files: fileInputRef.current?.files || null },
-          } as React.ChangeEvent<HTMLInputElement>);
-          await mutateAsync({
-            ...data,
-            photoUrl: cloudinaryData.secure_url || "",
-          });
-          navigate("/", { replace: true });
+          let photoUrl = "";
+          if (fileInputRef.current?.files && fileInputRef.current.files.length > 0) {
+            try {
+              const cloudinaryData = await handleImageChange({
+                target: { files: fileInputRef.current.files },
+              } as React.ChangeEvent<HTMLInputElement>);
+              photoUrl = cloudinaryData?.secure_url || "";
+            } catch (error) {
+               // Error is handled by useEffect
+            }
+          }
+          try {
+            await mutateAsync({
+              ...data,
+              photoUrl: photoUrl,
+            });
+            navigate("/", { replace: true });
+          } catch (error) {
+            // Error is handled by useEffect
+          }
         }, onInvalid)}
         style={{
           width: "100%",

@@ -131,8 +131,8 @@ const Reports = () => {
                   <Box>
                     <VStack align="stretch" spacing={2}>
                       <HStack fontSize="sm" color="gray.500">
-                        <Icon as={FiCalendar} color="blue.400" marginTop={-6}/>
-                        <Text fontWeight="medium"  marginTop={-3}>
+                        <Icon as={FiCalendar} color="blue.400" marginTop={-6} />
+                        <Text fontWeight="medium" marginTop={-3}>
                           From : {item.from_date} to : {item.to_date}
                         </Text>
                       </HStack>
@@ -231,7 +231,7 @@ const Reports = () => {
             <Box>
               <HStack mb={4}>
                 <Icon as={FiDollarSign} boxSize={6} color="orange.500" />
-                <Heading fontSize="xl" fontWeight="bold">
+                <Heading fontSize="xl" fontWeight="bold" marginTop={1}>
                   Daily Sales Report
                 </Heading>
               </HStack>
@@ -251,8 +251,9 @@ const Reports = () => {
                   aria-label="Search"
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
-                  style={{ maxWidth: "200px" }}
+                  style={{ maxWidth: "150px" }}
                   borderRadius="full"
+                  _hover={{ transform: "scale(1.05)" }}
                 />
               </div>
               <SimpleGrid
@@ -324,8 +325,10 @@ const Reports = () => {
                   aria-label="ISBN Search"
                   value={selectedIsbn}
                   onChange={(e) => setSelectedIsbn(e.target.value)}
-                  style={{ maxWidth: "300px" }}
+                  style={{ maxWidth: "150px" }}
                   borderRadius="full"
+                  marginLeft={2}
+                  _hover={{ transform: "scale(1.05)" }}
                 />
               </div>
               <SimpleGrid columns={1} spacing={4} mt={6} height={220}>
@@ -378,14 +381,19 @@ const Reports = () => {
                           <Text fontSize="xs" color="gray.500" marginTop={3}>
                             Restocks :
                           </Text>
-                          <Text fontSize="sm" fontWeight="medium" marginTop={3} color="green.500">
+                          <Text
+                            fontSize="sm"
+                            fontWeight="medium"
+                            marginTop={3}
+                            color="green.500"
+                          >
                             {numberofbooksordered?.total_restocked_books}
                           </Text>
                         </HStack>
                         <HStack fontSize="xs" color="gray.600" mb={1}>
                           <Icon as={FiShoppingCart} color="blue.500" />
                           <Text fontSize="xs" color="gray.500" marginTop={4}>
-                            Order Count : 
+                            Order Count :
                           </Text>
                           <Text
                             fontSize="sm"
@@ -398,17 +406,17 @@ const Reports = () => {
                         </HStack>
                         <HStack fontSize="xs" color="gray.600" mb={1}>
                           <Icon as={FiDollarSign} color="orange.500" />
-                            <Text fontSize="xs" color="gray.500" marginTop={3}>
-                              Total Spent : 
-                            </Text>
-                            <Text
-                              fontSize="sm"
-                              fontWeight="bold"
-                              color="orange.600"
-                              marginTop={3}
-                            >
-                              ${numberofbooksordered?.total_spent}
-                            </Text>
+                          <Text fontSize="xs" color="gray.500" marginTop={3}>
+                            Total Spent :
+                          </Text>
+                          <Text
+                            fontSize="sm"
+                            fontWeight="bold"
+                            color="orange.600"
+                            marginTop={3}
+                          >
+                            ${numberofbooksordered?.total_spent}
+                          </Text>
                         </HStack>
                       </SimpleGrid>
                     </CardBody>

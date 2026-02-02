@@ -13,6 +13,7 @@ import PriceRangeSelector from "../components/priceSelector";
 import ViewSaved from "../components/savedbooks";
 import { FiX } from "react-icons/fi";
 import Viewprofilegoogle from "../components/viewprofilegoogle";
+import useGetUser from "../hooks/useGetusers";
 
 const GoogleUserPage = () => {
   const [selectedView, setSelectedView] = useState<string>("books");
@@ -20,14 +21,21 @@ const GoogleUserPage = () => {
   const [criteria, setCriteria] = useState<BookSearchCriteria | null>(null);
   const navigate = useNavigate();
   const toast = useToast();
-
-  // Ref to prevent double-firing in React Strict Mode
+  const { data: userData } = useGetUser();
   const processedRef = useRef(false);
   const oauthProcessedRef = useRef(false); // ⭐ Separate ref for OAuth
 
   const [photoUrl, setPhotoUrl] = useState<string>("");
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("search");
+  
+  // Initialize photoUrl from user data when it loads
+  useEffect(() => {
+    if (userData?.photoUrl && !photoUrl) {
+      setPhotoUrl(userData.photoUrl);
+    }
+  }, [userData?.photoUrl]);
+  
   useEffect(() => {
     if (searchQuery) {
       // eslint-disable-next-line react-hooks/set-state-in-effect

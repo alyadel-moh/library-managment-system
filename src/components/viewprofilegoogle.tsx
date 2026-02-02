@@ -139,7 +139,7 @@ const Viewprofilegoogle = ({
   return (
     <>
       <UpdateProfilePhoto user={data} refetchphoto={handlePhotoUpdate} />
-      <TableContainer marginLeft={51} width="1100px">
+      <TableContainer marginLeft="90px" width="1000px">
         <Table>
           <Tbody>
             <Tr>

@@ -188,14 +188,16 @@ const Form = () => {
           leftIcon={<FiLogIn />}
           borderRadius="full"
           transition="all 0.2s"
-          _hover={{ transform: "scale(1.05)" }}
+          _hover={{ transform: "scale(1.05)", bg: "blue.600" }}
         >
           {isPending ? "Logging in..." : "Login"}
         </Button>
-            <HStack w="100%" py={0} marginTop={-1} >
-            <Divider marginTop={-1}/>
-            <Text fontSize="sm" color="gray.300">OR</Text>
-            <Divider marginTop={-1}/>
+        <HStack w="100%" py={0} marginTop={-1}>
+          <Divider marginTop={-1} />
+          <Text fontSize="sm" color="gray.300">
+            OR
+          </Text>
+          <Divider marginTop={-1} />
         </HStack>
 
         {/* --- NEW: Google Login Button --- */}
@@ -214,7 +216,9 @@ const Form = () => {
         >
           Log in with Google
         </Button>
-        <Text fontWeight="bold"  marginTop={-2}>Don't have an account ?</Text>
+        <Text fontWeight="bold" marginTop={-2}>
+          Don't have an account ?
+        </Text>
         <Button
           onClick={() => navigate("/signup")}
           size="2xl"

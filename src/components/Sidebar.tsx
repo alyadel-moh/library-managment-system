@@ -1,5 +1,5 @@
 import { Avatar, Button, useToast, VStack } from "@chakra-ui/react";
-import  { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FiBookOpen,
   FiLogOut,
@@ -26,7 +26,6 @@ const Sidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
   const navigate = useNavigate();
   const logoutQuery = useLogout();
   const { isPending } = logoutQuery;
-
   const handleViewChange = (view: string) => {
     setActiveView(view);
     onViewChange(view);

@@ -21,7 +21,7 @@ import {
   HStack,
   Text,
   InputGroup,
-  InputLeftElement
+  InputLeftElement,
 } from "@chakra-ui/react";
 import useGetUser from "../hooks/useGetusers";
 import {
@@ -59,12 +59,12 @@ const ViewProfile = ({
     duration: 3000,
     isClosable: true,
   });
-  
+
   const handlePhotoUpdate = (photo: string) => {
     if (refetchphoto) refetchphoto(photo);
     refetch(); // Refetch user data to get the updated photo
   };
-  
+
   const schema = z.object({
     [editField]:
       editField === "emailAddress"
@@ -148,7 +148,7 @@ const ViewProfile = ({
   return (
     <>
       <UpdateProfilePhoto user={data} refetchphoto={handlePhotoUpdate} />
-      <TableContainer marginLeft={51} width="1100px">
+      <TableContainer marginLeft="90px" width="1000px">
         <Table>
           <Tbody>
             <Tr>

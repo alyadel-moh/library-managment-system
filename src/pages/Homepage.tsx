@@ -13,21 +13,30 @@ import YearInput from "../components/yearSelector";
 import PriceRangeSelector from "../components/priceSelector";
 import ViewSaved from "../components/savedbooks";
 import { FiX } from "react-icons/fi";
+import useGetUser from "../hooks/useGetusers";
 
 const Homepage = () => {
   const [selectedView, setSelectedView] = useState<string>("books");
   const [selectedBook, setSelectedBook] = useState<any>(null);
   const [criteria, setCriteria] = useState<BookSearchCriteria | null>(null);
   const navigate = useNavigate();
-  const toast = useToast();
-
-  // Ref to prevent double-firing in React Strict Mode
+  const toast = useToast({
+    position: "bottom-right",
+    duration: 3000,
+    isClosable: true,
+  });
   const processedRef = useRef(false);
   const oauthProcessedRef = useRef(false); // ⭐ Separate ref for OAuth
-
+  const { data: userData } = useGetUser();
   const [photoUrl, setPhotoUrl] = useState<string>("");
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("search");
+  useEffect(() => {
+    if (userData?.photoUrl && !photoUrl) {
+      setPhotoUrl(userData.photoUrl);
+    }
+  }, [userData?.photoUrl, photoUrl]);
+
   useEffect(() => {
     if (searchQuery) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -42,23 +51,10 @@ const Homepage = () => {
   useEffect(() => {
     const token = searchParams.get("token");
     const error = searchParams.get("error");
-    const message = searchParams.get("message");
 
     // Handle OAuth errors
     if (error && !oauthProcessedRef.current) {
       oauthProcessedRef.current = true;
-
-      console.error("OAuth error:", message);
-      toast({
-        title: "Login Failed",
-        description: message || "Authentication failed. Please try again.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "top",
-      });
-
-      // Clear error params and redirect to login
       navigate("/", { replace: true });
       return;
     }
@@ -66,34 +62,17 @@ const Homepage = () => {
     // Handle successful OAuth login
     if (token && !oauthProcessedRef.current) {
       oauthProcessedRef.current = true;
-
       // Save token to localStorage
       localStorage.setItem("accessToken", token); // ⭐ Using your existing token key
-
-      console.log("OAuth login successful!");
-      toast({
-        title: "Welcome!",
-        description: "You have successfully logged in with Google.",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-        position: "top",
-      });
-
-      // Remove token from URL (clean up)
       const newParams = new URLSearchParams(searchParams);
       newParams.delete("token");
       newParams.delete("error");
       newParams.delete("message");
       setSearchParams(newParams, { replace: true });
     }
-  }, [searchParams, navigate, toast, setSearchParams]);
-
-  // --- ⭐ CHECK AUTHENTICATION ---
+  }, [searchParams, navigate, setSearchParams]);
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-
-    // Only redirect if no token AND no OAuth params in URL
     if (
       !token &&
       !searchParams.get("token") &&
@@ -132,11 +111,7 @@ const Homepage = () => {
       if (response.ok) {
         toast({
           title: "Payment Successful!",
-          description: "Your order has been placed successfully.",
           status: "success",
-          duration: 5000,
-          isClosable: true,
-          position: "top",
         });
 
         setSelectedView("orders");
@@ -147,12 +122,8 @@ const Homepage = () => {
     } catch (error) {
       console.error(error);
       toast({
-        title: "Order Verification Failed",
-        description:
-          "We could not verify your payment. Please check your order history.",
+        title: "Payment Verification Failed",
         status: "error",
-        duration: 5000,
-        isClosable: true,
       });
     }
   };
@@ -210,12 +181,12 @@ const Homepage = () => {
                 criteria={criteria || undefined}
               />
             </>
-          ) : selectedView === "cart" ? (
-            <ViewCart />
-          ) : selectedView === "orders" ? (
-            <ViewOrderhistory />
           ) : selectedView === "saved" ? (
             <ViewSaved onViewDetails={handleViewDetails} />
+          ) : selectedView === "orders" ? (
+            <ViewOrderhistory />
+          ) : selectedView === "cart" ? (
+            <ViewCart />
           ) : (
             <ViewProfile
               refetchphoto={(photo) => {

@@ -9,8 +9,6 @@ function AuthCallback() {
     const token = searchParams.get('token');
 
     if (token) {
-      // ⭐ FIX 1: Use 'accessToken' to match your other files
-      // ⭐ FIX 2: Add "Bearer " right here so you don't have to add it in every API call
       localStorage.setItem('accessToken', `Bearer ${token}`); 
       navigate('/googleuserpage', { replace: true });
     } else {
