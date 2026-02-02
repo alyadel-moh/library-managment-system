@@ -7,6 +7,12 @@
     <title>library-managment-system</title>
   </head>
   <body>
+    <script>
+      try {
+        var colorMode = 'dark';
+        localStorage.setItem('chakra-ui-color-mode', colorMode);
+      } catch (e) {}
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
