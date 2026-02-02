@@ -59,7 +59,7 @@ const Homepage = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/api/payments/verify-payment",
+        "https://ordering-system-58at.onrender.com/api/payments/verify-payment",
         {
           method: "POST",
           headers: {

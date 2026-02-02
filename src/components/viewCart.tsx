@@ -70,7 +70,7 @@ const ViewCart = () => {
     }
     try {
       const response = await fetch(
-        "http://localhost:8080/api/payments/create-checkout-session",
+        "https://ordering-system-58at.onrender.com/api/payments/create-checkout-session",
         {
           method: "POST",
           headers: {
@@ -110,7 +110,7 @@ const ViewCart = () => {
 
   return (
     <Box marginLeft={8}>
-      <SimpleGrid columns={2} spacing={4} mt={6} >
+      <SimpleGrid columns={2} spacing={4} mt={6}>
         {addedBooks?.items?.map((book) => (
           <ViewCartItem
             key={book.isbn}
