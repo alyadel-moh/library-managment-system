@@ -23,7 +23,7 @@ interface GoogleBooksResponse<T> {
   items?: T[];
 }
 const axiosinstance1 = axios.create({
-    baseURL: "https://ordering-system-58at.onrender.com/api "
+    baseURL: "https://ordering-system-58at.onrender.com/api"
 });
 export default class ApiClient1<T> {
     endpoint : string;
