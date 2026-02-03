@@ -12,6 +12,9 @@ export default interface Book1 {
     sellingPrice : number;
     stockQuantity   : number;
     threshold : number;
+    photoUrl: string;
+    description: string | null;
+    averageRating: number;
 }
 export interface Book2 {
     isbn : string;
@@ -23,4 +26,7 @@ export interface Book2 {
     sellingPrice : number;
     stockQuantity : number;
     threshold : number;
+    photoUrl: string;
+    description: string | null;
+    averageRating: number;
 }
