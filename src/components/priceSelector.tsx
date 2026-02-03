@@ -27,9 +27,9 @@ const PriceRangeSelector = ({ setCriteria }: priceProps) => {
     >
       <RangeSlider
         aria-label={["min", "max"]}
-        defaultValue={[0, 1000]}
+        defaultValue={[0, 100]}
         min={0}
-        max={1000}
+        max={100}
         step={5}
         value={values}
         onChange={(val) => setValues(val)}
