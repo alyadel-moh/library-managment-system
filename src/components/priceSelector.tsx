@@ -13,7 +13,7 @@ interface priceProps {
   setCriteria: (newCriteria: Partial<BookSearchCriteria>) => void;
 }
 const PriceRangeSelector = ({ setCriteria }: priceProps) => {
-  const [values, setValues] = useState([0, 1000]);
+  const [values, setValues] = useState([0, 100]);
   return (
     <Box
       width="300px"
@@ -30,7 +30,7 @@ const PriceRangeSelector = ({ setCriteria }: priceProps) => {
         defaultValue={[0, 1000]}
         min={0}
         max={1000}
-        step={10}
+        step={5}
         value={values}
         onChange={(val) => setValues(val)}
         onChangeEnd={(val) => {

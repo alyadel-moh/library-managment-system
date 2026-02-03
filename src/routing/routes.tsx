@@ -1,15 +1,20 @@
 import { createBrowserRouter } from "react-router-dom";
-import SignupPage from "../components/SignupPage";
-import Reports from "../components/reports.tsx";
-import Publisherorders from "../components/Publisherorders.tsx";
-import ViewOrderhistory from "../components/viewOrderhistory.tsx";
-import Homepage from "../pages/Homepage.tsx";
-import Layout from "../pages/Layout.tsx";
-import LoginPage from "../components/LoginPage.tsx";
-import MainpageLayout from "../pages/MainpageLayout.tsx";
-import Adminpage from "../pages/Adminpage.tsx";
-import AuthCallback from "../components/AuthCallback.tsx";
-import GoogleUserPage from "../pages/googleuserpage.tsx";
+import { lazy } from "react";
+
+// Lazy load components for code splitting
+const SignupPage = lazy(() => import("../components/SignupPage"));
+const Reports = lazy(() => import("../components/reports.tsx"));
+const Publisherorders = lazy(() => import("../components/Publisherorders.tsx"));
+const ViewOrderhistory = lazy(
+  () => import("../components/viewOrderhistory.tsx"),
+);
+const Homepage = lazy(() => import("../pages/Homepage.tsx"));
+const Layout = lazy(() => import("../pages/Layout.tsx"));
+const LoginPage = lazy(() => import("../components/LoginPage.tsx"));
+const MainpageLayout = lazy(() => import("../pages/MainpageLayout.tsx"));
+const Adminpage = lazy(() => import("../pages/Adminpage.tsx"));
+const AuthCallback = lazy(() => import("../components/AuthCallback.tsx"));
+const GoogleUserPage = lazy(() => import("../pages/googleuserpage.tsx"));
 const router = createBrowserRouter([
   {
     path: "/",

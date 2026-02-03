@@ -10,8 +10,9 @@ import useGetaddedbookstocart from "../hooks/useGetbooksaddedtocart";
 import useModifyquantity from "../hooks/useModifybookquantity";
 import useRemoveBookFromCart from "../hooks/useRemovebookfromcart";
 import ViewCartItem from "./viewCartitem";
-import { useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { FiCheckCircle } from "react-icons/fi";
+import useMakepayment from "../hooks/useMakepayment";
 const ViewCart = () => {
   const { data: addedBooks, refetch } = useGetaddedbookstocart();
   const [removingIsbn, setRemovingIsbn] = useState<string>("");
@@ -57,47 +58,21 @@ const ViewCart = () => {
       });
     }
   }, [removeError, modifyError]);
-  const makepayment = async () => {
-    const token = localStorage.getItem("accessToken");
-
-    if (!token) {
+  const {
+    mutate: makePayment,
+    isPending: paymentPending,
+    isError: paymentError,
+    error: paymentErrorMsg,
+  } = useMakepayment();
+  useEffect(() => {
+    if (paymentError) {
       toast({
-        title: "Authentication Error",
-        description: "Please log in to continue.",
-        status: "error",
-      });
-      return;
-    }
-    try {
-      const response = await fetch(
-        "https://ordering-system-58at.onrender.com/api/payments/create-checkout-session",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || `Server error: ${response.status}`);
-      }
-
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        throw new Error("No checkout URL received from server.");
-      }
-    } catch (err: any) {
-      console.error("Checkout error:", err);
-      toast({
-        title: "Checkout Error",
-        description: err.message || "Could not initiate payment.",
+        title: paymentErrorMsg?.message || "Could not initiate payment.",
         status: "error",
       });
     }
-  };
+  }, [paymentError]);
+
   return (
     <Box marginLeft={8}>
       <SimpleGrid columns={2} spacing={4} mt={6}>
@@ -161,8 +136,10 @@ const ViewCart = () => {
           transition="all 0.2s"
           _hover={{ transform: "scale(1.05)" }}
           leftIcon={<FiCheckCircle />}
+          isLoading={paymentPending}
+          isDisabled={!addedBooks?.items?.length || paymentPending}
           onClick={() => {
-            makepayment();
+            makePayment();
           }}
         >
           Checkout

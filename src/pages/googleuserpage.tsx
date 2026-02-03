@@ -14,6 +14,7 @@ import ViewSaved from "../components/savedbooks";
 import { FiX } from "react-icons/fi";
 import Viewprofilegoogle from "../components/viewprofilegoogle";
 import useGetUser from "../hooks/useGetusers";
+import useVerifyPayment from "../hooks/useverifypayment";
 
 const GoogleUserPage = () => {
   const [selectedView, setSelectedView] = useState<string>("books");
@@ -22,14 +23,14 @@ const GoogleUserPage = () => {
   const navigate = useNavigate();
   const toast = useToast({
     position: "bottom-right",
-    duration: 3000,
+    duration: 5000,
     isClosable: true,
   });
 
   const { data: userData } = useGetUser();
   const processedRef = useRef(false);
   const oauthProcessedRef = useRef(false); // ⭐ Separate ref for OAuth
-
+  const { mutate: verifyPayment } = useVerifyPayment();
   const [photoUrl, setPhotoUrl] = useState<string>("");
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("search");
@@ -37,6 +38,7 @@ const GoogleUserPage = () => {
   // Initialize photoUrl from user data when it loads
   useEffect(() => {
     if (userData?.photoUrl && !photoUrl) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPhotoUrl(userData.photoUrl);
     }
   }, [userData?.photoUrl]);
@@ -108,52 +110,32 @@ const GoogleUserPage = () => {
     }
   }, [navigate, searchParams]);
 
-  // --- PAYMENT VERIFICATION LOGIC ---
+  /// --- PAYMENT VERIFICATION LOGIC ---
   useEffect(() => {
     const sessionId = searchParams.get("session_id");
 
-    if (sessionId && !processedRef.current) {
-      processedRef.current = true;
-      verifyPayment(sessionId);
-    }
-  }, [searchParams]);
-
-  const verifyPayment = async (sessionId: string) => {
-    const token = localStorage.getItem("accessToken");
-
-    try {
-      const response = await fetch(
-        "https://ordering-system-58at.onrender.com/api/payments/verify-payment",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ sessionId }),
-        },
-      );
-
-      if (response.ok) {
+    const handleVerification = async (id: string) => {
+      try {
+        await verifyPayment(id);
         toast({
           title: "Payment Successful!",
           status: "success",
         });
-
-        setSelectedView("orders");
-        setSearchParams({});
-      } else {
-        throw new Error("Payment verification failed");
+        setSearchParams({}); // Clear params after verification
+      } catch (error: any) {
+        console.error("Verification Error:", error);
+        toast({
+          title: error.response?.data?.message || "An error occurred",
+          status: "error",
+        });
       }
-    } catch (error) {
-      console.error(error);
-      toast({
-        title:
-          "We could not verify your payment. Please check your order history.",
-        status: "error",
-      });
+    };
+
+    if (sessionId && !processedRef.current) {
+      processedRef.current = true;
+      handleVerification(sessionId);
     }
-  };
+  }, [searchParams, verifyPayment, toast, setSearchParams]);
 
   const handleViewDetails = (book: any) => {
     setSelectedBook(book);

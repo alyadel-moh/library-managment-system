@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { Box, Button, Grid, GridItem, Show, useToast } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -14,6 +15,7 @@ import PriceRangeSelector from "../components/priceSelector";
 import ViewSaved from "../components/savedbooks";
 import { FiX } from "react-icons/fi";
 import useGetUser from "../hooks/useGetusers";
+import useVerifyPayment from "../hooks/useverifypayment";
 
 const Homepage = () => {
   const [selectedView, setSelectedView] = useState<string>("books");
@@ -21,7 +23,7 @@ const Homepage = () => {
   const [criteria, setCriteria] = useState<BookSearchCriteria | null>(null);
   const toast = useToast({
     position: "bottom-right",
-    duration: 3000,
+    duration: 5000,
     isClosable: true,
   });
   const processedRef = useRef(false);
@@ -29,6 +31,7 @@ const Homepage = () => {
   const [photoUrl, setPhotoUrl] = useState<string>("");
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("search");
+  const { mutate: verifyPayment } = useVerifyPayment();
   useEffect(() => {
     if (userData?.photoUrl && !photoUrl) {
       setPhotoUrl(userData.photoUrl);
@@ -37,7 +40,6 @@ const Homepage = () => {
 
   useEffect(() => {
     if (searchQuery) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCriteria((prev) => ({ ...prev, keyword: searchQuery }));
     }
   }, [searchQuery]);
@@ -45,51 +47,32 @@ const Homepage = () => {
     setCriteria((prev) => ({ ...prev, ...newCriteria }));
   };
   // --- PAYMENT VERIFICATION LOGIC ---
+
   useEffect(() => {
     const sessionId = searchParams.get("session_id");
 
-    if (sessionId && !processedRef.current) {
-      processedRef.current = true;
-      verifyPayment(sessionId);
-    }
-  }, [searchParams]);
-
-  const verifyPayment = async (sessionId: string) => {
-    const token = localStorage.getItem("accessToken");
-
-    try {
-      const response = await fetch(
-        "https://ordering-system-58at.onrender.com/api/payments/verify-payment",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ sessionId }),
-        },
-      );
-
-      if (response.ok) {
+    const handleVerification = async (id: string) => {
+      try {
+        await verifyPayment(id);
         toast({
           title: "Payment Successful!",
           status: "success",
         });
-
-        setSelectedView("orders");
         setSearchParams({});
-      } else {
-        throw new Error("Payment verification failed");
+      } catch (error: any) {
+        console.error("Verification Error:", error);
+        toast({
+          title: error.response?.data?.message || "An error occurred",
+          status: "error",
+        });
       }
-    } catch (error) {
-      console.error(error);
-      toast({
-        title: "Payment Verification Failed",
-        status: "error",
-      });
-    }
-  };
+    };
 
+    if (sessionId && !processedRef.current) {
+      processedRef.current = true;
+      handleVerification(sessionId);
+    }
+  }, [searchParams, verifyPayment, setSearchParams]);
   const handleViewDetails = (book: any) => {
     setSelectedBook(book);
     setSelectedView("bookDetail");
