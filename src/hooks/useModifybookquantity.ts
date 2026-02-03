@@ -3,10 +3,17 @@ import { AxiosError } from "axios";
 import ApiClient1 from "../api-client";
 import type BackendResponsemessage from "../entities/Response";
 
-const useModifyquantity = (quantity: number, isbn: string) => {
-  const apiClient = new ApiClient1<BackendResponsemessage>(`/user/cart/update/${isbn}`);
-  return useMutation<BackendResponsemessage, AxiosError<{ message: string }>>({
-    mutationFn:() => apiClient.put({}, quantity) as unknown as Promise<BackendResponsemessage>,
+interface ModifyQuantityParams {
+  isbn: string;
+  quantity: number;
+}
+
+const useModifyquantity = () => {
+  return useMutation<BackendResponsemessage, AxiosError<{ message: string }>, ModifyQuantityParams>({
+    mutationFn: ({ isbn, quantity }: ModifyQuantityParams) => {
+      const apiClient = new ApiClient1<BackendResponsemessage>(`/user/cart/update/${isbn}`);
+      return apiClient.put({}, quantity) as unknown as Promise<BackendResponsemessage>;
+    },
     onSuccess: (data: BackendResponsemessage) => {
       console.log("quantity modified successfully:", data);
     },

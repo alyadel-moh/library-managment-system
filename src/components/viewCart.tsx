@@ -10,20 +10,18 @@ import useGetaddedbookstocart from "../hooks/useGetbooksaddedtocart";
 import useModifyquantity from "../hooks/useModifybookquantity";
 import useRemoveBookFromCart from "../hooks/useRemovebookfromcart";
 import ViewCartItem from "./viewCartitem";
-import {  useEffect, useState } from "react";
+import {  useEffect, useState, useMemo } from "react";
 import { FiCheckCircle } from "react-icons/fi";
 import useMakepayment from "../hooks/useMakepayment";
 const ViewCart = () => {
   const { data: addedBooks, refetch } = useGetaddedbookstocart();
   const [removingIsbn, setRemovingIsbn] = useState<string>("");
-  const [modifyingIsbn, setModifyingIsbn] = useState<string>("");
-  const [quantity, setQuantity] = useState<number>(0);
   const toast = useToast({
     position: "bottom-right",
     duration: 3000,
     isClosable: true,
   });
-  const removeBook = useRemoveBookFromCart(removingIsbn);
+  const removeBook = useRemoveBookFromCart();
   const {
     data: removeData,
     isError: removeError,
@@ -31,7 +29,7 @@ const ViewCart = () => {
     isPending: removeIsPending,
     isSuccess: removeIsSuccess,
   } = removeBook;
-  const modifyQuantity = useModifyquantity(quantity, modifyingIsbn);
+  const modifyQuantity = useModifyquantity();
   const {
     data: modifyData,
     isError: modifyError,
@@ -39,25 +37,40 @@ const ViewCart = () => {
     isSuccess: modifyIsSuccess,
   } = modifyQuantity;
   useEffect(() => {
-    if (removeData || modifyData) {
+    if (removeIsSuccess && removeData) {
       toast({
-        title: removeData
-          ? "Book removed from cart successfully!"
-          : "Book quantity updated successfully!",
+        title: "Book removed from cart successfully!",
         status: "success",
       });
     }
-  }, [removeIsSuccess, modifyIsSuccess]);
+  }, [removeIsSuccess, removeData]);
+  
   useEffect(() => {
-    if (removeError || modifyError) {
+    if (modifyIsSuccess && modifyData) {
       toast({
-        title:
-          removeErrorMsg?.response?.data?.message ||
-          modifyErrorMsg?.response?.data?.message,
+        title: "Book quantity updated successfully!",
+        status: "success",
+      });
+    }
+  }, [modifyIsSuccess, modifyData, toast]);
+  
+  useEffect(() => {
+    if (removeError && removeErrorMsg) {
+      toast({
+        title: removeErrorMsg?.response?.data?.message || "Failed to remove book",
         status: "error",
       });
     }
-  }, [removeError, modifyError]);
+  }, [removeError, removeErrorMsg]);
+  
+  useEffect(() => {
+    if (modifyError && modifyErrorMsg) {
+      toast({
+        title: modifyErrorMsg?.response?.data?.message || "Failed to update quantity",
+        status: "error",
+      });
+    }
+  }, [modifyError, modifyErrorMsg]);
   const {
     mutate: makePayment,
     isPending: paymentPending,
@@ -73,10 +86,13 @@ const ViewCart = () => {
     }
   }, [paymentError]);
 
+  // Memoize cart items to prevent unnecessary re-renders
+  const cartItems = useMemo(() => addedBooks?.items || [], [addedBooks?.items]);
+  
   return (
     <Box marginLeft={8}>
       <SimpleGrid columns={2} spacing={4} mt={6}>
-        {addedBooks?.items?.map((book) => (
+        {cartItems.map((book) => (
           <ViewCartItem
             key={book.isbn}
             isbn={book.isbn}
@@ -86,16 +102,14 @@ const ViewCart = () => {
             isremove={removingIsbn === book.isbn && removeIsPending}
             onRemove={() => {
               setRemovingIsbn(book.isbn);
-              removeBook.mutate(undefined, {
+              removeBook.mutate(book.isbn, {
                 onSuccess: () => {
                   refetch();
                 },
               });
             }}
             onUpdateQuantity={(newQuantity: number) => {
-              setModifyingIsbn(book.isbn);
-              setQuantity(newQuantity);
-              modifyQuantity.mutate(undefined, {
+              modifyQuantity.mutate({ isbn: book.isbn, quantity: newQuantity }, {
                 onSuccess: () => {
                   refetch();
                 },

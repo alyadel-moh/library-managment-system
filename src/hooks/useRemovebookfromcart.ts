@@ -3,10 +3,10 @@ import { AxiosError } from "axios";
 import ApiClient1 from "../api-client";
 import type BackendResponsemessage from "../entities/Response";
 
-const useRemoveBookFromCart = (isbn : string) =>{
+const useRemoveBookFromCart = () =>{
   const apiClient = new ApiClient1<BackendResponsemessage>("/user/cart/remove");
-  return useMutation<BackendResponsemessage, AxiosError<{message : string}>>({
-    mutationFn: () => apiClient.delete(isbn),
+  return useMutation<BackendResponsemessage, AxiosError<{message : string}>, string>({
+    mutationFn: (isbn: string) => apiClient.delete(isbn),
       onSuccess : (data: BackendResponsemessage) => {
         console.log("Book removed successfully:", data);
       },
