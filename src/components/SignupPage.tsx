@@ -112,7 +112,7 @@ const SignupPage = () => {
   return (
     <Box
       // --- Responsive Dimensions ---
-      w={["95%", "90%", "500px"]} // Mobile: 95% width, Tablet: 90%, Desktop: fixed 500px
+      w="580px" // Mobile: 95% width, Tablet: 90%, Desktop: fixed 500px
       h="auto" // Let height grow with content
       mx="auto" // Center horizontally
       my={[4, 8]} // Add top/bottom margin so it doesn't stick to screen edges on scroll
@@ -136,14 +136,17 @@ const SignupPage = () => {
       <form
         onSubmit={handleSubmit(async (data) => {
           let photoUrl = "";
-          if (fileInputRef.current?.files && fileInputRef.current.files.length > 0) {
+          if (
+            fileInputRef.current?.files &&
+            fileInputRef.current.files.length > 0
+          ) {
             try {
               const cloudinaryData = await handleImageChange({
                 target: { files: fileInputRef.current.files },
               } as React.ChangeEvent<HTMLInputElement>);
               photoUrl = cloudinaryData?.secure_url || "";
             } catch (error) {
-               // Error is handled by useEffect
+              // Error is handled by useEffect
             }
           }
           try {
@@ -158,7 +161,7 @@ const SignupPage = () => {
         }, onInvalid)}
         style={{
           width: "100%",
-          maxWidth: "650px",
+          maxWidth: "750px",
           display: "flex",
           flexDirection: "column",
           gap: "15px",
@@ -217,7 +220,7 @@ const SignupPage = () => {
                   pr="4.5rem"
                   id="username"
                   type="text"
-                  placeholder="Username"
+                  placeholder="User123"
                   {...register("username")}
                   borderRadius="full"
                 />
@@ -238,7 +241,7 @@ const SignupPage = () => {
                   pr="4.5rem"
                   id="password"
                   type={showPassword ? "text" : "password"}
-                  placeholder="strong"
+                  placeholder="Strong password"
                   {...register("password")}
                   borderRadius="full"
                 />
@@ -356,7 +359,7 @@ const SignupPage = () => {
                   pr="4.5rem"
                   id="phoneNumber"
                   type="text"
-                  placeholder="number"
+                  placeholder="01xxxxxxxxx"
                   {...register("phoneNumber")}
                   borderRadius="full"
                 />
