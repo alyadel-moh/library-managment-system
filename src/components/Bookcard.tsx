@@ -27,7 +27,6 @@ const Bookcard = ({ book, onViewDetails }: BookcardProps) => {
     duration: 3000,
     isClosable: true,
   });
-  const bookDetails = useGetGoogleBooks(book.title).data?.items?.[0];
   const addbook = useAddBooktosavedbooks();
   const { data: user } = useGetUser();
   useEffect(() => {
@@ -71,7 +70,7 @@ const Bookcard = ({ book, onViewDetails }: BookcardProps) => {
           />
         )}
         <Image
-          src={bookDetails?.volumeInfo.imageLinks?.thumbnail}
+          src={book.photoUrl}
           alt="Book cover"
           height="250px"
           objectFit="contain"
