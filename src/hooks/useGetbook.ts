@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import ApiClient1 from "../api-client";
 import type Book1 from "../entities/Book";
+import type { PageResponse } from "../entities/PageResponse";
 
 export interface BookSearchCriteria {
   keyword?: string;       
@@ -13,11 +14,11 @@ export interface BookSearchCriteria {
   isbn?: string;
 }
 
-const apiClient = new ApiClient1<Book1>("/user/book/search");
+const apiClient = new ApiClient1<PageResponse<Book1>>("/user/book/search");
 
-const useGetBook = (criteria?: BookSearchCriteria) =>{
-  return useQuery<Book1[]>({
-    queryKey: ['books', criteria],
+const useGetBook = (criteria?: BookSearchCriteria, page: number = 0, size: number = 10) => {
+  return useQuery<PageResponse<Book1>>({
+    queryKey: ['books', criteria, page, size], // Add page & size to query key
     queryFn: () => apiClient.getAll({
       ...(criteria?.keyword && { keyword: criteria.keyword }),
       ...(criteria?.categoryId && { categoryId: criteria.categoryId }),
@@ -27,9 +28,12 @@ const useGetBook = (criteria?: BookSearchCriteria) =>{
       ...(criteria?.maxPrice && { maxPrice: criteria.maxPrice }),
       ...(criteria?.publicationYear && { publicationYear: criteria.publicationYear }),
       ...(criteria?.isbn && { isbn: criteria.isbn }),
+      page: page.toString(),
+      size: size.toString(),
     }),
-    enabled: !!criteria,  // only run if criteria is provided
-    retry: false // do not retry on failure
+    enabled: !!criteria,
+    retry: false
   });
 }
+
 export default useGetBook;
