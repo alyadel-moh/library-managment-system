@@ -14,12 +14,14 @@ interface Top10sellingbooksResponse {
   category: string;
   title: string;
   total_sold: number;
+  url: string | null;
 }
 const topSellingBookItem = ({
   isbn,
   category,
   title,
   total_sold,
+  url,
 }: Top10sellingbooksResponse) => {
   return (
     <Card
@@ -37,7 +39,7 @@ const topSellingBookItem = ({
     >
       <Box width="150px" flexShrink={0} bg="gray.50">
         <Image
-          src={`https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg?default=false`}
+          src={url || "/default-book-cover.jpg"}
           alt="Book cover"
           height="100%"
           objectFit="cover"

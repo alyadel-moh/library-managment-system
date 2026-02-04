@@ -6,6 +6,7 @@ interface Top10sellingbooksResponse {
         category: string,
         title: string,
         total_sold: number
+        url : string | null
 }
 
 const apiClient = new ApiClient1<Top10sellingbooksResponse>("/admin/reports/top-books");

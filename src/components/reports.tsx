@@ -345,7 +345,9 @@ const Reports = () => {
                   >
                     <Box width="150px" flexShrink={0} bg="gray.50">
                       <Image
-                        src={`https://covers.openlibrary.org/b/isbn/${numberofbooksordered.book_isbn}-L.jpg?default=false`}
+                        src={
+                          numberofbooksordered.url || "/default-book-cover.jpg"
+                        }
                         alt="Book cover"
                         height="100%"
                         objectFit="cover"

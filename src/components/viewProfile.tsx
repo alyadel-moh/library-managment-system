@@ -22,6 +22,7 @@ import {
   Text,
   InputGroup,
   InputLeftElement,
+  Box,
 } from "@chakra-ui/react";
 import useGetUser from "../hooks/useGetusers";
 import {
@@ -148,8 +149,9 @@ const ViewProfile = ({
   return (
     <>
       <UpdateProfilePhoto user={data} refetchphoto={handlePhotoUpdate} />
-      <TableContainer marginLeft="90px" width="1000px">
-        <Table>
+      <Box display="flex" justifyContent="center" width="100%" px={4}>
+        <TableContainer maxWidth="1000px" width="100%">
+          <Table>
           <Tbody>
             <Tr>
               <Td>
@@ -308,6 +310,7 @@ const ViewProfile = ({
           </Tbody>
         </Table>
       </TableContainer>
+      </Box>
       <Modal isOpen={isOpen} onClose={onClose} size="lg">
         <ModalOverlay />
         <ModalContent borderRadius="2xl">

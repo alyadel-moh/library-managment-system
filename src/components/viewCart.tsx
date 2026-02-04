@@ -90,8 +90,9 @@ const ViewCart = () => {
   const cartItems = useMemo(() => addedBooks?.items || [], [addedBooks?.items]);
   
   return (
-    <Box marginLeft={8}>
-      <SimpleGrid columns={2} spacing={4} mt={6}>
+    <Box display="flex" justifyContent="center" width="100%" px={4}>
+      <Box maxWidth="1200px" width="100%">
+        <SimpleGrid columns={2} spacing={4} mt={6}>
         {cartItems.map((book) => (
           <ViewCartItem
             key={book.isbn}
@@ -159,6 +160,7 @@ const ViewCart = () => {
         >
           Checkout
         </Button>
+      </Box>
       </Box>
     </Box>
   );

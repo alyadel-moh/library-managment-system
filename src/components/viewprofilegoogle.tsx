@@ -22,6 +22,7 @@ import {
   Text,
   InputGroup,
   InputLeftElement,
+  Box,
 } from "@chakra-ui/react";
 import useGetUser from "../hooks/useGetusers";
 import {
@@ -139,144 +140,146 @@ const Viewprofilegoogle = ({
   return (
     <>
       <UpdateProfilePhoto user={data} refetchphoto={handlePhotoUpdate} />
-      <TableContainer marginLeft="90px" width="1000px">
-        <Table>
-          <Tbody>
-            <Tr>
-              <Td>
-                <HStack spacing={3}>
-                  <Icon as={FiUser} color="blue.400" />
-                  <Text fontWeight="medium" marginBottom="2px">
-                    Username
-                  </Text>
-                </HStack>
-              </Td>
-              <Td>{data.username}</Td>
-              <Td>
-                <IconButton
-                  icon={<Icon as={FiEdit2} />}
-                  size="md"
-                  variant="ghost"
-                  color="gray.600"
-                  _hover={{ color: "white" }}
-                  aria-label="Edit username"
-                  onClick={() => handleEditClick("username")}
-                />
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>
-                <HStack spacing={3} align="center">
-                  <Icon as={FiType} color="blue.400" />
-                  <Text fontWeight="medium" marginBottom="2px">
-                    First name
-                  </Text>
-                </HStack>
-              </Td>
-              <Td>{data.firstName}</Td>
-              <Td>
-                <IconButton
-                  icon={<Icon as={FiLock} />}
-                  size="md"
-                  color="gray.400"
-                  variant="ghost"
-                  aria-label="Email is read-only"
-                  isDisabled
-                  cursor="not-allowed"
-                />
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>
-                <HStack spacing={3}>
-                  <Icon as={FiType} color="blue.400" />
-                  <Text fontWeight="medium" marginBottom="2px">
-                    Last name
-                  </Text>
-                </HStack>
-              </Td>
-              <Td>{data.lastname}</Td>
-              <Td>
-                <IconButton
-                  icon={<Icon as={FiLock} />}
-                  size="md"
-                  color="gray.400"
-                  variant="ghost"
-                  aria-label="Email is read-only"
-                  isDisabled
-                  cursor="not-allowed"
-                />
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>
-                <HStack spacing={3} align="center">
-                  <Icon as={FiMail} color="blue.400" />
-                  <Text fontWeight="medium" marginBottom="2px">
-                    Email address
-                  </Text>
-                </HStack>
-              </Td>
-              <Td>{data.emailAddress}</Td>
-              <Td>
-                <IconButton
-                  icon={<Icon as={FiLock} />}
-                  size="md"
-                  color="gray.400"
-                  variant="ghost"
-                  aria-label="Email is read-only"
-                  isDisabled
-                  cursor="not-allowed"
-                />
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>
-                <HStack spacing={3} align="center">
-                  <Icon as={FiPhone} color="blue.400" />
-                  <Text fontWeight="medium" marginBottom="2px">
-                    Phone number
-                  </Text>
-                </HStack>
-              </Td>
-              <Td>{data.phoneNumber}</Td>
-              <Td>
-                <IconButton
-                  icon={<Icon as={FiEdit2} />}
-                  size="md"
-                  color="gray.600"
-                  _hover={{ color: "white" }}
-                  variant="ghost"
-                  aria-label="Edit phone"
-                  onClick={() => handleEditClick("phoneNumber")}
-                />
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>
-                <HStack spacing={3} align="center">
-                  <Icon as={FiMapPin} color="blue.400" />
-                  <Text fontWeight="medium" marginBottom="2px">
-                    Shipping address
-                  </Text>
-                </HStack>
-              </Td>
-              <Td>{data.shippingAddress}</Td>
-              <Td>
-                <IconButton
-                  icon={<Icon as={FiEdit2} />}
-                  size="md"
-                  color="gray.600"
-                  _hover={{ color: "white" }}
-                  variant="ghost"
-                  aria-label="Edit address"
-                  onClick={() => handleEditClick("shippingAddress")}
-                />
-              </Td>
-            </Tr>
-          </Tbody>
-        </Table>
-      </TableContainer>
+      <Box display="flex" justifyContent="center" width="100%" px={4}>
+        <TableContainer maxWidth="1000px" width="100%">
+          <Table>
+            <Tbody>
+              <Tr>
+                <Td>
+                  <HStack spacing={3}>
+                    <Icon as={FiUser} color="blue.400" />
+                    <Text fontWeight="medium" marginBottom="2px">
+                      Username
+                    </Text>
+                  </HStack>
+                </Td>
+                <Td>{data.username}</Td>
+                <Td>
+                  <IconButton
+                    icon={<Icon as={FiEdit2} />}
+                    size="md"
+                    variant="ghost"
+                    color="gray.600"
+                    _hover={{ color: "white" }}
+                    aria-label="Edit username"
+                    onClick={() => handleEditClick("username")}
+                  />
+                </Td>
+              </Tr>
+              <Tr>
+                <Td>
+                  <HStack spacing={3} align="center">
+                    <Icon as={FiType} color="blue.400" />
+                    <Text fontWeight="medium" marginBottom="2px">
+                      First name
+                    </Text>
+                  </HStack>
+                </Td>
+                <Td>{data.firstName}</Td>
+                <Td>
+                  <IconButton
+                    icon={<Icon as={FiLock} />}
+                    size="md"
+                    color="gray.400"
+                    variant="ghost"
+                    aria-label="Email is read-only"
+                    isDisabled
+                    cursor="not-allowed"
+                  />
+                </Td>
+              </Tr>
+              <Tr>
+                <Td>
+                  <HStack spacing={3}>
+                    <Icon as={FiType} color="blue.400" />
+                    <Text fontWeight="medium" marginBottom="2px">
+                      Last name
+                    </Text>
+                  </HStack>
+                </Td>
+                <Td>{data.lastname}</Td>
+                <Td>
+                  <IconButton
+                    icon={<Icon as={FiLock} />}
+                    size="md"
+                    color="gray.400"
+                    variant="ghost"
+                    aria-label="Email is read-only"
+                    isDisabled
+                    cursor="not-allowed"
+                  />
+                </Td>
+              </Tr>
+              <Tr>
+                <Td>
+                  <HStack spacing={3} align="center">
+                    <Icon as={FiMail} color="blue.400" />
+                    <Text fontWeight="medium" marginBottom="2px">
+                      Email address
+                    </Text>
+                  </HStack>
+                </Td>
+                <Td>{data.emailAddress}</Td>
+                <Td>
+                  <IconButton
+                    icon={<Icon as={FiLock} />}
+                    size="md"
+                    color="gray.400"
+                    variant="ghost"
+                    aria-label="Email is read-only"
+                    isDisabled
+                    cursor="not-allowed"
+                  />
+                </Td>
+              </Tr>
+              <Tr>
+                <Td>
+                  <HStack spacing={3} align="center">
+                    <Icon as={FiPhone} color="blue.400" />
+                    <Text fontWeight="medium" marginBottom="2px">
+                      Phone number
+                    </Text>
+                  </HStack>
+                </Td>
+                <Td>{data.phoneNumber}</Td>
+                <Td>
+                  <IconButton
+                    icon={<Icon as={FiEdit2} />}
+                    size="md"
+                    color="gray.600"
+                    _hover={{ color: "white" }}
+                    variant="ghost"
+                    aria-label="Edit phone"
+                    onClick={() => handleEditClick("phoneNumber")}
+                  />
+                </Td>
+              </Tr>
+              <Tr>
+                <Td>
+                  <HStack spacing={3} align="center">
+                    <Icon as={FiMapPin} color="blue.400" />
+                    <Text fontWeight="medium" marginBottom="2px">
+                      Shipping address
+                    </Text>
+                  </HStack>
+                </Td>
+                <Td>{data.shippingAddress}</Td>
+                <Td>
+                  <IconButton
+                    icon={<Icon as={FiEdit2} />}
+                    size="md"
+                    color="gray.600"
+                    _hover={{ color: "white" }}
+                    variant="ghost"
+                    aria-label="Edit address"
+                    onClick={() => handleEditClick("shippingAddress")}
+                  />
+                </Td>
+              </Tr>
+            </Tbody>
+          </Table>
+        </TableContainer>
+      </Box>
       <Modal isOpen={isOpen} onClose={onClose} size="lg">
         <ModalOverlay />
         <ModalContent borderRadius="2xl">

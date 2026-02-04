@@ -1,5 +1,13 @@
 /* eslint-disable react-hooks/set-state-in-effect */
-import { Box, Button, Grid, GridItem, Show, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Grid,
+  GridItem,
+  Show,
+  useToast,
+} from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import BooksList from "../components/booksList";
@@ -100,33 +108,37 @@ const Homepage = () => {
             <Bookdetailpage book={selectedBook} />
           ) : selectedView === "books" ? (
             <>
-              <BrowseCategories 
-                setCriteria={handleCriteriaChange} 
-                selectedCategory={selectedCategory}
-                setSelectedCategory={setSelectedCategory}
-              />
-              <YearInput setCriteria={handleCriteriaChange} />
-              <PriceRangeSelector setCriteria={handleCriteriaChange} />
-              <Button
-                mt={4}
+              <Flex
+                direction="column"
+                align="center"
+                gap={4}
                 mb={4}
-                borderRadius="full"
-                colorScheme="red"
-                width="120px"
-                size="sm"
-                marginLeft="1063px"
-                marginTop="-70px"
-                transition="all 0.2s"
-                _hover={{ transform: "scale(1.05)" }}
-                leftIcon={<FiX />}
-                onClick={() => {
-                  setCriteria(null);
-                  setSearchParams(new URLSearchParams());
-                  setSelectedCategory("All");
-                }}
+                width="100%"
               >
-                Clear Filters
-              </Button>
+                <BrowseCategories
+                  setCriteria={handleCriteriaChange}
+                  selectedCategory={selectedCategory}
+                  setSelectedCategory={setSelectedCategory}
+                />
+                <YearInput setCriteria={handleCriteriaChange} />
+                <PriceRangeSelector setCriteria={handleCriteriaChange} />
+                <Button
+                  borderRadius="full"
+                  colorScheme="red"
+                  width="120px"
+                  size="sm"
+                  transition="all 0.2s"
+                  _hover={{ transform: "scale(1.05)" }}
+                  leftIcon={<FiX />}
+                  onClick={() => {
+                    setCriteria(null);
+                    setSearchParams(new URLSearchParams());
+                    setSelectedCategory("All");
+                  }}
+                >
+                  Clear Filters
+                </Button>
+              </Flex>
               <BooksList
                 onViewDetails={handleViewDetails}
                 criteria={criteria || undefined}

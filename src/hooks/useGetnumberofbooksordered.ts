@@ -6,7 +6,8 @@ interface NumberofbooksorderedResponse {
     book_isbn: string,
     book_Title: string,
     total_spent: number,
-    order_count: number
+    order_count: number,
+    url : string | null
 }
 
 const useGetnumberofbooksordered = (isbn: string) =>{
