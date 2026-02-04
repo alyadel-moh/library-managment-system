@@ -346,7 +346,8 @@ const Reports = () => {
                     <Box width="150px" flexShrink={0} bg="gray.50">
                       <Image
                         src={
-                          numberofbooksordered.url || "/default-book-cover.jpg"
+                          numberofbooksordered.photoUrl ||
+                          "/default-book-cover.jpg"
                         }
                         alt="Book cover"
                         height="100%"
@@ -361,7 +362,7 @@ const Reports = () => {
                       p={8}
                     >
                       <Heading fontSize="lg" mb={4}>
-                        {numberofbooksordered?.book_Title}
+                        {numberofbooksordered?.bookTitle}
                       </Heading>
                       <SimpleGrid columns={2} spacing={0}>
                         <HStack fontSize="xs" color="gray.600" mb={1}>
@@ -371,7 +372,7 @@ const Reports = () => {
                             fontSize="xs"
                             color="gray.500"
                           >
-                            ISBN : {numberofbooksordered.book_isbn}
+                            ISBN : {numberofbooksordered.bookIsbn}
                           </Text>
                         </HStack>
                         <HStack fontSize="xs" color="gray.600" mb={1}>
@@ -385,7 +386,7 @@ const Reports = () => {
                             marginTop={3}
                             color="green.500"
                           >
-                            {numberofbooksordered?.total_restocked_books}
+                            {numberofbooksordered?.totalRestockedBooks}
                           </Text>
                         </HStack>
                         <HStack fontSize="xs" color="gray.600" mb={1}>
@@ -399,7 +400,7 @@ const Reports = () => {
                             color="blue.600"
                             marginTop={4}
                           >
-                            {numberofbooksordered?.order_count}
+                            {numberofbooksordered?.orderCount}
                           </Text>
                         </HStack>
                         <HStack fontSize="xs" color="gray.600" mb={1}>
@@ -413,7 +414,7 @@ const Reports = () => {
                             color="orange.600"
                             marginTop={3}
                           >
-                            ${numberofbooksordered?.total_spent}
+                            ${numberofbooksordered?.totalSpent}
                           </Text>
                         </HStack>
                       </SimpleGrid>

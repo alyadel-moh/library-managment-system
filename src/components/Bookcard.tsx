@@ -11,7 +11,7 @@ import {
   IconButton,
   useToast,
 } from "@chakra-ui/react";
-import { FiBookmark, FiEye } from "react-icons/fi";
+import { FiBookmark, FiEye, FiEdit } from "react-icons/fi";
 import type Book1 from "../entities/Book";
 import useAddBooktosavedbooks from "../hooks/useAddsavedbook";
 import useGetUser from "../hooks/useGetusers";
@@ -117,13 +117,13 @@ const Bookcard = ({ book, onViewDetails }: BookcardProps) => {
               borderRadius="full"
               colorScheme="blue"
               width="100%"
-              leftIcon={<FiEye />}
+              leftIcon={<FiEdit />}
               size="md"
               transition="all 0.2s"
               _hover={{ transform: "scale(1.05)" }}
               onClick={() => onViewDetails(book)}
             >
-              View Details
+              Modify Book
             </Button>
           </VStack>
         </Box>

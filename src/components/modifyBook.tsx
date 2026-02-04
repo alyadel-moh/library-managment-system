@@ -72,9 +72,9 @@ const ModifyBook = ({ book }: BookdetailpageProps) => {
             .min(1, { message: "At least one author is required" })
         : editField === "isbn" || editField === "title"
           ? z.string().min(1, { message: `${editField} is required` })
-          : z.coerce
-              .number({ invalid_type_error: `${editField} must be a number` })
-              .positive({ message: `${editField} must be a positive number` }),
+          : z.coerce.number({
+              invalid_type_error: `${editField} must be a number`,
+            }),
   });
   type FormData = z.infer<typeof schema>;
   const {

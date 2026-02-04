@@ -2,12 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import ApiClient1 from "../api-client";
 
 interface NumberofbooksorderedResponse {
-   total_restocked_books: number,
-    book_isbn: string,
-    book_Title: string,
-    total_spent: number,
-    order_count: number,
-    url : string | null
+   totalRestockedBooks: number,
+    bookIsbn: string,
+    bookTitle: string,
+    totalSpent: number,
+    orderCount: number,
+    photoUrl : string | null
 }
 
 const useGetnumberofbooksordered = (isbn: string) =>{

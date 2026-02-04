@@ -55,25 +55,27 @@ const ViewSaved = ({ onViewDetails }: ViewSavedProps) => {
     );
   }
   return (
-    <Box marginLeft={8}>
-      <SimpleGrid columns={2} spacing={4} mt={6} >
-        {addedBooks?.map((book) => (
-          <ViewSaveditem
-            key={book.isbn}
-            book={book}
-            onRemove={() => {
-              setRemovingIsbn(book.isbn);
-              removeBook.mutate(undefined, {
-                onSuccess: () => {
-                  refetch();
-                },
-              });
-            }}
-            isremove={removingIsbn === book.isbn && removeIsPending}
-            onViewChange={onViewDetails}
-          />
-        ))}
-      </SimpleGrid>
+    <Box display="flex" justifyContent="center" width="100%" px={4}>
+      <Box maxWidth="1200px" width="100%">
+        <SimpleGrid columns={2} spacing={4} mt={6}>
+          {addedBooks?.map((book) => (
+            <ViewSaveditem
+              key={book.isbn}
+              book={book}
+              onRemove={() => {
+                setRemovingIsbn(book.isbn);
+                removeBook.mutate(undefined, {
+                  onSuccess: () => {
+                    refetch();
+                  },
+                });
+              }}
+              isremove={removingIsbn === book.isbn && removeIsPending}
+              onViewChange={onViewDetails}
+            />
+          ))}
+        </SimpleGrid>
+      </Box>
     </Box>
   );
 };
