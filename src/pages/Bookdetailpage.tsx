@@ -22,7 +22,6 @@ import {
 import { MdBusinessCenter } from "react-icons/md";
 import useAddBooktocart from "../hooks/useAddbooktocart";
 import type Book1 from "../entities/Book";
-import useGetGoogleBooks from "../hooks/useGetgooglebooksapi";
 interface BookdetailpageProps {
   book: Book1;
 }
@@ -33,7 +32,6 @@ const Bookdetailpage = ({ book }: BookdetailpageProps) => {
     isClosable: true,
   });
   const addbooktocart = useAddBooktocart(book?.isbn || "");
-  const bookDetails = useGetGoogleBooks(book.title).data?.items?.[0];
   const {
     data: addBooktocartData,
     isError: addBooktocartError,
@@ -63,12 +61,7 @@ const Bookdetailpage = ({ book }: BookdetailpageProps) => {
     <SimpleGrid columns={{ base: 1, md: 2 }} spacing={120} p={50}>
       <GridItem>
         <VStack align="start" spacing={5}>
-          <Heading size="xl">{bookDetails?.volumeInfo.title}</Heading>
-          {bookDetails?.volumeInfo.subtitle && (
-            <Heading size="md" fontWeight="medium" color="gray.400">
-              {bookDetails?.volumeInfo.subtitle}
-            </Heading>
-          )}
+          <Heading size="xl">{book.title}</Heading>
 
           {book.authors && (
             <HStack spacing={2}>
@@ -108,7 +101,7 @@ const Bookdetailpage = ({ book }: BookdetailpageProps) => {
             </HStack>
           )}
 
-          {bookDetails?.volumeInfo.averageRating && (
+          {book.averageRating && (
             <HStack spacing={2}>
               <FiStar color="gold" />
               <Text
@@ -117,24 +110,17 @@ const Bookdetailpage = ({ book }: BookdetailpageProps) => {
                 color="yellow.400"
                 marginBottom="1"
               >
-                {bookDetails?.volumeInfo.averageRating}
+                {book.averageRating}
               </Text>
-              {bookDetails?.volumeInfo.ratingsCount && (
-                <Text fontSize="sm" color="gray.500" marginBottom="1">
-                  ({bookDetails?.volumeInfo.ratingsCount} reviews)
-                </Text>
-              )}
             </HStack>
           )}
 
-          {bookDetails?.volumeInfo.description && (
+          {book.description && (
             <Box>
               <Heading as="h3" size="md" mb={2}>
                 Description
               </Heading>
-              <Expandabletext>
-                {bookDetails?.volumeInfo.description}
-              </Expandabletext>
+              <Expandabletext>{book.description}</Expandabletext>
             </Box>
           )}
 
@@ -156,12 +142,8 @@ const Bookdetailpage = ({ book }: BookdetailpageProps) => {
       </GridItem>
       <GridItem>
         <Image
-          src={
-            bookDetails?.volumeInfo.imageLinks?.large ||
-            bookDetails?.volumeInfo.imageLinks?.medium ||
-            bookDetails?.volumeInfo.imageLinks?.thumbnail
-          }
-          alt={bookDetails?.volumeInfo.title}
+          src={book.photoUrl || "/default-book-cover.jpg"}
+          alt={book.title}
           borderRadius="md"
           shadow="lg"
           width="100%"

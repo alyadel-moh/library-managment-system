@@ -18,8 +18,8 @@ const apiClient = new ApiClient1<PageResponse<Book1>>("/user/book/search");
 
 const useGetBook = (criteria?: BookSearchCriteria, page: number = 0, size: number = 10) => {
   return useQuery<PageResponse<Book1>>({
-    queryKey: ['books', criteria, page, size], // Add page & size to query key
-    queryFn: () => apiClient.getAll({
+    queryKey: ['books', criteria, page, size],
+    queryFn: () => apiClient.getSingleWithParams({
       ...(criteria?.keyword && { keyword: criteria.keyword }),
       ...(criteria?.categoryId && { categoryId: criteria.categoryId }),
       ...(criteria?.authorName && { authorName: criteria.authorName }),

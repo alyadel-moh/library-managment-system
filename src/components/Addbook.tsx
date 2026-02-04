@@ -91,7 +91,12 @@ const Addbook = () => {
     >
       <form
         onSubmit={handleSubmit(async (data) => {
-          await mutateAsync(data);
+          await mutateAsync({
+            ...data,
+            photoUrl: null,
+            description: null,
+            averageRating: null,
+          });
         })}
         style={{
           width: "100%",

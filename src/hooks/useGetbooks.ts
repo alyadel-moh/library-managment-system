@@ -8,7 +8,7 @@ const apiClient = new ApiClient1<PageResponse<Book1>>("/user/book/all");
 const useGetbooks = (page: number = 0, size: number = 10) => {
   return useQuery<PageResponse<Book1>>({
     queryKey: ['books', 'all', page, size],
-    queryFn: () => apiClient.getAll({
+    queryFn: () => apiClient.getSingleWithParams({
       page: page.toString(),
       size: size.toString(),
     }),

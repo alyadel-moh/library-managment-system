@@ -69,7 +69,7 @@ const Bookcard = ({ book, onViewDetails }: BookcardProps) => {
           />
         )}
         <Image
-          src={book.photoUrl}
+          src={book.photoUrl || "/default-book-cover.jpg"}
           alt="Book cover"
           height="250px"
           objectFit="contain"

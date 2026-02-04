@@ -62,6 +62,17 @@ export default class ApiClient1<T> {
         }).then(res => res.data);
     }
     
+    // Get single object with query parameters
+    getSingleWithParams(params?: any) {
+        const token = localStorage.getItem('accessToken');
+        return axiosinstance1.get<T>(this.endpoint, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            params: params
+        }).then(res => res.data);
+    }
+    
     getArray(id: string | number) {
         const token = localStorage.getItem('accessToken');
         return axiosinstance1.get<T[]>(this.endpoint + '/' + id, {

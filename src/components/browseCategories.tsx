@@ -3,6 +3,8 @@ import type { BookSearchCriteria } from "../hooks/useGetbook";
 interface categoryProps {
   setCriteria: (newCriteria: Partial<BookSearchCriteria>) => void;
   criteria?: BookSearchCriteria;
+  selectedCategory?: string;
+  setSelectedCategory?: (category: string) => void;
 }
 function SegmentItem(props: any) {
   const { getInputProps, getRadioProps } = useRadio(props);
@@ -39,7 +41,7 @@ function SegmentItem(props: any) {
   );
 }
 
-const BrowseCategories = ({ setCriteria, criteria }: categoryProps) => {
+const BrowseCategories = ({ setCriteria, criteria, selectedCategory = "All", setSelectedCategory }: categoryProps) => {
   const options = [
     { value: "All", label: "All Categories" },
     { value: "2", label: "Art" },
@@ -51,12 +53,14 @@ const BrowseCategories = ({ setCriteria, criteria }: categoryProps) => {
 
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: "framework",
-    defaultValue: "All",
-    onChange: (value) =>
+    value: selectedCategory,
+    onChange: (value) => {
+      setSelectedCategory?.(value);
       setCriteria({
         ...criteria,
         categoryId: value === "All" ? undefined : value,
-      }),
+      });
+    },
   });
 
   const group = getRootProps();

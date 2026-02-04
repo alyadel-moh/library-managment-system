@@ -21,6 +21,7 @@ const Homepage = () => {
   const [selectedView, setSelectedView] = useState<string>("books");
   const [selectedBook, setSelectedBook] = useState<any>(null);
   const [criteria, setCriteria] = useState<BookSearchCriteria | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const toast = useToast({
     position: "bottom-right",
     duration: 5000,
@@ -99,7 +100,11 @@ const Homepage = () => {
             <Bookdetailpage book={selectedBook} />
           ) : selectedView === "books" ? (
             <>
-              <BrowseCategories setCriteria={handleCriteriaChange} />
+              <BrowseCategories 
+                setCriteria={handleCriteriaChange} 
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+              />
               <YearInput setCriteria={handleCriteriaChange} />
               <PriceRangeSelector setCriteria={handleCriteriaChange} />
               <Button
@@ -117,6 +122,7 @@ const Homepage = () => {
                 onClick={() => {
                   setCriteria(null);
                   setSearchParams(new URLSearchParams());
+                  setSelectedCategory("All");
                 }}
               >
                 Clear Filters

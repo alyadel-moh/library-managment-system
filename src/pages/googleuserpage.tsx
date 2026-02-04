@@ -19,6 +19,7 @@ import useVerifyPayment from "../hooks/useverifypayment";
 const GoogleUserPage = () => {
   const [selectedView, setSelectedView] = useState<string>("books");
   const [selectedBook, setSelectedBook] = useState<any>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [criteria, setCriteria] = useState<BookSearchCriteria | null>(null);
   const navigate = useNavigate();
   const toast = useToast({
@@ -163,7 +164,11 @@ const GoogleUserPage = () => {
             <Bookdetailpage book={selectedBook} />
           ) : selectedView === "books" ? (
             <>
-              <BrowseCategories setCriteria={handleCriteriaChange} />
+              <BrowseCategories
+                setCriteria={handleCriteriaChange}
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+              />
               <YearInput setCriteria={handleCriteriaChange} />
               <PriceRangeSelector setCriteria={handleCriteriaChange} />
               <Button
@@ -181,6 +186,7 @@ const GoogleUserPage = () => {
                 onClick={() => {
                   setCriteria(null);
                   setSearchParams(new URLSearchParams());
+                  setSelectedCategory("All");
                 }}
               >
                 Clear Filters

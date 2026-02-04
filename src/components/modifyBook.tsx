@@ -93,7 +93,7 @@ const ModifyBook = ({ book }: BookdetailpageProps) => {
     isError,
     error,
     data: updateData,
-  } = useModifyBook(data?.[0]?.isbn || "");
+  } = useModifyBook(data?.content?.[0]?.isbn || "");
   useEffect(() => {
     if (isSuccess && updateData) {
       toast({
@@ -111,7 +111,7 @@ const ModifyBook = ({ book }: BookdetailpageProps) => {
     }
   }, [isError, error]);
 
-  if (!data || data.length === 0) {
+  if (!data || !data.content || data.content.length === 0) {
     return (
       <HStack direction="row" align="center" spacing={3} padding={5}>
         <Spinner size="lg" color="blue.400" />
@@ -121,7 +121,7 @@ const ModifyBook = ({ book }: BookdetailpageProps) => {
       </HStack>
     );
   }
-  const bookData = data[0];
+  const bookData = data.content[0];
 
   const handleSave = async (formData: FormData) => {
     const updatedBook = {
@@ -134,6 +134,9 @@ const ModifyBook = ({ book }: BookdetailpageProps) => {
       sellingPrice: bookData.sellingPrice,
       stockQuantity: bookData.stockQuantity,
       threshold: bookData.threshold,
+      photoUrl: bookData.photoUrl,
+      description: bookData.description,
+      averageRating: bookData.averageRating,
       [editField]: formData[editField],
     };
     await mutateAsync(updatedBook);

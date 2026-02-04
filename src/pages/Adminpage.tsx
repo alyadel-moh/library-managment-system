@@ -20,6 +20,7 @@ const Adminpage = () => {
   const [selectedBook, setSelectedBook] = useState<Book1 | null>(null);
   const [criteria, setCriteria] = useState<BookSearchCriteria | null>(null);
   const [photoUrl, setPhotoUrl] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchParams, setSearchParams] = useSearchParams();
   const searchQuery = searchParams.get("search");
   const handleViewDetails = (bookData: Book1) => {
@@ -65,7 +66,11 @@ const Adminpage = () => {
             <Reports />
           ) : selectedView === "books" ? (
             <>
-              <BrowseCategories setCriteria={handleCriteriaChange} />
+              <BrowseCategories
+                setCriteria={handleCriteriaChange}
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+              />
               <YearInput setCriteria={handleCriteriaChange} />
               <PriceRangeSelector setCriteria={handleCriteriaChange} />
               <Button
@@ -83,6 +88,7 @@ const Adminpage = () => {
                 onClick={() => {
                   setCriteria(null);
                   setSearchParams(new URLSearchParams());
+                  setSelectedCategory("All");
                 }}
               >
                 Clear Filters
