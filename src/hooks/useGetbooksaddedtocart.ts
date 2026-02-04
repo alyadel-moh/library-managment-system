@@ -12,6 +12,7 @@ interface Item {
     unitPrice: number,
     quantity: number,
     subTotal: number
+    url : string | null
 }
 
 const apiClient = new ApiClient1<cart>("/user/cart");

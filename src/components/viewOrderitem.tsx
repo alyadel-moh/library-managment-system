@@ -17,6 +17,7 @@ interface orderhistory {
   items: Array<{
     isbn: string;
     title: string;
+    url: string | null;
     unit_price: number;
     quantity: number;
     total_price_book: number;

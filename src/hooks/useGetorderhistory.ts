@@ -11,6 +11,7 @@ interface orderhistory {
         unit_price : number,
         quantity : number,
         total_price_book : number
+        url : string | null
     }>
 }
 

@@ -9,7 +9,6 @@ import {
   VStack,
   Box,
 } from "@chakra-ui/react";
-import useGetGoogleBooks from "../hooks/useGetgooglebooksapi";
 import { FiEye, FiTrash2 } from "react-icons/fi";
 import type Book1 from "../entities/Book";
 interface Item {
@@ -19,7 +18,6 @@ interface Item {
   onViewChange: (book: Book1) => void;
 }
 const ViewSaveditem = ({ book, onRemove, isremove, onViewChange }: Item) => {
-  const bookDetails = useGetGoogleBooks(book.title).data?.items?.[0];
   return (
     <Card
       display="flex"
@@ -36,7 +34,7 @@ const ViewSaveditem = ({ book, onRemove, isremove, onViewChange }: Item) => {
     >
       <Box width="150px" flexShrink={0} bg="gray.50">
         <Image
-          src={bookDetails?.volumeInfo?.imageLinks?.thumbnail}
+          src={book.photoUrl || ""}
           alt="Book cover"
           height="100%"
           objectFit="cover"

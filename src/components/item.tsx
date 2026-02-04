@@ -7,7 +7,6 @@ import {
   Image,
   Text,
 } from "@chakra-ui/react";
-import useGetGoogleBooks from "../hooks/useGetgooglebooksapi";
 import { FiPackage, FiHash } from "react-icons/fi";
 
 interface orderitem {
@@ -16,6 +15,7 @@ interface orderitem {
   unit_price: number;
   quantity: number;
   total_price_book: number;
+  url: string | null;
 }
 const Item = ({
   isbn,
@@ -23,8 +23,8 @@ const Item = ({
   unit_price,
   quantity,
   total_price_book,
+  url,
 }: orderitem) => {
-  const { data } = useGetGoogleBooks(title);
   return (
     <Card
       display="flex"
@@ -43,7 +43,7 @@ const Item = ({
     >
       <Box width="150px" flexShrink={0} bg="gray.50">
         <Image
-          src={data?.items?.[0]?.volumeInfo?.imageLinks?.thumbnail}
+          src={url || "/default-book-cover.jpg"}
           alt="Book cover"
           height="100%"
           objectFit="cover"

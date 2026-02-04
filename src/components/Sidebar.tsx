@@ -147,7 +147,6 @@ const Sidebar = ({ onViewChange, refetchphoto }: SidebarProps) => {
           } catch (error) {
             toast({
               title: "Logout Failed",
-              description: (error as Error)?.message || "Error logging out",
               status: "error",
             });
           }

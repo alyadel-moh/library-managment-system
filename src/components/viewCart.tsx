@@ -99,6 +99,7 @@ const ViewCart = () => {
             title={book.title}
             unitPrice={book.unitPrice}
             quantity={book.quantity}
+            url={book.url || "/default-book-cover.jpg"}
             isremove={removingIsbn === book.isbn && removeIsPending}
             onRemove={() => {
               setRemovingIsbn(book.isbn);

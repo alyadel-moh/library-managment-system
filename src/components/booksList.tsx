@@ -19,7 +19,26 @@ const BooksList = ({ onViewDetails, criteria }: viewdetails) => {
 
   const { data, error, isLoading } = criteria
     ? useGetBook(criteria, page, pageSize)
-    : useGetbooks(page, pageSize);
+    : useGetbooks(page, pageSize); 
+
+  // Console log the response
+  useEffect(() => {
+    if (data) {
+      console.log("Books response:", data);
+      console.log("Page:", page);
+      console.log("Content:", data.content);
+      console.log("Number of books in content:", data.content?.length);
+      console.log("Total elements:", data.totalElements);
+      console.log("Total pages:", data.totalPages);
+      console.log("Is last page:", data.last);
+      console.log("Books data:", data.content?.map(book => ({
+        isbn: book.isbn,
+        title: book.title,
+        price: book.sellingPrice,
+        photoUrl: book.photoUrl
+      })));
+    }
+  }, [data, page]);
 
   // Reset when criteria changes
   useEffect(() => {

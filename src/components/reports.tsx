@@ -31,7 +31,6 @@ import {
   FiUser,
   FiAward,
 } from "react-icons/fi";
-import useGetGoogleBooks from "../hooks/useGetgooglebooksapi";
 const Reports = () => {
   const [searchValue, setSearchValue] = useState("");
   const [selectedIsbn, setSelectedIsbn] = useState("");
@@ -41,7 +40,6 @@ const Reports = () => {
   const { data: totalsalesday } = useGettotalsalesbydayreport(searchValue);
   const { data: numberofbooksordered } =
     useGetnumberofbooksordered(selectedIsbn);
-  const { data } = useGetGoogleBooks(numberofbooksordered?.book_Title || "");
   if (!topcustomer || !topsellingbooks || !totalsalesmonth) {
     return (
       <HStack direction="row" align="center" spacing={3} padding={5}>
@@ -347,9 +345,7 @@ const Reports = () => {
                   >
                     <Box width="150px" flexShrink={0} bg="gray.50">
                       <Image
-                        src={
-                          data?.items?.[0]?.volumeInfo?.imageLinks?.thumbnail
-                        }
+                        src={`https://covers.openlibrary.org/b/isbn/${numberofbooksordered.book_isbn}-L.jpg?default=false`}
                         alt="Book cover"
                         height="100%"
                         objectFit="cover"

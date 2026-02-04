@@ -8,7 +8,6 @@ import {
   Text,
   Icon,
 } from "@chakra-ui/react";
-import useGetGoogleBooks from "../hooks/useGetgooglebooksapi";
 import { FiHash, FiTag, FiShoppingBag } from "react-icons/fi";
 interface Top10sellingbooksResponse {
   isbn: string;
@@ -22,8 +21,6 @@ const topSellingBookItem = ({
   title,
   total_sold,
 }: Top10sellingbooksResponse) => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { data } = useGetGoogleBooks(title);
   return (
     <Card
       display="flex"
@@ -40,7 +37,7 @@ const topSellingBookItem = ({
     >
       <Box width="150px" flexShrink={0} bg="gray.50">
         <Image
-          src={data?.items?.[0]?.volumeInfo?.imageLinks?.thumbnail}
+          src={`https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg?default=false`}
           alt="Book cover"
           height="100%"
           objectFit="cover"

@@ -12,7 +12,6 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import useGetGoogleBooks from "../hooks/useGetgooglebooksapi";
 import {
   FiHash,
   FiTrash2,
@@ -30,17 +29,18 @@ interface Item {
   onRemove: () => void;
   onUpdateQuantity?: (newQuantity: number) => void;
   isremove?: boolean;
+  url: string | null;
 }
 const ViewCartItem = ({
   isbn,
   title,
   unitPrice,
   quantity,
+  url,
   onRemove,
   onUpdateQuantity,
   isremove,
 }: Item) => {
-  const { data } = useGetGoogleBooks(title);
   const [isEditing, setIsEditing] = useState(false);
   const [newQuantity, setNewQuantity] = useState(quantity.toString());
 
@@ -73,7 +73,7 @@ const ViewCartItem = ({
     >
       <Box width="150px" flexShrink={0} bg="gray.50">
         <Image
-          src={data?.items?.[0]?.volumeInfo?.imageLinks?.thumbnail}
+          src={url || "/default-book-cover.jpg"}
           alt="Book cover"
           height="100%"
           objectFit="cover"
