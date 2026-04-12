@@ -67,17 +67,17 @@ export default class ApiClient1<T> {
         return axiosinstance1.get<T[]>(this.endpoint + '/' + id).then(res => res.data);
     }
 
-    post(data: T | Record<string, unknown> = {}, pathParam?: string | number) {
+    post(data: unknown = {}, pathParam?: string | number) {
         const url = pathParam ? `${this.endpoint}/${pathParam}` : this.endpoint;
         return axiosinstance1.post<T>(url, data).then(res => res.data);
     }
 
     // For public endpoints that don't require authentication (login, signup)
-    postPublic(data: T | Record<string, unknown> = {}) {
+    postPublic(data: unknown = {}) {
         return axiosinstance1.post<T>(this.endpoint, data).then(res => res.data);
     }
 
-    put(data: T | Record<string, unknown> = {}, pathParam?: string | number) {
+    put(data: unknown = {}, pathParam?: string | number) {
         const url = pathParam ? `${this.endpoint}/${pathParam}` : this.endpoint;
         return axiosinstance1.put<T>(url, data).then(res => res.data);
     }
