@@ -59,7 +59,7 @@ const Item = ({
         p={8}
       >
         <Box>
-          <Heading fontSize="md" mb={4}>
+          <Heading fontSize="md" mb={4} color="gray.200">
             {title}
           </Heading>
           <HStack fontSize="sm" color="gray.600" mb={2}>
