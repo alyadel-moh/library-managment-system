@@ -66,7 +66,7 @@ const Item = ({
             <FiHash />
             <Text marginBottom="1px">ISBN: {isbn}</Text>
           </HStack>
-          <HStack fontSize="sm" mb={2}>
+          <HStack fontSize="sm" mb={2} color="gray.200">
             <FiPackage color="gray.200" />
             <Text marginBottom="1px" color="gray.200">
               Quantity: {quantity}
