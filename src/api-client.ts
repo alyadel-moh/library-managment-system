@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { type InternalAxiosRequestConfig } from "axios";
 const axiosinstance = axios.create({
     baseURL: "https://www.googleapis.com/books/v1",
     params: {
@@ -29,7 +29,7 @@ const axiosinstance1 = axios.create({
         'Content-Type': 'application/json'
     }
 });
-axiosinstance1.interceptors.request.use((config: any) => {
+axiosinstance1.interceptors.request.use((config: InternalAxiosRequestConfig) => {
     const token = localStorage.getItem('accessToken');
     if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;
@@ -45,7 +45,7 @@ export default class ApiClient1<T> {
         this.endpoint = endpoint;
     }
 
-    getAll = (params?: any) => {
+    getAll = (params?: Record<string, unknown>) => {
         return axiosinstance1.get<T[]>(this.endpoint, { params: params }).then(res => res.data);
     }
 
@@ -59,7 +59,7 @@ export default class ApiClient1<T> {
     }
 
     // Get single object with query parameters
-    getSingleWithParams(params?: any) {
+    getSingleWithParams(params?: Record<string, unknown>) {
         return axiosinstance1.get<T>(this.endpoint, { params: params }).then(res => res.data);
     }
 
@@ -67,17 +67,17 @@ export default class ApiClient1<T> {
         return axiosinstance1.get<T[]>(this.endpoint + '/' + id).then(res => res.data);
     }
 
-    post(data: T | any = {}, pathParam?: string | number) {
+    post(data: T | Record<string, unknown> = {}, pathParam?: string | number) {
         const url = pathParam ? `${this.endpoint}/${pathParam}` : this.endpoint;
         return axiosinstance1.post<T>(url, data).then(res => res.data);
     }
 
     // For public endpoints that don't require authentication (login, signup)
-    postPublic(data: T | any = {}) {
+    postPublic(data: T | Record<string, unknown> = {}) {
         return axiosinstance1.post<T>(this.endpoint, data).then(res => res.data);
     }
 
-    put(data: T | any = {}, pathParam?: string | number) {
+    put(data: T | Record<string, unknown> = {}, pathParam?: string | number) {
         const url = pathParam ? `${this.endpoint}/${pathParam}` : this.endpoint;
         return axiosinstance1.put<T>(url, data).then(res => res.data);
     }
