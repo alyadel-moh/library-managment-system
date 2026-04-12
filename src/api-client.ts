@@ -1,38 +1,6 @@
 import axios, { type InternalAxiosRequestConfig } from "axios";
-
-const rawApiBaseUrl = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL;
-const apiBaseUrl = typeof rawApiBaseUrl === 'string' ? rawApiBaseUrl.trim().replace(/\/$/, '') : '';
-
-if (!apiBaseUrl) {
-    throw new Error('Missing API base URL. Set VITE_API_BASE_URL (or legacy VITE_API_URL) in environment variables.');
-}
-
-const axiosinstance = axios.create({
-    baseURL: "https://www.googleapis.com/books/v1",
-    params: {
-        // Pulling the key securely from your new .env file
-        key: import.meta.env.VITE_GOOGLE_BOOKS_API_KEY
-    }
-});
-export class ApiClient<T> {
-    endpoint : string;
-    constructor(endpoint : string){
-        this.endpoint = endpoint;
-    }
-    getAll = () => {
-        return axiosinstance.get<GoogleBooksResponse<T>>(this.endpoint).then(res => res.data);
-    }
-    get(id : string | number) {
-        return axiosinstance.get<T>(this.endpoint + '/' +id).then(res => res.data);
-    }
-}
-interface GoogleBooksResponse<T> {
-  kind: string;
-  totalItems: number;
-  items?: T[];
-}
 const axiosinstance1 = axios.create({
-    baseURL: apiBaseUrl,
+    baseURL:  "https://ordering-system-58at.onrender.com/api",
     headers: {
         'Content-Type': 'application/json'
     }
@@ -46,13 +14,6 @@ axiosinstance1.interceptors.request.use((config: InternalAxiosRequestConfig) => 
 }, (error) => {
     return Promise.reject(error);
 });
-
-axiosinstance1.interceptors.response.use((response) => {
-    if (typeof response.data === 'string' && /<!doctype html>/i.test(response.data)) {
-        return Promise.reject(new Error(`Expected JSON from API but got HTML. Check VITE_API_BASE_URL/VITE_API_URL and endpoint: ${response.config.url ?? 'unknown'}`));
-    }
-    return response;
-}, (error) => Promise.reject(error));
 
 export default class ApiClient1<T> {
     endpoint: string;
