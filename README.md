@@ -68,7 +68,7 @@ npm install
    Create a `.env` file in the root directory with the following:
 
 ```env
-VITE_API_URL=your_backend_api_url
+VITE_API_BASE_URL=your_backend_api_url
 VITE_STRIPE_PUBLIC_KEY=your_stripe_public_key
 ```
 
