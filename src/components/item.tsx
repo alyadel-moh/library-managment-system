@@ -68,7 +68,7 @@ const Item = ({
           </HStack>
           <HStack fontSize="sm" mb={2}>
             <FiPackage />
-            <Text marginBottom="1px">Quantity: {quantity}</Text>
+            <Text marginBottom="1px"  color="gray.200">Quantity: {quantity}</Text>
           </HStack>
           <Text fontSize="md" fontWeight="bold" color="blue.600" mb={2}>
             ${unit_price}
